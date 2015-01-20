@@ -1,0 +1,10 @@
+@import url(bootstrap.css);
+@import url(admin.css);
+.navbar-inner{
+background-image:none;
+background-color:#fff;
+}
+.navbar .nav > li > a, .navbar .nav > li > a:hover{
+color:000;
+text-shadow:none;
+}
