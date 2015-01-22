@@ -1,1 +1,4 @@
+ALTER TABLE `membership` ADD `personal_email` VARCHAR( 255 ) NULL AFTER `ol_area` ,
+ADD `personal_phone` VARCHAR( 20 ) NULL AFTER `personal_email`; 
+
 ALTER TABLE `customers` ADD `photo` VARCHAR(255) NULL AFTER `gst_date`;

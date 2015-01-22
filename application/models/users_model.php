@@ -50,6 +50,7 @@ class Users_model extends CI_Model {
 		$this->db->select('email_address');
 		$this->db->select('user_name');
 		$this->db->select('mobile');
+		$this->db->select('role');
 		$this->db->where('email_address', $email);
 		$this->db->where('pass_word', $password);
 		$query = $this->db->get('membership');
@@ -171,6 +172,13 @@ class Users_model extends CI_Model {
 		$this->db->select('membership.email_address');
 		$this->db->select('membership.user_name');
 		$this->db->select('membership.mobile');
+		$this->db->select('membership.role');
+		$this->db->select('membership.ol_name');
+		$this->db->select('membership.ol_area');
+		$this->db->select('membership.address');
+		$this->db->select('membership.personal_email');
+		$this->db->select('membership.personal_phone');
+		
 		$this->db->from('membership');
 		
 		$this->db->where('membership.role > 1');
@@ -240,29 +248,14 @@ class Users_model extends CI_Model {
     * @param array $data - associative array with data to store
     * @return boolean 
     */
-    function store_user()
+    function store_user($new_member_insert_data)
     {
-		$this->db->where('email_address', $this->input->post('email'));
+		$this->db->where('email_address', $new_member_insert_data["email_address"]);
 		$query = $this->db->get('membership');
 
         if($query->num_rows > 0){
         	return false;
 		}else{
-
-			$new_member_insert_data = array(
-				'first_name' => $this->input->post('first_name'),
-				'last_name' => $this->input->post('last_name'),
-				'email_address' => $this->input->post('email'),			
-				//'user_name' => $this->input->post('username'),
-				'pass_word' => md5($this->input->post('password')),
-				'mobile' => $this->input->post('mobile'),
-				'role' => (int)$this->input->post('role'),
-				'ol_name' => $this->input->post('ol_name'),
-				'ol_area' => $this->input->post('ol_area'),
-				'address' => $this->input->post('address'),
-				'personal_email' => $this->input->post('personal_email'),
-				'personal_phone' => $this->input->post('personal_phone'),
-			);
 			$insert = $this->db->insert('membership', $new_member_insert_data);
 		    return  $this->db->insert_id();
 		}		

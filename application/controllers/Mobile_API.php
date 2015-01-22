@@ -39,6 +39,7 @@ class Mobile_API extends CI_Controller {
 		{
 			$data = array();
 			$data['status'] = 1;
+			$user[0]['role'] = (int)$user[0]['role'];
 			$data['data'] = $user[0];
 			$this->json_response($data);
 		}
@@ -68,7 +69,22 @@ class Mobile_API extends CI_Controller {
             if ($this->form_validation->run())
             {
                 //if the insert has returned true then we show the flash message
-                if($user_id = $this->users_model->store_user()){
+            	$new_member_insert_data = array(
+            			'first_name' => $this->input->post('first_name'),
+            			'last_name' => $this->input->post('last_name'),
+            			'email_address' => $this->input->post('email'),
+            			//'user_name' => $this->input->post('username'),
+            			'pass_word' => md5($this->input->post('password')),
+            			'mobile' => $this->input->post('mobile'),
+            			'role' => (int)$this->input->post('role'),
+            			'ol_name' => $this->input->post('ol_name'),
+            			'ol_area' => $this->input->post('ol_area'),
+            			'address' => $this->input->post('address'),
+            			'personal_email' => $this->input->post('personal_email'),
+            			'personal_phone' => $this->input->post('personal_phone'),
+            	);
+            	
+                if($user_id = $this->users_model->store_user($new_member_insert_data)){
                     $data = array();
 					$data['status'] = 1;
 					$data['message'] = "User registered successfully";

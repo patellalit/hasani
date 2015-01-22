@@ -129,7 +129,7 @@ class Customers_model extends CI_Model {
 				'created_at' => date("Y-m-d H:i:s")
 			);
 			$insert = $this->db->insert('customers', $new_member_insert_data);
-		    return $insert;
+		    return  $this->db->insert_id();
 		}		
 	}
 
