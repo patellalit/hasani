@@ -34,18 +34,14 @@ class Products_model extends CI_Model {
     * @param int $limit_end
     * @return array
     */
-    public function get_products($search_string=null, $order=null, $order_type='Asc', $limit_start=null, $limit_end=null)
+    public function get_products_api($search_string=null, $order=null, $order_type='Asc', $limit_start=null, $limit_end=null)
     {
 	    
 		$this->db->select('products.id');
 		$this->db->select('products.item');
 		$this->db->select('products.description');
-		$this->db->select('products.um');
 		$this->db->select('products.cost_price');
-		$this->db->select('products.sell_price_retail');
-		$this->db->select('products.sell_price_wholesale');
-		$this->db->select('products.sell_price_retail_max');
-		$this->db->select('products.sell_price_wholesale_max');
+		$this->db->select('products.sell_price');
 		$this->db->from('products');
 		if($search_string){
 			$this->db->like('description', $search_string);
@@ -72,12 +68,12 @@ class Products_model extends CI_Model {
     * @param int $order
     * @return int
     */
-    function count_products($search_string=null, $order=null)
+    function count_products_api($search_string=null, $order=null)
     {
 		$this->db->select('*');
 		$this->db->from('products');
 		if($search_string){
-			$this->db->like('description', $search_string);
+			$this->db->like('item', $search_string);
 		}
 		if($order){
 			$this->db->order_by($order, 'Asc');
@@ -93,7 +89,7 @@ class Products_model extends CI_Model {
     * @param array $data - associative array with data to store
     * @return boolean 
     */
-    function store_product($data)
+    function add_product_api($data)
     {
 		$insert = $this->db->insert('products', $data);
 	    return $insert;
@@ -104,7 +100,7 @@ class Products_model extends CI_Model {
     * @param array $data - associative array with data to store
     * @return boolean
     */
-    function update_product($id, $data)
+    function update_product_api($id, $data)
     {
 		$this->db->where('id', $id);
 		$this->db->update('products', $data);
@@ -123,7 +119,7 @@ class Products_model extends CI_Model {
     * @param int $id - product id
     * @return boolean
     */
-	function delete_product($id){
+	function delete_product_api($id){
 		$this->db->where('id', $id);
 		$this->db->delete('products'); 
 	}
