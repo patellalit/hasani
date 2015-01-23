@@ -2,3 +2,37 @@ ALTER TABLE `membership` ADD `personal_email` VARCHAR( 255 ) NULL AFTER `ol_area
 ADD `personal_phone` VARCHAR( 20 ) NULL AFTER `personal_email`; 
 
 ALTER TABLE `customers` ADD `photo` VARCHAR(255) NULL AFTER `gst_date`;
+
+===============
+223-12-2015
+===============
+ALTER TABLE `products` DROP `sell_price_wholesale` ,
+DROP `sell_price_retail_max` ,
+DROP `sell_price_wholesale_max` ;
+
+ALTER TABLE `products` DROP `um` 
+
+ALTER TABLE `products` CHANGE `sell_price_retail` `sell_price` DOUBLE NULL DEFAULT NULL ;
+
+ALTER TABLE `products` ADD `user_id` INT NOT NULL AFTER `sell_price` ;
+
+ALTER TABLE `membership` ADD `user_id` INT NOT NULL AFTER `personal_phone` ;
+
+ALTER TABLE `customers` ADD `user_id` INT NOT NULL AFTER `photo` ;
+
+ALTER TABLE `ci_cookies` CHANGE `cookie_id` `cookie_id` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ,
+CHANGE `netid` `netid` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ,
+CHANGE `ip_address` `ip_address` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ,
+CHANGE `user_agent` `user_agent` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ,
+CHANGE `orig_page_requested` `orig_page_requested` VARCHAR( 120 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ,
+CHANGE `php_session_id` `php_session_id` VARCHAR( 40 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ;
+
+ALTER TABLE `ci_sessions` CHANGE `session_id` `session_id` VARCHAR( 40 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '0',
+CHANGE `ip_address` `ip_address` VARCHAR( 45 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '0',
+CHANGE `user_agent` `user_agent` VARCHAR( 120 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL ,
+CHANGE `user_data` `user_data` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL ;
+
+ALTER TABLE `membership` CHANGE `first_name` `first_name` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL, CHANGE `last_name` `last_name` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL, CHANGE `email_address` `email_address` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL, CHANGE `user_name` `user_name` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL, CHANGE `pass_word` `pass_word` VARCHAR(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL, CHANGE `mobile` `mobile` VARCHAR(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL, CHANGE `address` `address` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL, CHANGE `ol_name` `ol_name` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL, CHANGE `ol_area` `ol_area` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL, CHANGE `personal_email` `personal_email` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL, CHANGE `personal_phone` `personal_phone` VARCHAR(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL;
+
+ALTER TABLE `products` CHANGE `item` `item` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL ,
+CHANGE `description` `description` VARCHAR( 40 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL 

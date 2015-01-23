@@ -36,32 +36,6 @@ class Users_model extends CI_Model {
 		return false;
 	}
 	
-	/**
-    * Validate the login's data with the database
-    * @param string $user_name
-    * @param string $password
-    * @return void
-    */
-	function validateApi($email, $password)
-	{
-		$this->db->select('id');
-		$this->db->select('first_name');
-		$this->db->select('last_name');
-		$this->db->select('email_address');
-		$this->db->select('user_name');
-		$this->db->select('mobile');
-		$this->db->select('role');
-		$this->db->where('email_address', $email);
-		$this->db->where('pass_word', $password);
-		$query = $this->db->get('membership');
-		
-		if($query->num_rows == 1)
-		{
-			return $query->result_array();
-		}
-		return false;
-	}
-
     /**
     * Serialize the session data stored in the database, 
     * store it in a new array and return it to the controller 
@@ -82,36 +56,6 @@ class Users_model extends CI_Model {
 	}
 	
     /**
-    * Store the new user's data into the database
-    * @return boolean - check the insert
-    */	
-	function create_member()
-	{
-
-		$this->db->where('user_name', $this->input->post('username'));
-		$query = $this->db->get('membership');
-
-        if($query->num_rows > 0){
-        	echo '<div class="alert alert-error"><a class="close" data-dismiss="alert">×</a><strong>';
-			  echo "Username already taken";	
-			echo '</strong></div>';
-		}else{
-
-			$new_member_insert_data = array(
-				'first_name' => $this->input->post('first_name'),
-				'last_name' => $this->input->post('last_name'),
-				'email_addres' => $this->input->post('email_address'),			
-				'user_name' => $this->input->post('username'),
-				'pass_word' => md5($this->input->post('password')),
-				'mobile' => $this->input->post('mobile')
-			);
-			$insert = $this->db->insert('membership', $new_member_insert_data);
-		    return $insert;
-		}
-	      
-	}//create_member
-
-	/**
     * Get user by his is
     * @param int $user_id 
     * @return array
@@ -162,8 +106,57 @@ class Users_model extends CI_Model {
 		
 		return $query->result_array(); 	
     }
+
+	/**
+    * Count the number of rows
+    * @param int $manufacture_id
+    * @param int $search_string
+    * @param int $order
+    * @return int
+    */
+    function count_users($search_string=null, $order=null)
+    {
+		$this->db->select('*');
+		$this->db->from('membership');
+		if($search_string){
+			$this->db->like('first_name', $search_string);
+		}
+		if($order){
+			$this->db->order_by($order, 'Asc');
+		}else{
+		    $this->db->order_by('id', 'Asc');
+		}
+		$query = $this->db->get();
+		return $query->num_rows();        
+    }
 	
-	public function get_api_users($search_string=null, $order=null, $order_type='Asc', $limit_start=null, $limit_end=null)
+	/**
+    * Validate the login's data with the database
+    * @param string $user_name
+    * @param string $password
+    * @return void
+    */
+	function validate_api($email, $password)
+	{
+		$this->db->select('id');
+		$this->db->select('first_name');
+		$this->db->select('last_name');
+		$this->db->select('email_address');
+		$this->db->select('user_name');
+		$this->db->select('mobile');
+		$this->db->select('role');
+		$this->db->where('email_address', $email);
+		$this->db->where('pass_word', $password);
+		$query = $this->db->get('membership');
+		
+		if($query->num_rows == 1)
+		{
+			return $query->result_array();
+		}
+		return false;
+	}
+
+	public function get_users_api($search_string=null, $order=null, $order_type='Asc', $limit_start=null, $limit_end=null)
     {
 	    
 		$this->db->select('membership.id');
@@ -202,30 +195,7 @@ class Users_model extends CI_Model {
 		return $query->result_array(); 	
     }
 
-    /**
-    * Count the number of rows
-    * @param int $manufacture_id
-    * @param int $search_string
-    * @param int $order
-    * @return int
-    */
-    function count_users($search_string=null, $order=null)
-    {
-		$this->db->select('*');
-		$this->db->from('membership');
-		if($search_string){
-			$this->db->like('first_name', $search_string);
-		}
-		if($order){
-			$this->db->order_by($order, 'Asc');
-		}else{
-		    $this->db->order_by('id', 'Asc');
-		}
-		$query = $this->db->get();
-		return $query->num_rows();        
-    }
-	
-	function count_api_users($search_string=null, $order=null)
+	function count_users_api($search_string=null, $order=null)
     {
 		$this->db->select('*');
 		$this->db->from('membership');
@@ -248,7 +218,7 @@ class Users_model extends CI_Model {
     * @param array $data - associative array with data to store
     * @return boolean 
     */
-    function store_user($new_member_insert_data)
+    function add_user_api($new_member_insert_data)
     {
 		$this->db->where('email_address', $new_member_insert_data["email_address"]);
 		$query = $this->db->get('membership');
@@ -266,7 +236,7 @@ class Users_model extends CI_Model {
     * @param array $data - associative array with data to store
     * @return boolean
     */
-    function update_user($id, $data)
+    function update_user_api($id, $data)
     {
 		$this->db->where('id', $id);
 		$this->db->update('membership', $data);
@@ -285,11 +255,8 @@ class Users_model extends CI_Model {
     * @param int $id - user id
     * @return boolean
     */
-	function delete_user($id){
+	function delete_user_api($id){
 		$this->db->where('id', $id);
 		$this->db->delete('membership'); 
 	}
 }
-
-
-                            

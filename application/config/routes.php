@@ -41,19 +41,36 @@ $route['default_controller'] = 'user/index';
 $route['404_override'] = '';
 /* API */
 //User Login
-$route['API/V1/login'] = 'Mobile_API/validate_credentials';
+$route['API/V1/login'] = 'Authentication_API/validate_credentials';
 
 //Users
-$route['API/V1/users'] = 'Mobile_API/users';
-$route['API/V1/register'] = 'Mobile_API/register';
-$route['API/V1/user/update/(:any)'] = 'Mobile_API/user_update/$1';
-$route['API/V1/user/delete/(:any)'] = 'Mobile_API/user_delete/$1';
+$route['API/V1/users'] = 'Users_API/user_list';
+$route['API/V1/register'] = 'Users_API/user_add';
+$route['API/V1/user/update/(:any)'] = 'Users_API/user_update/$1';
+$route['API/V1/user/delete/(:any)'] = 'Users_API/user_delete/$1';
 
-//Users/Customers
-$route['API/V1/outlets'] = 'Mobile_API/customers';
-$route['API/V1/outlets/add'] = 'Mobile_API/customers_add';
-$route['API/V1/outlets/update/(:any)'] = 'Mobile_API/customer_update/$1';
-$route['API/V1/outlets/delete/(:any)'] = 'Mobile_API/customer_delete/$1';
+//Customers
+$route['API/V1/outlets'] = 'Customer_API/customer_list';
+$route['API/V1/outlets/add'] = 'Customer_API/customer_add';
+$route['API/V1/outlets/update/(:any)'] = 'Customer_API/customer_update/$1';
+$route['API/V1/outlets/delete/(:any)'] = 'Customer_API/customer_delete/$1';
+
+//DSR
+$route['API/V1/dsr'] = 'DSR_API/dsr_list';
+$route['API/V1/dsr/add'] = 'DSR_API/dsr_add';
+$route['API/V1/dsr/update/(:any)'] = 'DSR_API/dsr_update/$1';
+$route['API/V1/dsr/delete/(:any)'] = 'DSR_API/dsr_delete/$1';
+
+$route['API/V1/dsr/area'] = 'DSR_API/customer_area_list';
+$route['API/V1/dsr/area/outlets'] = 'DSR_API/customer_list_by_area';
+
+$route['API/V1/products'] = 'Product_API/product_list';
+
+//Target
+$route['API/V1/target'] = 'Target_API/target_list';
+$route['API/V1/target/add'] = 'Target_API/target_add';
+$route['API/V1/target/update/(:any)'] = 'Target_API/target_update/$1';
+$route['API/V1/target/delete/(:any)'] = 'Target_API/target_delete/$1';
 
 /*admin*/
 $route['admin'] = 'user/index';
