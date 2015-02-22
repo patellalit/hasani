@@ -1,4 +1,4 @@
-    <div class="container top">
+	<div class="container top">
       
       <ul class="breadcrumb">
         <li>
@@ -53,13 +53,6 @@
       echo form_open('admin/users/update/'.$this->uri->segment(4).'', $attributes);
       ?>
         <fieldset>
-		  <div class="control-group">
-            <label for="inputError" class="control-label">Username</label>
-            <div class="controls">
-              <input type="text" readonly="readonly" id="" name="username" value="<?php echo $user[0]['user_name']; ?>" >
-              <!--<span class="help-inline">Woohoo!</span>-->
-            </div>
-          </div>
           <div class="control-group">
             <label for="inputError" class="control-label">First Name</label>
             <div class="controls">
@@ -74,30 +67,77 @@
               <!--<span class="help-inline">Woohoo!</span>-->
             </div>
           </div>
-		  <div class="control-group">
-            <label for="inputError" class="control-label">Password</label>
+          <div class="control-group">
+            <label for="inputError" class="control-label">Company Mobile</label>
             <div class="controls">
-              <input type="text" id="" name="password" value="">
+              <input type="text" id="" name="mobile" value="<?php echo $user[0]['mobile']; ?>">
               <!--<span class="help-inline">Cost Price</span>-->
             </div>
-          </div> 
+          </div>
 		  <div class="control-group">
-            <label for="inputError" class="control-label">Email</label>
+            <label for="inputError" class="control-label">Company Email</label>
             <div class="controls">
               <input type="text" id="" name="email" value="<?php echo $user[0]['email_address']; ?>" >
               <!--<span class="help-inline">Woohoo!</span>-->
             </div>
           </div>
           <div class="control-group">
-            <label for="inputError" class="control-label">Mobile</label>
+            <label for="inputError" class="control-label">Personal Mobile</label>
             <div class="controls">
-              <input type="text" id="" name="mobile" value="<?php echo $user[0]['mobile']; ?>">
+              <input type="text" id="" name="personal_phone" value="<?php echo $user[0]['personal_phone']; ?>">
               <!--<span class="help-inline">Cost Price</span>-->
             </div>
           </div>
+		  <div class="control-group">
+            <label for="inputError" class="control-label">Personal Email</label>
+            <div class="controls">
+              <input type="text" id="" name="personal_email" value="<?php echo $user[0]['personal_email']; ?>" >
+              <!--<span class="help-inline">Woohoo!</span>-->
+            </div>
+          </div>
+		  <div class="control-group">
+            <label for="inputError" class="control-label">Address</label>
+            <div class="controls">
+              <input type="text" id="" name="address" value="<?php echo $user[0]['address']; ?>" >
+              <!--<span class="help-inline">Woohoo!</span>-->
+            </div>
+          </div>
+		  <div class="control-group">
+            <label for="inputError" class="control-label">Password</label>
+            <div class="controls">
+              <input type="text" id="" name="password" value="">
+              <!--<span class="help-inline">Cost Price</span>-->
+            </div>
+          </div>
+ 
+          <div class="control-group">
+            <label for="inputError" class="control-label">Role</label>
+            <div class="controls">
+              <?php 
+				$js = 'id="role" onChange="if(this.value==2) $(\'.isd-toggle\').show(); else $(\'.isd-toggle\').hide();"';
+				echo form_dropdown('role', role_array(), $user[0]['role'],$js);
+			?>
+            </div>
+          </div>
+
+		  <div class="isd-toggle" <?php if($user[0]['role'] != 2) echo 'style="display:none;"'; ?>>
+			<div class="control-group">
+		        <label for="inputError" class="control-label">Dealer Name</label>
+		        <div class="controls">
+		          <input type="text" id="" name="ol_name" value="<?php echo $user[0]['ol_name']; ?>" >
+		        </div>
+		      </div>
+		      <div class="control-group">
+		        <label for="inputError" class="control-label">Dealer Area</label>
+		        <div class="controls">
+		          <input type="text" id="" name="ol_area" value="<?php echo $user[0]['ol_area']; ?>">
+		        </div>
+		      </div> 
+		  </div>
+
           <div class="form-actions">
             <button class="btn btn-primary" type="submit">Save changes</button>
-            <button class="btn" type="reset">Cancel</button>
+<button class="btn" type="button" onclick="document.location='<?php echo site_url("admin").'/users/'; ?>'">Cancel</button>
           </div>
         </fieldset>
 
@@ -105,3 +145,5 @@
 
     </div>
      
+
+                            

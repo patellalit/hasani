@@ -1,9 +1,14 @@
 <!DOCTYPE html> 
 <html lang="en-US">
 <head>
-  <title>CoilChem Admin</title>
+  <title>Hasani Group Admin</title>
   <meta charset="utf-8">
   <link href="<?php echo base_url(); ?>assets/css/admin/global.css" rel="stylesheet" type="text/css">
+  <link href="<?php echo base_url(); ?>assets/jquery-ui/jquery-ui.min.css" rel="stylesheet" type="text/css">
+  <script src="<?php echo base_url(); ?>assets/js/jquery-1.7.1.min.js"></script>
+    <script src="<?php echo base_url(); ?>assets/jquery-ui/jquery-ui.min.js"></script>
+	<script src="<?php echo base_url(); ?>assets/js/bootstrap.min.js"></script>
+	<script src="<?php echo base_url(); ?>assets/js/admin.js"></script>
 <style>
 .navbar-inner{
 background-image:none;
@@ -20,27 +25,44 @@ text-shadow:none !important;
 }
 </style>
 </head>
+<?php 
+$login_user = $this->session->userdata('login_user');
+
+?>
 <body>
 	<div class="navbar navbar-fixed-top">
 	  <div class="navbar-inner">
 	    <div class="container">
 	      <a class="brand" style="padding:0;"><img src="<?php echo base_url(); ?>assets/img/admin/logo-small.png" style="height:36px;" /></a>
 	      <ul class="nav">
-	        <li <?php if($this->uri->segment(2) == 'customers'){echo 'class="active"';}?>>
-	          <a href="<?php echo base_url(); ?>admin/customers">Customers</a>
-	        </li>
-	        <li <?php if($this->uri->segment(2) == 'users'){echo 'class="active"';}?>>
-	          <a href="<?php echo base_url(); ?>admin/users">Users</a>
-	        </li>
-	        <li class="dropdown">
-	          <a href="#" class="dropdown-toggle" data-toggle="dropdown">System <b class="caret"></b></a>
+			<li class="dropdown">
+	          <a href="#" class="dropdown-toggle" data-toggle="dropdown" style="padding:0;"><img src="<?php echo base_url(); ?>assets/img/admin/my-account.png" alt="User" title="My Account"/> <b class="caret"></b></a>
 	          <ul class="dropdown-menu">
 	            <li>
-	              <a href="<?php echo base_url(); ?>admin/logout">Logout</a>
+					<a href="javascript:void(0);">Welcome <?php echo $login_user["first_name"]." ".$login_user["last_name"]?></a>
+				</li>
+				<!--<li>
+					<a href="<?php echo base_url(); ?>admin/changepassword">Change Password</a>	              
+				</li>-->
+				<li>
+					<a href="<?php echo base_url(); ?>admin/logout">Logout</a>
 	            </li>
 	          </ul>
 	        </li>
+			<li <?php if($this->uri->segment(2) == 'registered'){echo 'class="active"';}?>>
+	          <a href="<?php echo base_url(); ?>admin/registered/users">Registered CDKEY</a>
+	        </li>
+
+	        <li <?php if($this->uri->segment(2) == 'users'){echo 'class="active"';}?>>
+	          <a href="<?php echo base_url(); ?>admin/users">Users</a>
+	        </li>
+			
+			<li <?php if($this->uri->segment(2) == 'dealers'){echo 'class="active"';}?>>
+	          <a href="<?php echo base_url(); ?>admin/dealers">Dealers</a>
+	        </li>
+	        
 	      </ul>
 	    </div>
 	  </div>
-	</div>	
+	</div>
+                            

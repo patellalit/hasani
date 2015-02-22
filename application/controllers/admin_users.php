@@ -9,6 +9,8 @@ class Admin_users extends CI_Controller {
     {
         parent::__construct();
         $this->load->model('users_model');
+        $this->load->helper('common_helper');
+		$this->load->library('apicall');
 
         if(!$this->session->userdata('is_logged_in')){
             redirect('admin/login');
@@ -21,14 +23,8 @@ class Admin_users extends CI_Controller {
     */
     public function index()
     {
-
-        //all the posts sent by the view
-        $search_string = $this->input->post('search_string');        
-        $order = $this->input->post('order'); 
-        $order_type = $this->input->post('order_type'); 
-
-        //pagination settings
-        $config['per_page'] = 5;
+		//pagination settings
+        $config['per_page'] = 25;
         $config['base_url'] = base_url().'admin/users';
         $config['use_page_numbers'] = TRUE;
         $config['num_links'] = 20;
@@ -38,89 +34,60 @@ class Admin_users extends CI_Controller {
         $config['num_tag_close'] = '</li>';
         $config['cur_tag_open'] = '<li class="active"><a>';
         $config['cur_tag_close'] = '</a></li>';
+        $config['uri_segment'] = 3;
+        $config['num_links'] = 4;
 
-        //limit end
+		//limit end
         $page = $this->uri->segment(3);
-
-        //math to get the initial record to be select in the database
+		//math to get the initial record to be select in the database
         $limit_end = ($page * $config['per_page']) - $config['per_page'];
         if ($limit_end < 0){
             $limit_end = 0;
         } 
 
-        //if order type was changed
-        if($order_type){
-            $filter_session_data['order_type'] = $order_type;
-        }
-        else{
-            //we have something stored in the session? 
-            if($this->session->userdata('order_type')){
-                $order_type = $this->session->userdata('order_type');    
-            }else{
-                //if we have nothing inside session, so it's the default "Asc"
-                $order_type = 'Asc';    
-            }
-        }
-        //make the data type var avaible to our view
-        $data['order_type_selected'] = $order_type;        
+		//all the posts sent by the view
+        $search_string = $this->input->post('search_string');        
+        $order = $this->input->post('order'); 
+        $order_type = $this->input->post('order_type'); 
+		
+		//filtered && || paginated
+        if($search_string !== false && $search_string != "" && $order !== false || $this->uri->segment(3) == true){ 
+			$filter_session_data = array();
+			//if order type was changed
+		    if($order_type){
+		        $filter_session_data['order_type'] = $order_type;
+		    }
+		    else{
+		        //we have something stored in the session? 
+		        if($this->session->userdata('order_type')){
+		            $order_type = $this->session->userdata('order_type');    
+		        }else{
+		            //if we have nothing inside session, so it's the default "Asc"
+		            $order_type = 'DESC';    
+		        }
+		    }
+		    //make the data type var avaible to our view
+		    $data['order_type_selected'] = $order_type;
+		
+			if($search_string){
+		        $filter_session_data['search_string_selected'] = $search_string;
+		    }else{
+		        $search_string = $this->session->userdata('search_string_selected');
+		    }
+		    $data['search_string_selected'] = $search_string;
 
+			if($order){
+		        $filter_session_data['order'] = $order;
+		    }
+		    else{
+		        $order = $this->session->userdata('order');
+		    }
+		    $data['order'] = $order;
 
-        //we must avoid a page reload with the previous session data
-        //if any filter post was sent, then it's the first time we load the content
-        //in this case we clean the session filter data
-        //if any filter post was sent but we are in some page, we must load the session data
-
-        //filtered && || paginated
-        if($search_string !== false && $order !== false || $this->uri->segment(3) == true){ 
-           
-            /*
-            The comments here are the same for line 79 until 99
-
-            if post is not null, we store it in session data array
-            if is null, we use the session data already stored
-            we save order into the the var to load the view with the param already selected       
-            */
-
-            if($search_string){
-                $filter_session_data['search_string_selected'] = $search_string;
-            }else{
-                $search_string = $this->session->userdata('search_string_selected');
-            }
-            $data['search_string_selected'] = $search_string;
-
-            if($order){
-                $filter_session_data['order'] = $order;
-            }
-            else{
-                $order = $this->session->userdata('order');
-            }
-            $data['order'] = $order;
-
-            //save session data into the session
-            $this->session->set_userdata($filter_session_data);
-
-            $data['count_users']= $this->users_model->count_users($search_string, $order);
-            $config['total_rows'] = $data['count_users'];
-
-            //fetch sql data into arrays
-            if($search_string){
-                if($order){
-                    $data['users'] = $this->users_model->get_users($search_string, $order, $order_type, $config['per_page'],$limit_end);        
-                }else{
-                    $data['users'] = $this->users_model->get_users($search_string, '', $order_type, $config['per_page'],$limit_end);           
-                }
-            }else{
-                if($order){
-                    $data['users'] = $this->users_model->get_users('', $order, $order_type, $config['per_page'],$limit_end);        
-                }else{
-					
-                    $data['users'] = $this->users_model->get_users('', '', $order_type, $config['per_page'],$limit_end);        
-                }
-            }
-
-        }else{
-
-            //clean filter data inside section
+			//save session data into the session
+		    $this->session->set_userdata($filter_session_data);
+		}else{
+			//clean filter data inside section
             $filter_session_data['search_string_selected'] = null;
             $filter_session_data['order'] = null;
             $filter_session_data['order_type'] = null;
@@ -129,13 +96,15 @@ class Admin_users extends CI_Controller {
             //pre selected options
             $data['search_string_selected'] = '';
             $data['order'] = 'id';
+			$data['order_type_selected'] = 'desc';
+		}
 
-            //fetch sql data into arrays
-            $data['count_users']= $this->users_model->count_users();
-            $data['users'] = $this->users_model->get_users('', '', $order_type, $config['per_page'],$limit_end);        
-            $config['total_rows'] = $data['count_users'];
+		$request_params = array("search_string"=>$data['search_string_selected'],"offset"=>$limit_end,"limit"=>$config['per_page'],"sort"=>$data['order'],"sort_dir"=>$data['order_type_selected']);
+		$users = $this->apicall->call("GET","users",$request_params);
 
-        }//!isset($manufacture_id) && !isset($search_string) && !isset($order)
+		$data['count_users'] = $users["data"]["count_users"];
+		$data['users'] = $users["data"]["users"];
+		$config['total_rows'] = $data['count_users'];
 
         //initializate the panination helper 
         $this->pagination->initialize($config);   
@@ -155,25 +124,32 @@ class Admin_users extends CI_Controller {
             //form validation
 			$this->form_validation->set_rules('first_name', 'First Name', 'required|trim');
 			$this->form_validation->set_rules('last_name', 'Last Name', 'required|trim');
-			$this->form_validation->set_rules('username', 'Username', 'required|trim');                        
-			$this->form_validation->set_rules('email', 'Email', 'required|trim');
-            $this->form_validation->set_rules('password', 'Password', 'required|trim');
-            $this->form_validation->set_rules('mobile', 'Mobile', 'required|trim');
+			$this->form_validation->set_rules('mobile', 'Company Mobile', 'required|trim');
+			$this->form_validation->set_rules('personal_phone', 'Personal Mobile', 'required|trim');
+			$this->form_validation->set_rules('address', 'Address', 'required|trim');
+			$this->form_validation->set_rules('role', 'Role', 'required|trim');
+			if($this->input->post('role') == 2){
+				$this->form_validation->set_rules('ol_name', 'Dealer Name', 'required|trim');
+				$this->form_validation->set_rules('ol_area', 'Dealer Area', 'required|trim');
+			}
+            $this->form_validation->set_rules('mobile', 'Company Mobile', 'required|trim');
+			$this->form_validation->set_rules('password', 'Password', 'required|trim');
 
             $this->form_validation->set_error_delimiters('<div class="alert alert-error"><a class="close" data-dismiss="alert">×</a><strong>', '</strong></div>');
 
             //if the form has passed through the validation
             if ($this->form_validation->run())
             {
+				$request_params = $_POST;
+				$users = $this->apicall->call("POST","user/add",$request_params);
+
                 //if the insert has returned true then we show the flash message
-                if($this->users_model->store_user()){
+                if($users["status"] == 1){
                     $data['flash_message'] = TRUE; 
                 }else{
                     $data['flash_message'] = FALSE;
                 }
-
             }
-
         }
         //load the view
         $data['main_content'] = 'admin/users/add';
@@ -204,18 +180,11 @@ class Admin_users extends CI_Controller {
             //if the form has passed through the validation
             if ($this->form_validation->run())
             {
-    
-                $data_to_store = array(
-                    'first_name' => $this->input->post('first_name'),
-					'last_name' => $this->input->post('last_name'),
-                    'email_address' => $this->input->post('email'),
-                    'mobile' => $this->input->post('mobile')
-                );
-				if($this->input->post('password') != "")
-					$data_to_store['password'] = md5($this->input->post('password'));
+                $request_params = $_POST;
 
+				$users = $this->apicall->call("POST","user/update/".$id,$request_params);
                 //if the insert has returned true then we show the flash message
-                if($this->users_model->update_user($id, $data_to_store) == TRUE){
+                if($users["status"] == 1){
                     $this->session->set_flashdata('flash_message', 'updated');
                 }else{
                     $this->session->set_flashdata('flash_message', 'not_updated');
@@ -245,8 +214,179 @@ class Admin_users extends CI_Controller {
     {
         //userw id 
         $id = $this->uri->segment(4);
-        $this->users_model->delete_user($id);
+		$users = $this->apicall->call("GET","user/delete/".$id);
         redirect('admin/users');
     }//edit
 
+
+	/**
+    * Load the main view with all the current model model's data.
+    * @return void
+    */
+    public function registered_user_list()
+    {
+		//pagination settings
+        $config['per_page'] = 25;
+        $config['base_url'] = base_url().'admin/registered/users';
+        $config['use_page_numbers'] = TRUE;
+        $config['num_links'] = 20;
+        $config['full_tag_open'] = '<ul>';
+        $config['full_tag_close'] = '</ul>';
+        $config['num_tag_open'] = '<li>';
+        $config['num_tag_close'] = '</li>';
+        $config['cur_tag_open'] = '<li class="active"><a>';
+        $config['cur_tag_close'] = '</a></li>';
+        $config['uri_segment'] = 4;
+        $config['num_links'] = 4;
+
+		//limit end
+        $data['page_selected'] = $page = $this->uri->segment(4);
+		//math to get the initial record to be select in the database
+        $limit_end = ($page * $config['per_page']) - $config['per_page'];
+        if ($limit_end < 0){
+            $limit_end = 0;
+        } 
+
+		//all the posts sent by the view
+        $search_string = $this->input->post('search_string');  
+		$search_from_date = $this->input->post('search_from_date');
+		$search_to_date = $this->input->post('search_to_date');
+        $order = $this->input->post('order'); 
+        $order_type = $this->input->post('order_type'); 
+		$search_in = $this->input->post('search_in');
+		
+		//filtered && || paginated
+        if(($search_string != "" && $search_in )|| $search_from_date != "" || $search_to_date != "" && $order !== false || $this->uri->segment(4) == true){ 
+			$filter_session_data = array();
+			//if order type was changed
+		    if($order_type){
+		        $filter_session_data['order_type'] = $order_type;
+		    }
+		    else{
+		        //we have something stored in the session? 
+		        if($this->session->userdata('order_type')){
+		            $order_type = $this->session->userdata('order_type');    
+		        }else{
+		            //if we have nothing inside session, so it's the default "Asc"
+		            $order_type = 'DESC';    
+		        }
+		    }
+		    //make the data type var avaible to our view
+		    $data['order_type_selected'] = $order_type;
+		
+		    if($search_from_date){
+		        $filter_session_data['search_from_date_selected'] = $search_from_date;
+		    }else{
+		        $search_from_date = $this->session->userdata('search_from_date_selected');
+		    }
+		    $data['search_from_date_selected'] = date("Y-m-d",strtotime($search_from_date));
+			
+		    if($search_to_date){
+		        $filter_session_data['search_to_date_selected'] = $search_to_date;
+		    }else{
+		        $search_to_date = $this->session->userdata('search_to_date_selected');
+		    }
+		    $data['search_to_date_selected'] = date("Y-m-d",strtotime($search_to_date));
+
+		    if($search_in == "all"){
+		        $search_string = null;
+		    }else if($search_string){
+		        $filter_session_data['search_string_selected'] = $search_string;
+		    }else{
+				$search_string = $this->session->userdata('search_string_selected');
+			}
+		    $data['search_string_selected'] = $search_string;
+
+			if($search_in == "all"){
+		        $search_in = null;
+		    }else if($search_in){
+		        $filter_session_data['search_in_selected'] = $search_in;
+		    }else{
+		        $search_in = $this->session->userdata('search_in_selected');
+		    }
+		    $data['search_in_selected'] = $search_in;
+			$data['search_in'] = $search_in;
+
+			if($order){
+		        $filter_session_data['order'] = $order;
+		    }
+		    else{
+		        $order = $this->session->userdata('order');
+		    }
+			
+		    $data['order'] = $order;
+
+			//save session data into the session
+		    $this->session->set_userdata($filter_session_data);
+		}else{
+			//clean filter data inside section
+            $filter_session_data['search_string_selected'] = null;
+			$filter_session_data["search_in_selected"]=null;
+	    	$filter_session_data['search_from_date_selected'] = date("Y-m-d");
+            $filter_session_data['search_to_date_selected'] = date("Y-m-d");
+            $filter_session_data['order'] = null;
+            $filter_session_data['order_type'] = null;
+
+            $this->session->set_userdata($filter_session_data);
+
+            //pre selected options
+            $data['search_string_selected'] = '';
+		    $data['search_from_date_selected'] = date("Y-m-d");
+            $data['search_to_date_selected'] = date("Y-m-d");
+            $data['order'] = 'p.id';
+			$data['order_type_selected'] = 'desc';
+			$data["search_in_selected"]="";
+		}
+
+		$request_params = array("search_in"=>$search_in,"search_from_date"=>$data['search_from_date_selected'],"search_to_date"=>$data['search_to_date_selected'],"search_string"=>$data['search_string_selected'],"offset"=>$limit_end,"limit"=>$config['per_page'],"sort"=>$data['order'],"sort_dir"=>$data['order_type_selected']);
+		//$users = $this->apicall->call("GET","users",$request_params);
+		$users = $this->users_model->get_registered_users($request_params);
+
+		$data['count_users'] = $this->users_model->get_registered_users_count($request_params,true);
+		$data['total_bill'] = $this->users_model->get_registered_users_total_bill($request_params,"bill",true);
+$data['total_price'] = $this->users_model->get_registered_users_total_bill($request_params,"price",true);
+
+		$date = new DateTime();
+        $data['search_date_0'] = $request_params["search_date"] = date_format($date, 'Y-m-d');
+        $data['count_users_0'] = $this->users_model->get_registered_users_count($request_params);
+		$data['total_bill_0'] = $this->users_model->get_registered_users_total_bill($request_params,"bill");
+$data['total_price_0'] = $this->users_model->get_registered_users_total_bill($request_params,"price");
+
+		$date = new DateTime($request_params["search_date"]);
+		$date->sub(new DateInterval('P1D'));
+        $data['search_date_1'] = $request_params["search_date"] = date_format($date, 'Y-m-d');
+        $data['count_users_1'] = $this->users_model->get_registered_users_count($request_params);
+		$data['total_bill_1'] = $this->users_model->get_registered_users_total_bill($request_params,"bill");
+$data['total_price_1'] = $this->users_model->get_registered_users_total_bill($request_params,"price");
+
+		$date = new DateTime($request_params["search_date"]);
+		$date->sub(new DateInterval('P1D'));
+        $data['search_date_2'] = $request_params["search_date"] = date_format($date, 'Y-m-d');
+        $data['count_users_2'] = $this->users_model->get_registered_users_count($request_params);
+		$data['total_bill_2'] = $this->users_model->get_registered_users_total_bill($request_params,"bill");
+$data['total_price_2'] = $this->users_model->get_registered_users_total_bill($request_params,"price");
+
+		$date = new DateTime($request_params["search_date"]);
+		$date->sub(new DateInterval('P1D'));
+        $data['search_date_3'] = $request_params["search_date"] = date_format($date, 'Y-m-d');
+        $data['count_users_3'] = $this->users_model->get_registered_users_count($request_params);
+		$data['total_bill_3'] = $this->users_model->get_registered_users_total_bill($request_params,"bill");
+$data['total_price_3'] = $this->users_model->get_registered_users_total_bill($request_params,"price");
+		
+		$data['search_from_date_selected'] = date("d-m-Y",strtotime($data['search_from_date_selected']));
+		$data['search_to_date_selected'] = date("d-m-Y",strtotime($data['search_to_date_selected']));
+		$data['users'] = $users;
+		$config['total_rows'] = $data['count_users'];
+
+
+        //initializate the panination helper 
+        $this->pagination->initialize($config);   
+
+        //load the view
+        $data['main_content'] = 'admin/users/registered_list';
+        $this->load->view('includes/template', $data);  
+
+    }//index
+
 }
+                            

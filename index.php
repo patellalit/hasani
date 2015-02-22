@@ -18,6 +18,7 @@
  *
  */
 	define('ENVIRONMENT', 'development');
+	date_default_timezone_set("Asia/Kolkata");
 /*
  *---------------------------------------------------------------
  * ERROR REPORTING

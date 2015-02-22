@@ -1,4 +1,4 @@
-    <div class="container top">
+<div class="container top">
 
       <ul class="breadcrumb">
         <li>
@@ -62,9 +62,12 @@ height: 26px;"');
               <tr>
                 <th class="header">#</th>
 				<th class="yellow header headerSortDown">Name</th>                
-				<th class="green header">Username</th>
-                <th class="green header">Email</th>
-                <th class="red header">Mobile</th>
+				<th class="green header">Company Phone</th>
+                <th class="green header">Company Email</th>
+				<th class="green header">Personal Phone</th>
+                <th class="green header">Personal Email</th>
+                <th class="red header">Address</th>
+                <th class="red header">Role</th>
                 <th class="red header">Actions</th>
               </tr>
             </thead>
@@ -75,12 +78,15 @@ height: 26px;"');
                 echo '<tr>';
                 echo '<td>'.$row['id'].'</td>';
 				echo '<td>'.$row['first_name'].' '.$row['last_name'].'</td>';
-				echo '<td>'.$row['user_name'].'</td>';
+				echo '<td>'.$row['mobile'].'</td>';
                 echo '<td>'.$row['email_address'].'</td>';
-                echo '<td>'.$row['mobile'].'</td>';
+                echo '<td>'.$row['personal_phone'].'</td>';
+                echo '<td>'.$row['personal_email'].'</td>';
+                echo '<td>'.$row['address'].'</td>';
+                echo '<td>'.role_array($row['role']).'</td>';
                 echo '<td class="crud-actions">
                   <a href="'.site_url("admin").'/users/update/'.$row['id'].'" class="btn btn-info">view & edit</a>  
-                  <a href="'.site_url("admin").'/users/delete/'.$row['id'].'" class="btn btn-danger">delete</a>
+                  <a href="'.site_url("admin").'/users/delete/'.$row['id'].'" class="btn btn-danger" onclick="return confirmDelete(this);">delete</a>
                 </td>';
                 echo '</tr>';
               }

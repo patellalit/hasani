@@ -82,12 +82,7 @@ class Users_model extends CI_Model {
     public function get_users($search_string=null, $order=null, $order_type='Asc', $limit_start, $limit_end)
     {
 	    
-		$this->db->select('membership.id');
-		$this->db->select('membership.first_name');
-		$this->db->select('membership.last_name');
-		$this->db->select('membership.email_address');
-		$this->db->select('membership.user_name');
-		$this->db->select('membership.mobile');
+		$this->db->select('*');
 		$this->db->from('membership');
 		if($search_string){
 			$this->db->like('first_name', $search_string);
@@ -145,8 +140,12 @@ class Users_model extends CI_Model {
 		$this->db->select('user_name');
 		$this->db->select('mobile');
 		$this->db->select('role');
-		$this->db->where('email_address', $email);
+                $this->db->select('is_logged_in');
 		$this->db->where('pass_word', $password);
+		
+		$where = "(mobile='".$email."' or email_address='".$email."') ";
+		$this->db->where($where);
+
 		$query = $this->db->get('membership');
 		
 		if($query->num_rows == 1)
@@ -155,10 +154,37 @@ class Users_model extends CI_Model {
 		}
 		return false;
 	}
-
-	public function get_users_api($search_string=null, $order=null, $order_type='Asc', $limit_start=null, $limit_end=null)
+	
+	public function get_users_by_role_api($role)
     {
 	    
+		$this->db->select('membership.id');
+		$this->db->select('membership.first_name');
+		$this->db->select('membership.last_name');
+		$this->db->select('membership.email_address');
+		$this->db->select('membership.user_name');
+		$this->db->select('membership.mobile');
+		$this->db->select('membership.role');
+		$this->db->select('membership.ol_name');
+		$this->db->select('membership.ol_area');
+		$this->db->select('membership.address');
+		$this->db->select('membership.personal_email');
+		$this->db->select('membership.personal_phone');
+		
+		$this->db->from('membership');
+		
+		$this->db->where('membership.role',$role);
+		
+		$this->db->order_by('membership.first_name', "ASC");
+		$this->db->order_by('membership.last_name', "ASC");
+		
+		$query = $this->db->get();
+		
+		return $query->result_array(); 	
+    }
+
+	public function get_users_api($search_string=null, $order=null, $order_type='Asc', $offset=null, $limit=null)
+    {
 		$this->db->select('membership.id');
 		$this->db->select('membership.first_name');
 		$this->db->select('membership.last_name');
@@ -185,13 +211,14 @@ class Users_model extends CI_Model {
 		}else{
 		    $this->db->order_by('id', $order_type);
 		}
-		
-		if($limit_start)
-		$this->db->limit($limit_start, $limit_end);
+
+		if($limit !== null){
+			$this->db->limit($limit,$offset);
+		}
 		//$this->db->limit('4', '4');
 
 		$query = $this->db->get();
-		
+
 		return $query->result_array(); 	
     }
 
@@ -209,8 +236,7 @@ class Users_model extends CI_Model {
 		}else{
 		    $this->db->order_by('id', 'Asc');
 		}
-		$query = $this->db->get();
-		return $query->num_rows();        
+		return $this->db->count_all_results();
     }
 
     /**
@@ -259,4 +285,137 @@ class Users_model extends CI_Model {
 		$this->db->where('id', $id);
 		$this->db->delete('membership'); 
 	}
+
+	function get_registered_users($params){
+		
+		$search_string=$params["search_string"];
+                $search_in=$params["search_in"];
+		$search_from_date=$params["search_from_date"];
+		$search_to_date=$params["search_to_date"];
+		$order=$params["sort"];
+		$order_type=$params["sort_dir"];
+		$offset=$params["offset"];
+		$limit=$params["limit"];
+
+		$this->db->select('*');
+		$this->db->from('productregistration p')
+			->join('login l', 'l.id = p.loginId', 'inner')
+			->join('plans pp', 'pp.id = p.plan_id', 'inner')
+			->join('packages pk', 'pk.id = pp.package', 'inner');
+		
+		if($search_string && $search_in){
+			$this->db->like($search_in, $search_string);
+			/*$this->db->or_like('p.customerName', $search_string);
+			$this->db->or_like('p.phoneNo', $search_string);
+			$this->db->or_like('p.imeiNo', $search_string);
+			$this->db->or_like('p.imeiNo2', $search_string);
+			$this->db->or_like('p.billNo', $search_string);
+			$this->db->or_like('pk.package_name', $search_string);
+			$this->db->or_like('pp.plan_name', $search_string);*/
+		}
+		if($search_from_date){
+			$this->db->where('p.planDate >=', $search_from_date);
+		}
+                if($search_to_date){
+			$this->db->where('p.planDate <=', $search_to_date);
+		}
+
+		if($order){
+			$this->db->order_by($order, $order_type);
+		}else{
+		    $this->db->order_by('p.id', "DESC");
+		}
+
+		if($limit !== null){
+			$this->db->limit($limit,$offset);
+		}
+
+		$query = $this->db->get();
+
+		return $query->result_array(); 	
+	}
+
+	function get_registered_users_count($params,$is_search=false){
+		$search_string=$params["search_string"];
+$search_in=$params["search_in"];
+		$search_from_date=$params["search_from_date"];
+		$search_to_date=$params["search_to_date"];
+        $search_date=(isset($params["search_date"]))?$params["search_date"]:false;
+
+		
+
+		$this->db->select('*');
+		$this->db->from('productregistration p')
+			->join('login l', 'l.id = p.loginId', 'inner')
+			->join('plans pp', 'pp.id = p.plan_id', 'inner')
+			->join('packages pk', 'pk.id = pp.package', 'inner');
+
+		if($search_string && $search_in && $is_search){
+			$this->db->like($search_in, $search_string);
+			/*$this->db->or_like('p.customerName', $search_string);
+			$this->db->or_like('p.phoneNo', $search_string);
+			$this->db->or_like('p.imeiNo', $search_string);
+			$this->db->or_like('p.imeiNo2', $search_string);
+			$this->db->or_like('p.billNo', $search_string);
+			$this->db->or_like('pk.package_name', $search_string);
+			$this->db->or_like('pp.plan_name', $search_string);*/
+		}
+		if($search_from_date && !$search_date){
+			$this->db->where('p.planDate >=', $search_from_date);
+		}
+                if($search_to_date && !$search_date){
+			$this->db->where('p.planDate <=', $search_to_date);
+		}
+		if($search_date){
+			$this->db->where('p.planDate', $search_date);
+		}
+		return $this->db->count_all_results();
+	}
+
+        function get_registered_users_total_bill($params,$type,$is_search=false){
+		$search_string=$params["search_string"];
+$search_in=$params["search_in"];
+		$search_from_date=$params["search_from_date"];
+		$search_to_date=$params["search_to_date"];
+        $search_date=(isset($params["search_date"]))?$params["search_date"]:false;
+		
+
+		if($type == "bill")
+			$this->db->select_sum('billAmount');
+		else
+			$this->db->select_sum('pp.price');
+
+		$this->db->from('productregistration p')
+			->join('login l', 'l.id = p.loginId', 'inner')
+			->join('plans pp', 'pp.id = p.plan_id', 'inner')
+			->join('packages pk', 'pk.id = pp.package', 'inner');
+		
+		if($search_string && $search_in && $is_search){
+			$this->db->like($search_in, $search_string);
+			/*$this->db->or_like('p.customerName', $search_string);
+			$this->db->or_like('p.phoneNo', $search_string);
+			$this->db->or_like('p.imeiNo', $search_string);
+			$this->db->or_like('p.imeiNo2', $search_string);
+			$this->db->or_like('p.billNo', $search_string);
+			$this->db->or_like('pk.package_name', $search_string);
+			$this->db->or_like('pp.plan_name', $search_string);*/
+		}
+		if($search_from_date && !$search_date){
+			$this->db->where('p.planDate >=', $search_from_date);
+		}
+                if($search_to_date && !$search_date){
+			$this->db->where('p.planDate <=', $search_to_date);
+		}
+		if($search_date){
+			$this->db->where('p.planDate', $search_date);
+		}
+        $query = $this->db->get();
+        $result = $query->result_array();
+if($type == "bill")
+        return $result[0]['billAmount'];
+else
+return $result[0]['price'];
+	}
 }
+                            
+                            

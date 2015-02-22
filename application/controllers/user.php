@@ -10,7 +10,7 @@ class User extends CI_Controller {
 	function index()
 	{
 		if($this->session->userdata('is_logged_in')){
-			redirect('admin/customers');
+			redirect('admin/registered/users');
         }else{
         	$this->load->view('admin/login');	
         }
@@ -39,11 +39,11 @@ class User extends CI_Controller {
 		if($is_valid)
 		{
 			$data = array(
-				'user_name' => $user_name,
+				'login_user' => $is_valid[0],
 				'is_logged_in' => true
 			);
 			$this->session->set_userdata($data);
-			redirect('admin/customers');
+			redirect('admin/registered/users');
 		}
 		else // incorrect username or password
 		{
@@ -112,4 +112,7 @@ class User extends CI_Controller {
 
 }
 
+                            
+
+                            
                             

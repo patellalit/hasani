@@ -1,6 +1,5 @@
 <?php
 class Products_model extends CI_Model {
- 
     /**
     * Responsable for auto load the database
     * @return void
@@ -18,7 +17,7 @@ class Products_model extends CI_Model {
     public function get_product_by_id($id)
     {
 		$this->db->select('*');
-		$this->db->from('products');
+		$this->db->from('plans');
 		$this->db->where('id', $id);
 		$query = $this->db->get();
 		return $query->result_array(); 
@@ -37,14 +36,12 @@ class Products_model extends CI_Model {
     public function get_products_api($search_string=null, $order=null, $order_type='Asc', $limit_start=null, $limit_end=null)
     {
 	    
-		$this->db->select('products.id');
-		$this->db->select('products.item');
-		$this->db->select('products.description');
-		$this->db->select('products.cost_price');
-		$this->db->select('products.sell_price');
-		$this->db->from('products');
+		$this->db->select('id');
+		$this->db->select('price');
+		$this->db->select('plan_full_name as item');
+		$this->db->from('plans');
 		if($search_string){
-			$this->db->like('description', $search_string);
+			$this->db->like('plan_full_name', $search_string);
 		}
 
 		if($order){
@@ -71,60 +68,32 @@ class Products_model extends CI_Model {
     function count_products_api($search_string=null, $order=null)
     {
 		$this->db->select('*');
-		$this->db->from('products');
+		$this->db->from('plans');
 		if($search_string){
-			$this->db->like('item', $search_string);
-		}
-		if($order){
-			$this->db->order_by($order, 'Asc');
-		}else{
-		    $this->db->order_by('id', 'Asc');
+			$this->db->like('plan_full_name', $search_string);
 		}
 		$query = $this->db->get();
 		return $query->num_rows();        
     }
 
-    /**
-    * Store the new item into the database
-    * @param array $data - associative array with data to store
-    * @return boolean 
-    */
-    function add_product_api($data)
+    public function get_planss_with_package_api()
     {
-		$insert = $this->db->insert('products', $data);
-	    return $insert;
-	}
+	    
+		$this->db->select('p.id as plan_id');
+		$this->db->select('p.price');
+		$this->db->select('p.plan_full_name as plan_name');
+		$this->db->select('pk.id as package_id');
+		$this->db->select('pk.package_name');
+		$this->db->from('plans p')
+				->join('packages pk', 'pk.id = p.package AND pk.status=1', 'inner');
+		
+		$this->db->order_by('pk.id', "ASC");
+		$this->db->order_by('p.price', "ASC");
+		$query = $this->db->get();
 
-    /**
-    * Update product
-    * @param array $data - associative array with data to store
-    * @return boolean
-    */
-    function update_product_api($id, $data)
-    {
-		$this->db->where('id', $id);
-		$this->db->update('products', $data);
-		$report = array();
-		$report['error'] = $this->db->_error_number();
-		$report['message'] = $this->db->_error_message();
-		if($report !== 0){
-			return true;
-		}else{
-			return false;
-		}
-	}
-
-    /**
-    * Delete product
-    * @param int $id - product id
-    * @return boolean
-    */
-	function delete_product_api($id){
-		$this->db->where('id', $id);
-		$this->db->delete('products'); 
-	}
- 
+		return $query->result_array();
+		
+    }
 }
-?>	
 
                             

@@ -24,35 +24,16 @@ class Customers_model extends CI_Model {
 		return $query->result_array(); 
     }
 
-	public function get_area_api()
+	public function get_customer_by_city_api($city_id)
     {
 	    
 		$this->db->select('customers.id');
-		$this->db->select('customers.ol_area');
-		
-		$this->db->from('customers')->group_by('customers.ol_area');
-		$this->db->order_by("customers.ol_area","asc");
-
-		$query = $this->db->get();
-		
-		$res_array = array();
-		foreach ($query->result_array() as $row)
-		{
-		   $res_array[] = $row;
-		}
-
-		return $res_array; 	
-    }
-
-	public function get_customer_by_area_api($area_name)
-    {
-	    
-		$this->db->select('customers.id');
-		$this->db->select('customers.ol_area');
-		$this->db->where('customers.ol_area',$area_name);
+		$this->db->select('customers.customer_name');
+$this->db->select('customers.ol_name');
+		$this->db->where('customers.city_id',$city_id);
 		
 		$this->db->from('customers');
-		$this->db->order_by("customers.ol_area","asc");
+		$this->db->order_by("customers.customer_name","asc");
 
 		$query = $this->db->get();
 		
@@ -82,9 +63,7 @@ class Customers_model extends CI_Model {
 		$this->db->select('customers.customer_name');
 		$this->db->select('customers.ol_name');
 		$this->db->select('customers.ol_address');
-		$this->db->select('customers.ol_area');
 		$this->db->select('customers.mobile');
-		
 		$this->db->select('customers.email');
 		$this->db->select('customers.cst_number');
 		$this->db->select('customers.cst_date');
@@ -92,7 +71,36 @@ class Customers_model extends CI_Model {
 		$this->db->select('customers.gst_date');
 		$this->db->select('customers.photo');
 		
-		$this->db->from('customers');
+		$this->db->select('customers.promoter');
+		
+		$this->db->select('customers.pan_number');
+		$this->db->select('customers.pan_date');
+		$this->db->select('customers.cin_number');
+		$this->db->select('customers.cin_date');
+		
+		$this->db->select('customers.tl_id');
+		$this->db->select('tlm.first_name as tl_first_name');
+		$this->db->select('tlm.last_name as tl_last_name');
+		
+		$this->db->select('customers.isd_user_id');
+		$this->db->select('isdm.first_name as isd_first_name');
+		$this->db->select('isdm.last_name as isd_last_name');
+
+		$this->db->select('city.id as city_id');
+		$this->db->select('city.name as city_name');
+		
+		$this->db->select('f.id as firm_id');
+		$this->db->select('f.name as firm_name');
+	
+		$this->db->select('state.id as state_id');
+		$this->db->select('state.name as state_name');
+		
+		$this->db->from('customers')
+			->join('city', 'city.id = customers.city_id', 'left')
+			->join('state', 'state.id = city.stateId', 'left')
+			->join('membership tlm', 'tlm.id = customers.tl_id', 'left')
+			->join('membership isdm', 'isdm.id = customers.isd_user_id', 'left')
+			->join('firms f', 'f.id = customers.firm_id', 'left');
 		if($search_string){
 			$this->db->like('customer_name', $search_string);
 		}
@@ -120,6 +128,17 @@ class Customers_model extends CI_Model {
 		   		$row["gst_date"] = date("d-m-Y",strtotime($row["gst_date"]));
 			else if($row["gst_date"] == "0000-00-00")
 				$row["gst_date"] = null;
+
+			if($row["pan_date"] && $row["pan_date"] != "" && $row["pan_date"] != null && $row["pan_date"] != "0000-00-00")
+		   		$row["pan_date"] = date("d-m-Y",strtotime($row["pan_date"]));
+			else if($row["pan_date"] == "0000-00-00")
+				$row["pan_date"] = null;
+
+			if($row["cin_date"] && $row["cin_date"] != "" && $row["cin_date"] != null && $row["cin_date"] != "0000-00-00")
+		   		$row["cin_date"] = date("d-m-Y",strtotime($row["cin_date"]));
+			else if($row["cin_date"] == "0000-00-00")
+				$row["cin_date"] = null;
+
 			if($row["photo"] && $row["photo"] != "")
 				$row["photo"] = base_url()."assets/uploads/".$row["photo"];
 
@@ -139,14 +158,14 @@ class Customers_model extends CI_Model {
     function count_customers_api($search_string=null, $order=null)
     {
 		$this->db->select('*');
-		$this->db->from('customers');
+		$this->db->from('customers')
+			->join('city', 'city.id = customers.city_id', 'left')
+			->join('state', 'state.id = city.stateId', 'left')
+			->join('membership tlm', 'tlm.id = customers.tl_id', 'left')
+			->join('membership isdm', 'isdm.id = customers.isd_user_id', 'left')
+			->join('firms f', 'f.id = customers.firm_id', 'left');
 		if($search_string){
 			$this->db->like('customer_name', $search_string);
-		}
-		if($order){
-			$this->db->order_by($order, 'Asc');
-		}else{
-		    $this->db->order_by('id', 'Asc');
 		}
 		$query = $this->db->get();
 		return $query->num_rows();        
@@ -200,3 +219,5 @@ class Customers_model extends CI_Model {
 		$this->db->delete('customers'); 
 	}
 }
+
+                            

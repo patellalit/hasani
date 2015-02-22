@@ -8,3 +8,33 @@ background-color:#fff;
 color:000;
 text-shadow:none;
 }
+
+.container {
+    margin-left: 60px;
+    margin-right: 60px;
+    width: 100%;
+}
+.container {
+    width: 93%;
+}
+.span12{
+    width: 100%;
+}
+
+.filter-total{
+width:35%;
+float:right;
+}
+.registered-users {
+    float: left;
+}
+
+.clear {
+    clear: both;
+}
+
+
+.filter-total td, .filter-total th {
+    background-color: #888 !important;
+    color: #fff;
+}

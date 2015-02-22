@@ -55,48 +55,78 @@
             <label for="inputError" class="control-label">First Name</label>
             <div class="controls">
               <input type="text" id="" name="first_name" value="<?php echo set_value('first_name'); ?>" >
-              <!--<span class="help-inline">Woohoo!</span>-->
             </div>
           </div>
 		  <div class="control-group">
             <label for="inputError" class="control-label">Last Name</label>
             <div class="controls">
               <input type="text" id="" name="last_name" value="<?php echo set_value('last_name'); ?>" >
-              <!--<span class="help-inline">Woohoo!</span>-->
             </div>
           </div>
 		  <div class="control-group">
-            <label for="inputError" class="control-label">Username</label>
+            <label for="inputError" class="control-label">Company Phone</label>
             <div class="controls">
-              <input type="text" id="" name="username" value="<?php echo set_value('username'); ?>" >
-              <!--<span class="help-inline">Woohoo!</span>-->
+              <input type="text" id="" name="mobile" value="<?php echo set_value('mobile'); ?>">
+            </div>
+          </div>
+		  <div class="control-group">
+            <label for="inputError" class="control-label">Company Email</label>
+            <div class="controls">
+              <input type="text" id="" name="email" value="<?php echo set_value('email'); ?>" >
+            </div>
+          </div>
+		  <div class="control-group">
+            <label for="inputError" class="control-label">Personal Phone</label>
+            <div class="controls">
+              <input type="text" id="" name="personal_phone" value="<?php echo set_value('personal_phone'); ?>">
+            </div>
+          </div>
+		  <div class="control-group">
+            <label for="inputError" class="control-label">Personal Email</label>
+            <div class="controls">
+              <input type="text" id="" name="personal_email" value="<?php echo set_value('personal_email'); ?>" >
+            </div>
+          </div> 
+		  <div class="control-group">
+            <label for="inputError" class="control-label">Address</label>
+            <div class="controls">
+              <input type="text" id="" name="address" value="<?php echo set_value('address'); ?>" >
             </div>
           </div>
           <div class="control-group">
             <label for="inputError" class="control-label">Password</label>
             <div class="controls">
               <input type="text" id="" name="password" value="<?php echo set_value('password'); ?>">
-              <!--<span class="help-inline">Cost Price</span>-->
             </div>
-          </div>    
+          </div> 
 		  <div class="control-group">
-            <label for="inputError" class="control-label">Email</label>
+            <label for="inputError" class="control-label">Role</label>
             <div class="controls">
-              <input type="text" id="" name="email" value="<?php echo set_value('email'); ?>" >
-              <!--<span class="help-inline">Woohoo!</span>-->
+			<?php 
+				$js = 'id="role" onChange="if(this.value==2) $(\'.isd-toggle\').show(); else $(\'.isd-toggle\').hide();"';
+				echo form_dropdown('role', role_array(), "4",$js);
+			?>
             </div>
-          </div>      
-          <div class="control-group">
-            <label for="inputError" class="control-label">Mobile</label>
-            <div class="controls">
-              <input type="text" id="" name="mobile" value="<?php echo set_value('mobile'); ?>">
-              <!--<span class="help-inline">Cost Price</span>-->
-            </div>
-          </div>
+          </div> 
+
+		  <div class="isd-toggle" style="display:none;">
+			<div class="control-group">
+		        <label for="inputError" class="control-label">Dealer Name</label>
+		        <div class="controls">
+		          <input type="text" id="" name="ol_name" value="<?php echo set_value('ol_name'); ?>" >
+		        </div>
+		      </div>
+		      <div class="control-group">
+		        <label for="inputError" class="control-label">Dealer Area</label>
+		        <div class="controls">
+		          <input type="text" id="" name="ol_area" value="<?php echo set_value('ol_area'); ?>">
+		        </div>
+		      </div> 
+		  </div>
 		  
           <div class="form-actions">
             <button class="btn btn-primary" type="submit">Save changes</button>
-            <button class="btn" type="reset">Cancel</button>
+            <button class="btn" type="button" onclick="document.location='<?php echo site_url("admin").'/users/'; ?>'">Cancel</button>
           </div>
         </fieldset>
 
@@ -104,3 +134,5 @@
 
     </div>
      
+
+                            

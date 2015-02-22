@@ -40,14 +40,12 @@ class Dsr_model extends CI_Model {
 		$this->db->select('dsr.id');
 		$this->db->select('dsr.customer_id');
 		$this->db->select('c.customer_name');
-		$this->db->select('c.ol_area');
 
-		$this->db->select('dsr.product_id');
-		$this->db->select('p.item');
-
-		$this->db->select('dsr.qty');
-		$this->db->select('dsr.payment_by');
-		$this->db->select('dsr.amount');
+		$this->db->select('city.id as city_id');
+		$this->db->select('city.name as city_name');
+		
+		$this->db->select('s.id as state_id');
+		$this->db->select('s.name as state_name');
 
 		$this->db->select('dsr.cheque_number');
 		$this->db->select('dsr.bank_name');
@@ -57,7 +55,8 @@ class Dsr_model extends CI_Model {
 		
 		$this->db->from('dsr')
 			->join('customers c', 'c.id = dsr.customer_id', 'inner')
-			->join('products p', 'p.id = dsr.product_id', 'inner');
+			->join('city', 'city.id = c.city_id', 'inner')
+			->join('state s', 's.id = city.stateId', 'inner');
 		if($search_string){
 			$this->db->like('c.customer_name', $search_string);
 		}
@@ -80,6 +79,18 @@ class Dsr_model extends CI_Model {
 		   		$row["cheque_date"] = date("d-m-Y",strtotime($row["cheque_date"]));
 			else if($row["cheque_date"] == "0000-00-00")
 				$row["cheque_date"] = null;
+
+			$this->db->select('p.id as product_id');
+			$this->db->select('p.plan_full_name as item');
+			$this->db->select('d.qty');
+			$this->db->select('d.price');
+			
+			$this->db->from('dsr_products d')
+				->join('plans p', 'p.id = d.product_id', 'inner');
+			$this->db->where('d.dsr_id',$row["id"]);
+
+			$query = $this->db->get();
+			$row["products"]=$query->result_array();
 		   $res_array[] = $row;
 		}
 
@@ -97,8 +108,7 @@ class Dsr_model extends CI_Model {
     {
 		$this->db->select('*');
 		$this->db->from('dsr')
-			->join('customers c', 'c.id = dsr.customer_id', 'inner')
-			->join('products p', 'p.id = dsr.product_id', 'inner');
+			->join('customers c', 'c.id = dsr.customer_id', 'inner');
 		if($search_string){
 			$this->db->like('c.customer_name', $search_string);
 		}
@@ -122,6 +132,47 @@ class Dsr_model extends CI_Model {
 	    return  $this->db->insert_id();
 	}
 
+	/**
+    * Store the new item into the database
+    * @param array $data - associative array with data to store
+    * @return boolean 
+    */
+    function add_dsr_product_api($new_member_insert_data,$id=0)
+    {
+		if($id > 0){
+			$this->db->select('*')
+				 ->from('dsr_products')
+				 ->where("id=".$id);
+
+			$query = $this->db->get();
+			if($query->num_rows() > 0){
+				$this->update_dsr_product_api($id,$new_member_insert_data);
+				return;	
+			}
+		}
+		$insert = $this->db->insert('dsr_products', $new_member_insert_data);
+	    return  $this->db->insert_id();
+	}
+
+	/**
+    * Update dsr
+    * @param array $data - associative array with data to store
+    * @return boolean
+    */
+    function update_dsr_product_api($id, $data)
+    {
+		$this->db->where('id', $id);
+		$this->db->update('dsr_products', $data);
+		$report = array();
+		$report['error'] = $this->db->_error_number();
+		$report['message'] = $this->db->_error_message();
+		if($report !== 0){
+			return $id;
+		}else{
+			return false;
+		}
+	}
+
     /**
     * Update dsr
     * @param array $data - associative array with data to store
@@ -135,7 +186,7 @@ class Dsr_model extends CI_Model {
 		$report['error'] = $this->db->_error_number();
 		$report['message'] = $this->db->_error_message();
 		if($report !== 0){
-			return true;
+			return $id;
 		}else{
 			return false;
 		}
@@ -147,7 +198,27 @@ class Dsr_model extends CI_Model {
     * @return boolean
     */
 	function delete_dsr_api($id){
+		$this->delete_dsr_product_api(0,$id);
+
 		$this->db->where('id', $id);
-		$this->db->delete('dsr'); 
+		$this->db->delete('dsr');
+		
+	}
+
+	/**
+    * Delete dsr
+    * @param int $id - dsr id
+    * @return boolean
+    */
+	function delete_dsr_product_api($id=0,$dsr_id=0){
+		if($dsr_id > 0)
+			$this->db->where('dsr_id', $dsr_id);
+		else if($id > 0)
+			$this->db->where('id', $id);
+		else 
+			return false;
+		$this->db->delete('dsr_products');
 	}
 }
+
+                            
