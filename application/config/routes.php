@@ -45,6 +45,8 @@ $route['API/V1/login'] = 'API/Authentication_API/validate_credentials';
 
 //Basic Data
 $route['API/V1/region'] = 'API/BasicData_API/city_state_list';
+$route['API/V1/roles'] = 'API/BasicData_API/role_list';
+
 //$route['API/V1/dsr/area'] = 'DSR_API/customer_area_list';
 $route['API/V1/dsr/city/outlets'] = 'API/DSR_API/customer_list_by_city';
 $route['API/V1/target/customer'] = 'API/Target_API/customer_details';
@@ -58,6 +60,7 @@ $route['API/V1/user/add'] = 'API/Users_API/user_add';
 $route['API/V1/user/update/(:any)'] = 'API/Users_API/user_update/$1';
 $route['API/V1/user/delete/(:any)'] = 'API/Users_API/user_delete/$1';
 $route['API/V1/users/role/(:any)'] = 'API/Users_API/user_list_by_role/$1';
+$route['API/V1/user/update/password'] = 'API/Users_API/user_change_password';
 
 //Customers
 $route['API/V1/outlets'] = 'API/Customer_API/customer_list';

@@ -207,4 +207,57 @@ class Users_API extends CI_Controller {
 			$this->json_response($data);
 		}
 	}
+	
+	
+	public function user_change_password(){
+		//if save button was clicked, get the data sent via post
+		$user_id = (int)$this->input->get('user_id');
+        if ($this->input->server('REQUEST_METHOD') === 'POST' && (int)$user_id > 0)
+        {
+            //form validation
+			$this->form_validation->set_rules('old_password', 'Old Password', 'required|trim');
+			$this->form_validation->set_rules('new_password', 'New Password', 'required|trim');                       
+			
+            //if the form has passed through the validation
+            if ($this->form_validation->run())
+            {
+               	if(!$this->users_model->old_password_check($user_id,$this->input->post('old_password'))){
+					$data = array();
+					$data['status'] = 0;
+					$data['message'] = "Old password is invalid.";
+					$this->json_response($data);
+				}
+				
+				 //if the insert has returned true then we show the flash message
+				$new_member_insert_data = array(
+					'pass_word' => md5($this->input->post('new_password')),
+				);
+				
+                if($user_id = $this->users_model->update_user_api($user_id,$new_member_insert_data)){
+                    $data = array();
+					$data['status'] = 1;
+					$data['message'] = "Password updated successfully";
+					$data['data'] = array("user_id"=>$user_id);
+					$this->json_response($data); 
+                }else{
+                    $data = array();
+					$data['status'] = 0;
+					$data['message'] = "User not updated. Try again.";
+					$this->json_response($data);
+                }
+
+            }else{
+				$data = array();
+				$data['status'] = 0;
+				$data['message'] = "Enter required fields";
+				$this->json_response($data);
+			}
+			
+        }
+		
+		$data = array();
+		$data['status'] = 0;
+		$data['message'] = "Method/User Id is not valid";
+		$this->json_response($data);
+	}
 }

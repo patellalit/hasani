@@ -11,12 +11,12 @@ class BasicData_API extends CI_Controller {
         $this->load->model('region_model');
 		$this->load->model('firm_model');
 		$this->load->model('products_model');
-
+		$this->load->model('basic_model');
 
 		$user_id = (int)$this->input->get('user_id');
 		if($user_id <= 0){
 			$data = array();
-			$data['status'] = 1;
+			$data['status'] = 0;
 			$data['message'] = "You are not authorised user.";
 			$this->json_response($data);
 		}
@@ -35,28 +35,23 @@ class BasicData_API extends CI_Controller {
 		
 		$data = array();
 		$data['status'] = 1;
-		$citystates = $this->region_model->get_city_state();
-		$response = array();
-		$states_id = array();
-		$states = array();
-		$cities = array();
-		foreach($citystates as $citystate){
-			if(!in_array($citystate["state_id"],$states_id)){
-				if(!empty($states_id)){
-					$states = array_merge($states,array("cities"=>$cities));
-					$response[] = $states;
-					$cities = array();
-					$states = array();
+		$states = $this->region_model->get_states_by_country(1);
+		$state_index=0;$city_index=0;
+		foreach($states as $state){
+			$cities = $this->region_model->get_city_by_state($state["state_id"]);
+			$response[$state_index] = array("state_id"=>$state["state_id"],"state_name"=>$state["state_name"]);
+			$city_index = 0;
+			foreach($cities as $city){
+				$areas = $this->region_model->get_area_by_city($city["city_id"]);
+				$response[$state_index]["cities"][$city_index] = array("city_id"=>$city["city_id"],"city_name"=>$city["city_name"]);
+				foreach($areas as $area){
+					$response[$state_index]["cities"][$city_index]["areas"][] = array("area_id"=>$area["area_id"],"area_name"=>$area["area_name"]);
 				}
-				$states_id[] = $citystate["state_id"];
-				$states = array("state_id"=>$citystate["state_id"],"state_name"=>$citystate["state_name"]);
+				$city_index++;
 			}
-			$cities[] = array("city_id"=>$citystate["city_id"],"city_name"=>$citystate["city_name"]);
+			$state_index++;
 		}
 		
-		$states = array_merge($states,array("cities"=>$cities));
-		$response[] = $states;
-
 		$data['data']['region'] = $response;
 		$this->json_response($data);
 	}
@@ -109,7 +104,18 @@ class BasicData_API extends CI_Controller {
 		$data['data']['products'] = $response;
 		$this->json_response($data);
 	}
+	
+	/**
+    * Load the main view with all the current model model's data.
+    * @return void
+    */
+    public function role_list(){
+		$data = array();
+		$data['status'] = 1;
+		
+		$firms = $this->basic_model->get_role_api();
+		
+		$data['data']['roles'] = $firms;
+		$this->json_response($data);
+	}
 }
-
-                            
-                            

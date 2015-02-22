@@ -212,7 +212,7 @@ class Users_model extends CI_Model {
 		    $this->db->order_by('id', $order_type);
 		}
 
-		if($limit !== null){
+		if($limit !== null && $limit > 0){
 			$this->db->limit($limit,$offset);
 		}
 		//$this->db->limit('4', '4');
@@ -337,7 +337,7 @@ class Users_model extends CI_Model {
 
 	function get_registered_users_count($params,$is_search=false){
 		$search_string=$params["search_string"];
-$search_in=$params["search_in"];
+		$search_in=$params["search_in"];
 		$search_from_date=$params["search_from_date"];
 		$search_to_date=$params["search_to_date"];
         $search_date=(isset($params["search_date"]))?$params["search_date"]:false;
@@ -372,9 +372,9 @@ $search_in=$params["search_in"];
 		return $this->db->count_all_results();
 	}
 
-        function get_registered_users_total_bill($params,$type,$is_search=false){
+	function get_registered_users_total_bill($params,$type,$is_search=false){
 		$search_string=$params["search_string"];
-$search_in=$params["search_in"];
+		$search_in=$params["search_in"];
 		$search_from_date=$params["search_from_date"];
 		$search_to_date=$params["search_to_date"];
         $search_date=(isset($params["search_date"]))?$params["search_date"]:false;
@@ -411,10 +411,25 @@ $search_in=$params["search_in"];
 		}
         $query = $this->db->get();
         $result = $query->result_array();
-if($type == "bill")
-        return $result[0]['billAmount'];
-else
-return $result[0]['price'];
+		
+		if($type == "bill")
+			return $result[0]['billAmount'];
+		else
+			return $result[0]['price'];
+	}
+	
+	function old_password_check($user_id,$old_password){
+		
+		$this->db->from('membership');
+		$this->db->where('id',$user_id);
+		$this->db->where('pass_word',md5($old_password));
+		
+		//$query = $this->db->get();
+		
+		if($this->db->count_all_results())
+			return true;
+		else
+			return false;
 	}
 }
                             

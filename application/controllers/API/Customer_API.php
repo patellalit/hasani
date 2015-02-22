@@ -58,6 +58,7 @@ class Customer_API extends CI_Controller {
 					'customer_name' => $this->input->post('customer_name'),
 					'ol_name' => $this->input->post('ol_name'),
 					'ol_address' => $this->input->post('ol_address'),
+					'ol_area' => $this->input->post('ol_area'),
 					'city_id' => $this->input->post('city_id'),
 					'email' => $this->input->post('email'),
 					'mobile' => $this->input->post('mobile'),
@@ -157,6 +158,7 @@ class Customer_API extends CI_Controller {
 					'ol_name' => $this->input->post('ol_name'),
 					'ol_address' => $this->input->post('ol_address'),
 					'city_id' => $this->input->post('city_id'),
+					'ol_area' => $this->input->post('ol_area'),
 					'email' => $this->input->post('email'),
 					'mobile' => $this->input->post('mobile'),
 					
