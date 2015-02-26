@@ -174,16 +174,19 @@ class Users_API extends CI_Controller {
     */
     public function user_list(){
 		$user_id = (int)$this->input->get('user_id');
-		$s = $this->input->get('search_string');
+		$search_string = $this->input->get('search_string');
+		$search_in = $this->input->get('search_in');
 		$offset = (int)$this->input->get('offset');
 		$limit = (int)$this->input->get('limit');
 		$sort = $this->input->get('sort');
 		$sort_dir = $this->input->get('sort_dir');
+		$is_admin = $this->input->get('is_admin',false);
 		
 		$data = array();
 		$data['status'] = 1;
-		$data['data']['count_users']= $this->users_model->count_users_api($s);
-	    $data['data']['users'] = $this->users_model->get_users_api($s, $sort, $sort_dir,$offset,$limit);
+		$request_params = array("search_in"=>$search_in,"search_string"=>$search_string,"offset"=>$offset,"limit"=>$limit,"sort"=>$sort,"sort_dir"=>$sort_dir);
+		$data['data']['count_users']= $this->users_model->count_users_api($request_params,$is_admin);
+	    $data['data']['users'] = $this->users_model->get_users_api($request_params,$is_admin);
 		$this->json_response($data);
 	}
 	

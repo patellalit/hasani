@@ -1,4 +1,4 @@
-<div class="container top">
+	<div class="container top">
 
       <ul class="breadcrumb">
         <li>
@@ -24,32 +24,35 @@
           <div class="well">
            
             <?php
-           
-            $attributes = array('class' => 'form-inline reset-margin', 'id' => 'myform');
-           
             //save the columns names in a array that we will use as filter         
-            $options_users = array();    
-            foreach ($users as $array) {
-              foreach ($array as $key => $value) {
-                $options_users[$key] = $key;
-              }
-              break;
-            }
-
+            $options_users = array(
+				"all"=>"ALL",
+				"m.first_name"=>"First Name",
+				"m.last_name"=>"Last Name",
+				"m.mobile"=>"Company Phone",
+				"m.email_address"=>"Company Email",
+				"m.personal_phone"=>"Personal Phone",
+				"m.personal_email"=>"Personal Email",
+				"m.address"=>"Address",
+				"r.role_name"=>"Role",
+				/*"m.ol_name"=>"O/L Name",
+				"m.ol_area"=>"O/L Area",*/
+			);
+            
+            $attributes = array('class' => 'form-inline reset-margin', 'id' => 'myform');
             echo form_open('admin/users', $attributes);
      
               echo form_label('Search:', 'search_string');
               echo form_input('search_string', $search_string_selected, 'style="width: 170px;
 height: 26px;"');
 
-              echo form_label('Order by:', 'order');
-              echo form_dropdown('order', $options_users, $order, 'class="span2"');
+              echo form_label('Search In:', 'search_in');
+              echo form_dropdown('search_in', $options_users, $search_in_selected, 'class="span2"');
 
               $data_submit = array('name' => 'mysubmit', 'class' => 'btn btn-primary', 'value' => 'Go');
-
-              $options_order_type = array('Asc' => 'Asc', 'Desc' => 'Desc');
-              echo form_dropdown('order_type', $options_order_type, $order_type_selected, 'class="span1"');
-
+              
+              echo '<input type="hidden" id="sort_order" name="order" value="'.$order.'" />';
+              echo '<input type="hidden" id="sort_order_type" name="order_type" value="'.$order_type_selected.'" />';
               echo form_submit($data_submit);
 
             echo form_close();
@@ -61,13 +64,14 @@ height: 26px;"');
             <thead>
               <tr>
                 <th class="header">#</th>
-				<th class="yellow header headerSortDown">Name</th>                
-				<th class="green header">Company Phone</th>
-                <th class="green header">Company Email</th>
-				<th class="green header">Personal Phone</th>
-                <th class="green header">Personal Email</th>
-                <th class="red header">Address</th>
-                <th class="red header">Role</th>
+				<th class="yellow header"><a href="javascript:void(0)" class="sort" data-order="m.first_name" data-order-dir="<?php echo $order_type_selected?>">First Name</a></th>
+				<th class="yellow header"><a href="javascript:void(0)" class="sort" data-order="m.last_name" data-order-dir="<?php echo $order_type_selected?>">Last Name</a></th>                
+				<th class="green header"><a href="javascript:void(0)" class="sort" data-order="m.mobile" data-order-dir="<?php echo $order_type_selected?>">Company Phone</a></th>
+                <th class="green header"><a href="javascript:void(0)" class="sort" data-order="m.email_address" data-order-dir="<?php echo $order_type_selected?>">Company Email</a></th>
+				<th class="green header"><a href="javascript:void(0)" class="sort" data-order="m.personal_phone" data-order-dir="<?php echo $order_type_selected?>">Personal Phone</a></th>
+                <th class="green header"><a href="javascript:void(0)" class="sort" data-order="m.personal_email" data-order-dir="<?php echo $order_type_selected?>">Personal Email</a></th>
+                <th class="red header"><a href="javascript:void(0)" class="sort" data-order="m.address" data-order-dir="<?php echo $order_type_selected?>">Address</a></th>
+                <th class="red header"><a href="javascript:void(0)" class="sort" data-order="r.role_name" data-order-dir="<?php echo $order_type_selected?>">Role</a></th>
                 <th class="red header">Actions</th>
               </tr>
             </thead>
@@ -77,13 +81,14 @@ height: 26px;"');
               {
                 echo '<tr>';
                 echo '<td>'.$row['id'].'</td>';
-				echo '<td>'.$row['first_name'].' '.$row['last_name'].'</td>';
+				echo '<td>'.$row['first_name'].'</td>';
+				echo '<td>'.$row['last_name'].'</td>';
 				echo '<td>'.$row['mobile'].'</td>';
                 echo '<td>'.$row['email_address'].'</td>';
                 echo '<td>'.$row['personal_phone'].'</td>';
                 echo '<td>'.$row['personal_email'].'</td>';
                 echo '<td>'.$row['address'].'</td>';
-                echo '<td>'.role_array($row['role']).'</td>';
+                echo '<td>'.$row['role_name'].'</td>';
                 echo '<td class="crud-actions">
                   <a href="'.site_url("admin").'/users/update/'.$row['id'].'" class="btn btn-info">view & edit</a>  
                   <a href="'.site_url("admin").'/users/delete/'.$row['id'].'" class="btn btn-danger" onclick="return confirmDelete(this);">delete</a>
@@ -98,3 +103,14 @@ height: 26px;"');
 
       </div>
     </div>
+ <script>
+	$(function() {
+		$(".sort").click(function(){
+			var sort_dir = $(this).attr("data-order-dir");
+			sort_dir = (sort_dir == "Asc")?"Desc":"Asc";
+			$("#sort_order_type").val(sort_dir);
+			$("#sort_order").val($(this).attr("data-order"));
+			$("#myform").submit();
+		});
+	});
+</script>

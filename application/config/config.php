@@ -14,8 +14,8 @@
 | path to your installation.
 |
 */
-$config['base_url']	= 'http://hasanigroup.com/hasani';
-$config['api_base_url']	= 'http://hasanigroup.com/hasani/API/V1';
+$config['base_url']	= 'http://localhost/tmp/hasani';
+$config['api_base_url']	= 'http://localhost/tmp/hasani/API/V1';
 
 /*
 |--------------------------------------------------------------------------

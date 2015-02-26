@@ -23,12 +23,9 @@
           <div class="well">
            
             <?php
-           
-            $attributes = array('class' => 'form-inline reset-margin', 'id' => 'myform',"style"=>"float:left;");
-           
             //save the columns names in a array that we will use as filter         
             $options_users = array(
-"all"=>"ALL",
+				"all"=>"ALL",
 				"l.cdkey"=>"CDKEY",
 				"p.customerName"=>"Customer Name",
 				"p.phoneNo"=>"Phone Number",
@@ -48,7 +45,7 @@
 				"p.planDate"=>"Plan Date",
 			);
             
-
+            $attributes = array('class' => 'form-inline reset-margin', 'id' => 'myform',"style"=>"float:left;");
             echo form_open('admin/registered/users', $attributes);
 
               echo form_label('From Date:', 'search_date');

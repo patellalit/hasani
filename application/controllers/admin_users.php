@@ -46,12 +46,13 @@ class Admin_users extends CI_Controller {
         } 
 
 		//all the posts sent by the view
-        $search_string = $this->input->post('search_string');        
+        $search_string = $this->input->post('search_string');  
         $order = $this->input->post('order'); 
         $order_type = $this->input->post('order_type'); 
+		$search_in = $this->input->post('search_in'); 
 		
 		//filtered && || paginated
-        if($search_string !== false && $search_string != "" && $order !== false || $this->uri->segment(3) == true){ 
+		if(($search_string != "" && $search_in ) || $order !== false || $this->uri->segment(3) == true){ 
 			$filter_session_data = array();
 			//if order type was changed
 		    if($order_type){
@@ -69,12 +70,24 @@ class Admin_users extends CI_Controller {
 		    //make the data type var avaible to our view
 		    $data['order_type_selected'] = $order_type;
 		
-			if($search_string){
+		    if($search_in == "all"){
+		        $search_string = null;
+		    }else if($search_string){
 		        $filter_session_data['search_string_selected'] = $search_string;
 		    }else{
-		        $search_string = $this->session->userdata('search_string_selected');
-		    }
+				$search_string = $this->session->userdata('search_string_selected');
+			}
 		    $data['search_string_selected'] = $search_string;
+
+			if($search_in == "all"){
+		        $search_in = null;
+		    }else if($search_in){
+		        $filter_session_data['search_in_selected'] = $search_in;
+		    }else{
+		        $search_in = $this->session->userdata('search_in_selected');
+		    }
+		    $data['search_in_selected'] = $search_in;
+			$data['search_in'] = $search_in;
 
 			if($order){
 		        $filter_session_data['order'] = $order;
@@ -82,6 +95,7 @@ class Admin_users extends CI_Controller {
 		    else{
 		        $order = $this->session->userdata('order');
 		    }
+			
 		    $data['order'] = $order;
 
 			//save session data into the session
@@ -89,17 +103,20 @@ class Admin_users extends CI_Controller {
 		}else{
 			//clean filter data inside section
             $filter_session_data['search_string_selected'] = null;
+			$filter_session_data["search_in_selected"]=null;
             $filter_session_data['order'] = null;
             $filter_session_data['order_type'] = null;
+
             $this->session->set_userdata($filter_session_data);
 
             //pre selected options
             $data['search_string_selected'] = '';
-            $data['order'] = 'id';
+            $data['order'] = 'm.id';
 			$data['order_type_selected'] = 'desc';
+			$data["search_in_selected"]="";
 		}
 
-		$request_params = array("search_string"=>$data['search_string_selected'],"offset"=>$limit_end,"limit"=>$config['per_page'],"sort"=>$data['order'],"sort_dir"=>$data['order_type_selected']);
+		$request_params = array("search_in"=>$search_in,"search_string"=>$data['search_string_selected'],"offset"=>$limit_end,"limit"=>$config['per_page'],"sort"=>$data['order'],"sort_dir"=>$data['order_type_selected']);
 		$users = $this->apicall->call("GET","users",$request_params);
 
 		$data['count_users'] = $users["data"]["count_users"];

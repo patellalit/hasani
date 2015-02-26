@@ -183,59 +183,70 @@ class Users_model extends CI_Model {
 		return $query->result_array(); 	
     }
 
-	public function get_users_api($search_string=null, $order=null, $order_type='Asc', $offset=null, $limit=null)
+	public function get_users_api($params,$is_admin=false)
     {
-		$this->db->select('membership.id');
-		$this->db->select('membership.first_name');
-		$this->db->select('membership.last_name');
-		$this->db->select('membership.email_address');
-		$this->db->select('membership.user_name');
-		$this->db->select('membership.mobile');
-		$this->db->select('membership.role');
-		$this->db->select('membership.ol_name');
-		$this->db->select('membership.ol_area');
-		$this->db->select('membership.address');
-		$this->db->select('membership.personal_email');
-		$this->db->select('membership.personal_phone');
+    	$search_string=$params["search_string"];
+    	$search_in=$params["search_in"];
+    	$order=$params["sort"];
+    	$order_type=$params["sort_dir"];
+    	$offset=$params["offset"];
+    	$limit=$params["limit"];
+    	
+		$this->db->select('m.id');
+		$this->db->select('m.first_name');
+		$this->db->select('m.last_name');
+		$this->db->select('m.email_address');
+		$this->db->select('m.user_name');
+		$this->db->select('m.mobile');
+		$this->db->select('m.ol_name');
+		$this->db->select('m.ol_area');
+		$this->db->select('m.address');
+		$this->db->select('m.personal_email');
+		$this->db->select('m.personal_phone');
+		$this->db->select('r.role_name');
+		$this->db->select('r.id as role_id');
+		$this->db->select('m.is_logged_in');
 		
-		$this->db->from('membership');
+		$this->db->from('membership m')
+				->join('roles r', 'r.id = m.role', 'inner');
+
+		if(!$is_admin)
+			$this->db->where('m.role > 1');
 		
-		$this->db->where('membership.role > 1');
-		
-		if($search_string){
-			$this->db->like('first_name', $search_string);
+		if($search_string && $search_in){
+			$this->db->like($search_in, $search_string);
 		}
 
-		if($order){
+		if($order && $order_type){
 			$this->db->order_by($order, $order_type);
 		}else{
-		    $this->db->order_by('id', $order_type);
+		    $this->db->order_by('m.id', $order_type);
 		}
 
 		if($limit !== null && $limit > 0){
 			$this->db->limit($limit,$offset);
 		}
-		//$this->db->limit('4', '4');
 
 		$query = $this->db->get();
 
 		return $query->result_array(); 	
     }
 
-	function count_users_api($search_string=null, $order=null)
+	function count_users_api($params, $is_admin=false)
     {
+    	$search_string=$params["search_string"];
+    	$search_in=$params["search_in"];
+    	
 		$this->db->select('*');
-		$this->db->from('membership');
-		$this->db->where('role > 1');
+		$this->db->from('membership m')
+				->join('roles r', 'r.id = m.role', 'inner');
+		if(!$is_admin)
+			$this->db->where('m.role > 1');
 		
 		if($search_string){
-			$this->db->like('first_name', $search_string);
+			$this->db->like($search_in, $search_string);
 		}
-		if($order){
-			$this->db->order_by($order, 'Asc');
-		}else{
-		    $this->db->order_by('id', 'Asc');
-		}
+		
 		return $this->db->count_all_results();
     }
 
@@ -432,5 +443,3 @@ class Users_model extends CI_Model {
 			return false;
 	}
 }
-                            
-                            

@@ -23,6 +23,7 @@ class Apicall {
 		    case "POST":
 				$data_post = array();
 				$data_post["user_id"]=$user_info["id"];
+				$data_post["is_admin"]=true;
 				if($print_respose)
 						echo http_build_query($data);
 				$url = sprintf("%s?%s", $url, http_build_query($data_post));
@@ -37,6 +38,7 @@ class Apicall {
 		    default:
 		        if ($data){
 					$data["user_id"]=$user_info["id"];
+					$data["is_admin"]=true;
 					if($print_respose)
 						echo http_build_query($data);
 		            $url = sprintf("%s?%s", $url, http_build_query($data));
@@ -45,6 +47,7 @@ class Apicall {
 				}else{
 					$data = array();
 					$data["user_id"]=$user_info["id"];
+					$data["is_admin"]=true;
 					if($print_respose)
 						echo http_build_query($data);
 					$url = sprintf("%s?%s", $url, http_build_query($data));
@@ -75,5 +78,4 @@ class Apicall {
 		return $json_data;
 	}
 }
-
                             
