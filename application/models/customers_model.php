@@ -29,7 +29,7 @@ class Customers_model extends CI_Model {
 	    
 		$this->db->select('customers.id');
 		$this->db->select('customers.customer_name');
-$this->db->select('customers.ol_name');
+		$this->db->select('customers.ol_name');
 		$this->db->where('customers.city_id',$city_id);
 		
 		$this->db->from('customers');
@@ -56,33 +56,39 @@ $this->db->select('customers.ol_name');
     * @param int $limit_end
     * @return array
     */
-    public function get_customers_api($search_string=null, $order=null, $order_type='Asc', $limit_start=null, $limit_end=null)
+    public function get_customers_api($params,$is_admin=false)
     {
-	    
-		$this->db->select('customers.id');
-		$this->db->select('customers.customer_name');
-		$this->db->select('customers.ol_name');
-		$this->db->select('customers.ol_address');
-		$this->db->select('customers.mobile');
-		$this->db->select('customers.email');
-		$this->db->select('customers.cst_number');
-		$this->db->select('customers.cst_date');
-		$this->db->select('customers.gst_number');
-		$this->db->select('customers.gst_date');
-		$this->db->select('customers.photo');
+    	$search_string=$params["search_string"];
+    	$search_in=$params["search_in"];
+    	$order=$params["sort"];
+    	$order_type=$params["sort_dir"];
+    	$offset=$params["offset"];
+    	$limit=$params["limit"];
+    	
+		$this->db->select('c.id');
+		$this->db->select('c.customer_name');
+		$this->db->select('c.ol_name');
+		$this->db->select('c.ol_address');
+		$this->db->select('c.mobile');
+		$this->db->select('c.email');
+		$this->db->select('c.cst_number');
+		$this->db->select('c.cst_date');
+		$this->db->select('c.gst_number');
+		$this->db->select('c.gst_date');
+		$this->db->select('c.photo');
 		
-		$this->db->select('customers.promoter');
+		$this->db->select('c.promoter');
 		
-		$this->db->select('customers.pan_number');
-		$this->db->select('customers.pan_date');
-		$this->db->select('customers.cin_number');
-		$this->db->select('customers.cin_date');
+		$this->db->select('c.pan_number');
+		$this->db->select('c.pan_date');
+		$this->db->select('c.cin_number');
+		$this->db->select('c.cin_date');
 		
-		$this->db->select('customers.tl_id');
+		$this->db->select('c.tl_id');
 		$this->db->select('tlm.first_name as tl_first_name');
 		$this->db->select('tlm.last_name as tl_last_name');
 		
-		$this->db->select('customers.isd_user_id');
+		$this->db->select('c.isd_user_id');
 		$this->db->select('isdm.first_name as isd_first_name');
 		$this->db->select('isdm.last_name as isd_last_name');
 
@@ -94,25 +100,31 @@ $this->db->select('customers.ol_name');
 	
 		$this->db->select('state.id as state_id');
 		$this->db->select('state.name as state_name');
+		$this->db->select('a.area_name');
+		$this->db->select('a.id as area_id');
 		
-		$this->db->from('customers')
-			->join('city', 'city.id = customers.city_id', 'left')
+		$this->db->from('customers c')
+			->join('area a', 'a.id = c.ol_area', 'left')
+			->join('city', 'city.id = c.city_id', 'left')
 			->join('state', 'state.id = city.stateId', 'left')
-			->join('membership tlm', 'tlm.id = customers.tl_id', 'left')
-			->join('membership isdm', 'isdm.id = customers.isd_user_id', 'left')
-			->join('firms f', 'f.id = customers.firm_id', 'left');
-		if($search_string){
-			$this->db->like('customer_name', $search_string);
+			->join('membership tlm', 'tlm.id = c.tl_id', 'left')
+			->join('membership isdm', 'isdm.id = c.isd_user_id', 'left')
+			->join('firms f', 'f.id = c.firm_id', 'left');
+		
+    	if($search_string && $search_in){
+    		if($search_in =="ol_area")
+    			$search_in = "c.ol_area"; 
+			$this->db->like($search_in, $search_string);
 		}
 
-		if($order){
+    	if($order && $order_type){
 			$this->db->order_by($order, $order_type);
 		}else{
-		    $this->db->order_by('id', $order_type);
+		    $this->db->order_by('c.id', $order_type);
 		}
-		if($limit_start)
-		$this->db->limit($limit_start, $limit_end);
-		//$this->db->limit('4', '4');
+    	if($limit !== null && $limit > 0){
+			$this->db->limit($limit,$offset);
+		}
 
 		$query = $this->db->get();
 		
@@ -155,17 +167,22 @@ $this->db->select('customers.ol_name');
     * @param int $order
     * @return int
     */
-    function count_customers_api($search_string=null, $order=null)
+    function count_customers_api($params, $is_admin=false)
     {
+    	$search_string=$params["search_string"];
+    	$search_in=$params["search_in"];
+    	
 		$this->db->select('*');
-		$this->db->from('customers')
-			->join('city', 'city.id = customers.city_id', 'left')
+		$this->db->from('customers c')
+			->join('city', 'city.id = c.city_id', 'left')
 			->join('state', 'state.id = city.stateId', 'left')
-			->join('membership tlm', 'tlm.id = customers.tl_id', 'left')
-			->join('membership isdm', 'isdm.id = customers.isd_user_id', 'left')
-			->join('firms f', 'f.id = customers.firm_id', 'left');
-		if($search_string){
-			$this->db->like('customer_name', $search_string);
+			->join('membership tlm', 'tlm.id = c.tl_id', 'left')
+			->join('membership isdm', 'isdm.id = c.isd_user_id', 'left')
+			->join('firms f', 'f.id = c.firm_id', 'left');
+    	if($search_string && $search_in){
+    		if($search_in =="ol_area")
+    			$search_in = "c.ol_area";
+			$this->db->like($search_in, $search_string);
 		}
 		$query = $this->db->get();
 		return $query->num_rows();        
