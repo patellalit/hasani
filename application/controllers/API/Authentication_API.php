@@ -36,6 +36,12 @@ class Authentication_API extends CI_Controller {
 		
 		if($user)
 		{
+			$new_member_insert_data = array(
+					'is_logged_in' => 1,
+			);
+			
+			$this->users_model->update_user_api($user[0]["id"],$new_member_insert_data);
+			
 			$data = array();
 			$data['status'] = 1;
 			$user[0]['role'] = (int)$user[0]['role'];

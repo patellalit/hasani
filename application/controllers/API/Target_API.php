@@ -52,6 +52,13 @@ class Target_API extends CI_Controller {
             //if the form has passed through the validation
             if ($this->form_validation->run())
             {
+            	if($this->target_model->check_duplicate($this->input->post('customer_id'),$this->input->get('user_id'))){
+            		$data = array();
+            		$data['status'] = 0;
+            		$data['message'] = "Customer is duplicate.";
+            		$this->json_response($data);
+            	}
+            	
 				$new_member_insert_data = array(
 					'customer_id' => $this->input->post('customer_id'),
 					'user_id' => $this->input->get('user_id'),

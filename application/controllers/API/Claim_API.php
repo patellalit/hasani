@@ -157,10 +157,17 @@ class Claim_API extends CI_Controller {
 	    $data['data']['claim'] = $this->claim_model->get_claim_api('', '', 'ASC',null,null,$user_id);
 		$this->json_response($data);
 	}
-
-	public function claim_track_add(){
-
-            $claim_id = $this->uri->segment(5);
+	
+	public function pickup_add(){
+		$this->claim_track_add(2,"Pickup");
+	}
+	public function pickup_list(){
+		$this->claim_track_list(2);
+	}
+	
+	public function claim_track_add($status,$label){
+		
+        $claim_id =$this->input->post('claim_id');
 		//if save button was clicked, get the data sent via post
         //if save button was clicked, get the data sent via post
         if ($this->input->server('REQUEST_METHOD') === 'POST')
@@ -170,7 +177,7 @@ class Claim_API extends CI_Controller {
 				$new_member_insert_data = array(
 					'claim_id' => $claim_id,
 					'remarks' => $this->input->post('remarks'),
-					'status' => $this->input->post('status'),
+					'status' => $status,
 					'user_id' => $this->input->get('user_id'),
 					'created_at' => date("Y-m-d H:i:s"),
 				);
@@ -179,13 +186,13 @@ class Claim_API extends CI_Controller {
                 if($claim_id = $this->claim_model->add_claim_track_api($new_member_insert_data)){
                     $data = array();
 					$data['status'] = 1;
-					$data['message'] = "Pick up added successfully";
+					$data['message'] = $label." added successfully";
 					$data['data'] = array("claim_id"=>$claim_id);
 					$this->json_response($data); 
                 }else{
                     $data = array();
 					$data['status'] = 0;
-					$data['message'] = "Claim already picked up.";
+					$data['message'] = "Claim already $label.";
 					$this->json_response($data);
                 }
 
@@ -208,11 +215,12 @@ class Claim_API extends CI_Controller {
     * Load the main view with all the current model model's data.
     * @return void
     */
-    public function claim_track_list(){
-		$status = $this->uri->segment(5);
+    public function claim_track_list($status){
+		
+		$user_id = (int)$this->input->get('user_id');
 		$data = array();
 		$data['status'] = 1;
-		$data['data']['count_claim']= $this->claim_model->count_claim_api(null,null,$user_id);
+		$data['data']['count_claim']= $this->claim_model->count_claim_track_api($status);
 	    $data['data']['claim'] = $this->claim_model->get_claim_track_api($status);
 		$this->json_response($data);
 	}

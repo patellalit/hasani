@@ -42,7 +42,7 @@ class DSR_API extends CI_Controller {
 			$this->json_response($data);
 		}
 	}
-
+	
 	public function dsr_add(){
 		//if save button was clicked, get the data sent via post
         //if save button was clicked, get the data sent via post
@@ -66,6 +66,13 @@ class DSR_API extends CI_Controller {
             //if the form has passed through the validation
             if ($this->form_validation->run())
             {
+            	if($this->dsr_model->check_duplicate($this->input->post('customer_id'),$this->input->get('user_id'))){
+            		$data = array();
+            		$data['status'] = 0;
+            		$data['message'] = "Customer is duplicate.";
+            		$this->json_response($data);
+            	}
+            	
 				$new_member_insert_data = array(
 					'customer_id' => $this->input->post('customer_id'),
 					//'product_id' => $this->input->post('product_id'),

@@ -100,8 +100,8 @@ $route['API/V1/claim/update/(:any)'] = 'API/Claim_API/claim_update/$1';
 $route['API/V1/claim/delete/(:any)'] = 'API/Claim_API/claim_delete/$1';
 
 //Claim Pickup
-$route['API/V1/claim/pickup/list'] = 'API/Claim_API/claim_track_list/2';
-$route['API/V1/claim/pickup/add'] = 'API/Claim_API/claim_track_add/2';
+$route['API/V1/claim/pickup/list'] = 'API/Claim_API/pickup_list';
+$route['API/V1/claim/pickup/add'] = 'API/Claim_API/pickup_add';
 
 /*admin*/
 $route['admin'] = 'user/index';
