@@ -46,6 +46,7 @@ $route['API/V1/login'] = 'API/Authentication_API/validate_credentials';
 //Basic Data
 $route['API/V1/region'] = 'API/BasicData_API/city_state_list';
 $route['API/V1/roles'] = 'API/BasicData_API/role_list';
+$route['API/V1/service_centers'] = 'API/BasicData_API/service_center_list';
 
 //$route['API/V1/dsr/area'] = 'DSR_API/customer_area_list';
 $route['API/V1/dsr/city/outlets'] = 'API/DSR_API/customer_list_by_city';
@@ -102,6 +103,18 @@ $route['API/V1/claim/delete/(:any)'] = 'API/Claim_API/claim_delete/$1';
 //Claim Pickup
 $route['API/V1/claim/pickup/list'] = 'API/Claim_API/pickup_list';
 $route['API/V1/claim/pickup/add'] = 'API/Claim_API/pickup_add';
+
+//Claim Drop to Service Center
+$route['API/V1/claim/service_center/list'] = 'API/Claim_API/drop_to_service_center_list';
+$route['API/V1/claim/service_center/add'] = 'API/Claim_API/drop_to_service_center_add';
+
+//Claim Pickup from Service Center
+$route['API/V1/claim/service_center_pickup/list'] = 'API/Claim_API/pickup_from_service_center_list';
+$route['API/V1/claim/service_center_pickup/add'] = 'API/Claim_API/pickup_from_service_center_add';
+
+//Claim Drop to Customer
+$route['API/V1/claim/deliverd/list'] = 'API/Claim_API/drop_to_customer_list';
+$route['API/V1/claim/deliverd/add'] = 'API/Claim_API/drop_to_customer_add';
 
 /*admin*/
 $route['admin'] = 'user/index';

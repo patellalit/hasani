@@ -235,6 +235,19 @@ class Claim_model extends CI_Model {
 			
 		return $query->num_rows();
 	}
+	
+	function check_valid_status_claim_track($claim_id,$status){
+		$this->db->select('*');
+	
+		$this->db->from('claim');
+			
+		$this->db->where('claim.status',$status);
+		$this->db->where('claim.id',$claim_id);
+			
+		$query = $this->db->get();
+			
+		return $query->num_rows();
+	}
 }
                             
                             

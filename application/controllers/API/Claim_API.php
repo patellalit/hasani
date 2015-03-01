@@ -159,13 +159,75 @@ class Claim_API extends CI_Controller {
 	}
 	
 	public function pickup_add(){
-		$this->claim_track_add(2,"Pickup");
+	$claim_id =$this->input->post('claim_id');
+		if($this->claim_model->check_valid_status_claim_track($claim_id,1))
+			$this->claim_track_add(2,"Pickup");
+		else{
+			$data = array();
+			$data['status'] = 0;
+			$data['message'] = "Claim not found";
+			$this->json_response($data);
+		}
 	}
 	public function pickup_list(){
 		$this->claim_track_list(2);
 	}
 	
-	public function claim_track_add($status,$label){
+	public function drop_to_service_center_add(){
+		$claim_id =$this->input->post('claim_id');
+		$service_center_id =$this->input->post('service_center_id');
+		
+		if($this->claim_model->check_valid_status_claim_track($claim_id,2))
+			$this->claim_track_add(3,"Deliver to Service Center",array("service_center_id"=>$service_center_id));
+		else{
+			$data = array();
+			$data['status'] = 0;
+			$data['message'] = "Claim is not picked up";
+			$this->json_response($data);
+		}
+	}
+	public function drop_to_service_center_list(){
+		$this->claim_track_list(3);
+	}
+	
+	public function pickup_from_service_center_add(){
+		$claim_id =$this->input->post('claim_id');
+		$service_center_id =$this->input->post('service_center_id');
+	
+		if($this->claim_model->check_valid_status_claim_track($claim_id,3))
+			$this->claim_track_add(4,"Pickup from Service Center",array("service_center_id"=>$service_center_id));
+		else{
+			$data = array();
+			$data['status'] = 0;
+			$data['message'] = "Claim is not in service center";
+			$this->json_response($data);
+		}
+	}
+	public function pickup_from_service_center_list(){
+		$this->claim_track_list(4);
+	}
+	
+	public function drop_to_customer_add(){
+		$claim_id =$this->input->post('claim_id');
+		$service_center_id =$this->input->post('service_center_id');
+		
+		$submit_to_person_name =$this->input->post('ssubmit_to_person_name');
+		$submit_to_person_phone =$this->input->post('submit_to_person_phone');
+		
+		if($this->claim_model->check_valid_status_claim_track($claim_id,4))
+			$this->claim_track_add(5,"Drop to Customer",array("submit_to_person_name"=>$submit_to_person_name,"submit_to_person_phone"=>$submit_to_person_phone));
+		else{
+			$data = array();
+			$data['status'] = 0;
+			$data['message'] = "Claim is not pickup from service center";
+			$this->json_response($data);
+		}
+	}
+	public function drop_to_customer_list(){
+		$this->claim_track_list(5);
+	}
+	
+	public function claim_track_add($status,$label,$params = array()){
 		
         $claim_id =$this->input->post('claim_id');
 		//if save button was clicked, get the data sent via post
@@ -174,13 +236,32 @@ class Claim_API extends CI_Controller {
         {
             if ($claim_id != "")
             {
+            	$created_at = $this->input->post('date');
+            	if(!$created_at || $created_at == ""){
+            		$created_at = date("Y-m-d H:i:s");
+            	}else{
+            		$created_at = date("Y-m-d H:i:s",strtotime($created_at));
+            	}
+            	
 				$new_member_insert_data = array(
 					'claim_id' => $claim_id,
 					'remarks' => $this->input->post('remarks'),
 					'status' => $status,
 					'user_id' => $this->input->get('user_id'),
-					'created_at' => date("Y-m-d H:i:s"),
+					'created_at' => $created_at,
 				);
+				
+				if(!empty($params) && (int)$params["service_center_id"] > 0){
+					$new_member_insert_data["service_center_id"] = $params["service_center_id"]; 
+				}
+				
+				if(!empty($params) && (int)$params["ssubmit_to_person_name"] > 0){
+					$new_member_insert_data["ssubmit_to_person_name"] = $params["ssubmit_to_person_name"];
+				}
+				
+				if(!empty($params) && (int)$params["submit_to_person_phone"] > 0){
+					$new_member_insert_data["submit_to_person_phone"] = $params["submit_to_person_phone"];
+				}
 
                 //if the insert has returned true then we show the flash message
                 if($claim_id = $this->claim_model->add_claim_track_api($new_member_insert_data)){
