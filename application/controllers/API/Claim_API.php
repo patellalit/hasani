@@ -211,9 +211,20 @@ class Claim_API extends CI_Controller {
 		$claim_id =$this->input->post('claim_id');
 		$service_center_id =$this->input->post('service_center_id');
 		
-		$submit_to_person_name =$this->input->post('ssubmit_to_person_name');
+		$submit_to_person_name =$this->input->post('submit_to_person_name');
 		$submit_to_person_phone =$this->input->post('submit_to_person_phone');
-		
+		if(!$submit_to_person_name || $submit_to_person_name == ""){
+			$data = array();
+			$data['status'] = 0;
+			$data['message'] = "Required Submit to person name";
+			$this->json_response($data);
+		}
+		if(!$submit_to_person_phone || $submit_to_person_phone == ""){
+			$data = array();
+			$data['status'] = 0;
+			$data['message'] = "Required Submit to person phone number";
+			$this->json_response($data);
+		}
 		if($this->claim_model->check_valid_status_claim_track($claim_id,4))
 			$this->claim_track_add(5,"Drop to Customer",array("submit_to_person_name"=>$submit_to_person_name,"submit_to_person_phone"=>$submit_to_person_phone));
 		else{
@@ -251,15 +262,15 @@ class Claim_API extends CI_Controller {
 					'created_at' => $created_at,
 				);
 				
-				if(!empty($params) && (int)$params["service_center_id"] > 0){
+				if(!empty($params) && isset($params["service_center_id"]) && (int)$params["service_center_id"] > 0){
 					$new_member_insert_data["service_center_id"] = $params["service_center_id"]; 
 				}
 				
-				if(!empty($params) && (int)$params["ssubmit_to_person_name"] > 0){
-					$new_member_insert_data["ssubmit_to_person_name"] = $params["ssubmit_to_person_name"];
+				if(!empty($params) && isset($params["submit_to_person_name"]) && $params["submit_to_person_name"] != ""){
+					$new_member_insert_data["submit_to_person_name"] = $params["submit_to_person_name"];
 				}
 				
-				if(!empty($params) && (int)$params["submit_to_person_phone"] > 0){
+				if(!empty($params) && isset($params["submit_to_person_phone"]) && (int)$params["submit_to_person_phone"] > 0){
 					$new_member_insert_data["submit_to_person_phone"] = $params["submit_to_person_phone"];
 				}
 
