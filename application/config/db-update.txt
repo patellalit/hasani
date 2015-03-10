@@ -36,3 +36,13 @@ ALTER TABLE `membership` CHANGE `first_name` `first_name` VARCHAR(255) CHARACTER
 
 ALTER TABLE `products` CHANGE `item` `item` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL ,
 CHANGE `description` `description` VARCHAR( 40 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL 
+
+===============
+01-03-2015
+===============
+ALTER TABLE `servicecenter` DROP `city`, DROP `state`;
+ALTER TABLE `servicecenter` CHANGE `area` `area` INT NOT NULL;
+INSERT INTO `area` (`id`, `area_name`, `city_id`) VALUES (NULL, 'UDANA DARVAJA', '73');
+ALTER TABLE `claim_track` ADD `service_center_id` INT NOT NULL DEFAULT '0' AFTER `user_id`;
+ALTER TABLE `claim_track` ADD `submit_to_person_name` VARCHAR(255) NULL DEFAULT NULL AFTER `service_center_id`;
+ALTER TABLE `claim_track` ADD `submit_to_person_phone` VARCHAR(20) NULL DEFAULT NULL AFTER `submit_to_person_name`;

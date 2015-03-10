@@ -118,4 +118,18 @@ class BasicData_API extends CI_Controller {
 		$data['data']['roles'] = $firms;
 		$this->json_response($data);
 	}
+	
+	/**
+	 * Load the main view with all the current model model's data.
+	 * @return void
+	 */
+	public function service_center_list(){
+		$data = array();
+		$data['status'] = 1;
+	
+		$service_centers = $this->basic_model->get_service_center_api();
+	
+		$data['data']['service_centers'] = $service_centers;
+		$this->json_response($data);
+	}
 }

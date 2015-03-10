@@ -23,6 +23,19 @@ class Target_model extends CI_Model {
 		$query = $this->db->get();
 		return $query->result_array(); 
     }
+    
+    public function check_duplicate($customer_id,$user_id)
+    {
+    	$this->db->select('*');
+    	$this->db->from('target');
+    	$this->db->where('customer_id', $customer_id);
+    	$this->db->where('user_id', $user_id);
+    	$query = $this->db->get();
+    	if($query->num_rows() > 0)
+    		return true;
+    	else
+    		return false;
+    }
 
 	/**
     * Fetch target data from the database
