@@ -60,7 +60,19 @@ $login_user = $this->session->userdata('login_user');
 			<li <?php if($this->uri->segment(2) == 'dealers'){echo 'class="active"';}?>>
 	          <a href="<?php echo base_url(); ?>admin/dealers">Dealers</a>
 	        </li>
-	        
+            <li <?php if($this->uri->segment(2) == 'Country'){echo 'class="active"';}?>>
+                <a href="<?php echo base_url(); ?>admin/country">Country</a>
+            </li>
+            <li <?php if($this->uri->segment(2) == 'State'){echo 'class="active"';}?>>
+                <a href="<?php echo base_url(); ?>admin/state">State</a>
+            </li>
+            <li <?php if($this->uri->segment(2) == 'City'){echo 'class="active"';}?>>
+            <a href="<?php echo base_url(); ?>admin/city">City</a>
+            </li>
+            <li <?php if($this->uri->segment(2) == 'Area'){echo 'class="active"';}?>>
+            <a href="<?php echo base_url(); ?>admin/area">Area</a>
+            </li>
+
 	      </ul>
 	    </div>
 	  </div>

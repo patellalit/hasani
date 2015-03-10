@@ -26,3 +26,37 @@ function confirmDelete(obj){
     else
         return false;
 }
+function fetchState(countryid,url){
+    $.ajax({
+        url : url+'?countryid='+countryid,
+        type: "POST",
+        data : '',
+        success:function(data, textStatus, jqXHR)
+        {
+           //alert(data);
+           $('#state_id').html(data);
+           
+        },
+        error: function(jqXHR, textStatus, errorThrown)
+        {
+           alert("error"+textStatus);
+        }
+    });
+}
+function fetchCity(stateid,url){
+    $.ajax({
+           url : url+'?stateid='+stateid,
+           type: "POST",
+           data : '',
+           success:function(data, textStatus, jqXHR)
+           {
+           //alert(data);
+           $('#city_id').html(data);
+           
+           },
+           error: function(jqXHR, textStatus, errorThrown)
+           {
+           alert("error"+textStatus);
+           }
+           });
+}

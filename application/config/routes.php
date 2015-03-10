@@ -126,7 +126,32 @@ $route['admin/dealers/update/(:any)'] = 'admin_dealers/update/$1';
 $route['admin/dealers/delete/(:any)'] = 'admin_dealers/delete/$1';
 $route['admin/dealers/csv'] = 'admin_dealers/csv';
 $route['admin/dealers/(:any)'] = 'admin_dealers/index/$1'; //$1 = page number
+    
+$route['admin/country'] = 'admin_country/index';
+$route['admin/country/add'] = 'admin_country/add';
+$route['admin/country/update/(:any)'] = 'admin_country/update/$1';
+$route['admin/country/delete/(:any)'] = 'admin_country/delete/$1';
+$route['admin/country/(:any)'] = 'admin_country/index/$1'; //$1 = page number
+    
+$route['admin/state'] = 'admin_state/index';
+$route['admin/state/add'] = 'admin_state/add';
+$route['admin/state/fetchState'] = 'admin_state/fetchState';
+$route['admin/state/fetchCity'] = 'admin_state/fetchCity';
+$route['admin/state/update/(:any)'] = 'admin_state/update/$1';
+$route['admin/state/delete/(:any)'] = 'admin_state/delete/$1';
+$route['admin/state/(:any)'] = 'admin_state/index/$1'; //$1 = page number
 
+$route['admin/city'] = 'admin_city/index';
+$route['admin/city/add'] = 'admin_city/add';
+$route['admin/city/update/(:any)'] = 'admin_city/update/$1';
+$route['admin/city/delete/(:any)'] = 'admin_city/delete/$1';
+$route['admin/city/(:any)'] = 'admin_city/index/$1'; //$1 = page number
+    
+$route['admin/area'] = 'admin_area/index';
+$route['admin/area/add'] = 'admin_area/add';
+$route['admin/area/update/(:any)'] = 'admin_area/update/$1';
+$route['admin/area/delete/(:any)'] = 'admin_area/delete/$1';
+$route['admin/area/(:any)'] = 'admin_area/index/$1'; //$1 = page number
 
 
 /* End of file routes.php */
