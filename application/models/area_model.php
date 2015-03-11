@@ -18,9 +18,13 @@ class Area_model extends CI_Model {
     public function get_area_by_id($id)
     {
 		$this->db->select('*');
-		$this->db->select('(select stateId from city where city.id='.$this->table_name.'.city_id) as stateId');
+		//$this->db->select('(select stateId from city where city.id='.$this->table_name.'.city_id) as stateId');
+        $this->db->select('city.name as city_name,city.id as city_id,state.name as state_name,state.id as state_id,country.country_name as country_name,country.id as country_id');
 		$this->db->from($this->table_name);
-		$this->db->where('id', $id);
+		$this->db->where($this->table_name.'.id', $id);
+        $this->db->join('city', $this->table_name.'.city_id = city.id', 'inner');
+        $this->db->join('state', 'city.stateId = state.id', 'inner');
+        $this->db->join('country', 'state.country_id = country.id', 'inner');
 		$query = $this->db->get();
 		return $query->result_array(); 
     }    
@@ -51,7 +55,8 @@ class Area_model extends CI_Model {
     {
 	    
 		$this->db->select($this->table_name.'.*');
-		$this->db->select('city.name as city_name,(select name from state where state.id=city.stateId) as state_name');
+		//$this->db->select('city.name as city_name,(select name from state where state.id=city.stateId) as state_name');
+        $this->db->select('city.name as city_name,city.id as city_id,state.name as state_name,state.id as state_id,country.country_name as country_name,country.id as country_id');
 		
 		$this->db->from($this->table_name);
 		
@@ -59,7 +64,9 @@ class Area_model extends CI_Model {
 			$this->db->where('city_id', $city_id);
 		}
 
-		$this->db->join('city', $this->table_name.'.city_id = city.id', 'left');
+		$this->db->join('city', $this->table_name.'.city_id = city.id', 'inner');
+        $this->db->join('state', 'city.stateId = state.id', 'inner');
+        $this->db->join('country', 'state.country_id = country.id', 'inner');
 
 		$this->db->group_by($this->table_name.'.id');
 

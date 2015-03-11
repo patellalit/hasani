@@ -284,7 +284,7 @@ class Admin_city extends CI_Controller {
         $id = $this->uri->segment(4);
         $this->city_model->delete_city($id);
 		$data_to_send = "id=".$id;
-		redirect('city');
+		redirect('admin/city');
     }//edit
 
 }

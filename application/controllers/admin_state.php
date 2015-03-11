@@ -297,7 +297,7 @@ class Admin_state extends CI_Controller {
         $id = $this->uri->segment(4);
         $this->state_model->delete_state($id);
 		$data_to_send = "id=".$id;
-		redirect('state');
+		redirect('admin/state');
     }//edit
 
 }

@@ -264,12 +264,13 @@ class Admin_area extends CI_Controller {
 
         }
 		$data['area'] = $this->area_model->get_area_by_id($id);
+        //echo "<pre>";print_r($data['area']);echo"</pre>";
 		//fetch country data to populate the select field
         $data['country'] = $this->country_model->get_country();
 		
 //print_r($data['city']);
-        $data['city'] =$this->city_model->get_city($data['area'][0]['city_id']);
-		$data['state'] =$this->state_model->get_state();
+        $data['city'] =$this->city_model->get_city($data['area'][0]['state_id']);
+		$data['state'] =$this->state_model->get_state($data['area'][0]['country_id']);
         
         //aanganvadi data 
         
@@ -287,9 +288,9 @@ class Admin_area extends CI_Controller {
     {
         //aanganvadi id 
         $id = $this->uri->segment(4);
-        $this->city_model->delete_city($id);
+        $this->area_model->delete_area($id);
 		$data_to_send = "id=".$id;
-		redirect('city');
+		redirect('admin/area');
     }//edit
 
 }

@@ -207,10 +207,10 @@ class Admin_country extends CI_Controller {
     public function delete()
     {
         //aanganvadi id 
-        $id = $this->uri->segment(3);
+        $id = $this->uri->segment(4);
         $this->country_model->delete_country($id);
 		$data_to_send = "id=".$id;
-		redirect('country');
+		redirect('admin/country');
     }//edit
 
 }

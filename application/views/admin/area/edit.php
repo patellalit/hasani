@@ -73,13 +73,13 @@
             <div class="control-group">
             <label for="inputError" class="control-label">Country</label>
             <div class="controls">
-            <?php echo form_dropdown('country_id',$option_country,'','class="span2 width230" id="country_id"  onchange="fetchState(this.value,\''.base_url().'admin/state/fetchState\')"'); ?>
+            <?php echo form_dropdown('country_id',$option_country,$area[0]['country_id'],'class="span2 width230" id="country_id"  onchange="fetchState(this.value,\''.base_url().'admin/state/fetchState\')"'); ?>
             </div>
             </div>
 <div class="control-group">
 <label for="inputError" class="control-label">State</label>
 <div class="controls">
-<?php echo form_dropdown('state_id',$option_state,$area[0]['stateId'],'class="span2 width230" id="state_id"'); ?>
+<?php echo form_dropdown('state_id',$option_state,$area[0]['state_id'],'class="span2 width230" id="state_id"  onchange="fetchCity(this.value,\''.base_url().'admin/state/fetchCity\')"'); ?>
 </div>
 </div>
 <div class="control-group">
