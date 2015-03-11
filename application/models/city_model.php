@@ -150,4 +150,3 @@ class City_model extends CI_Model {
 	}
  
 }
-?>	

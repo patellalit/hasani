@@ -55,7 +55,7 @@ class Claim_API extends CI_Controller {
                 }else{
                     $data = array();
 					$data['status'] = 0;
-					$data['message'] = "Claim not updated. Try again.";
+					$data['message'] = "Claim already created with this customer.";
 					$this->json_response($data);
                 }
 

@@ -23,6 +23,25 @@ class Claim_model extends CI_Model {
 		$query = $this->db->get();
 		return $query->result_array(); 
     }
+    
+    /**
+     * Get user by his is
+     * @param int $claim_id
+     * @return array
+     */
+    public function check_duplicate_claim($customer_id,$user_id)
+    {
+    	$this->db->select('*');
+    	$this->db->from('claim');
+    	$this->db->where('target_customer_id', $customer_id);
+    	$this->db->where('user_id', $user_id);
+    	$this->db->where('status != ', 5);
+    	$query = $this->db->get();
+    	if( $query->num_rows() > 0)
+    		return true;
+    	else 
+    		return false;
+    }
 
     /**
     * Fetch claim data from the database
@@ -122,12 +141,14 @@ class Claim_model extends CI_Model {
     */
     function add_claim_api($new_member_insert_data)
     {
+    	if($this->check_duplicate_claim($this->input->post('target_customer_id'),$new_member_insert_data['user_id']))
+    		return false;
 		$insert = $this->db->insert('claim', $new_member_insert_data);
 		$claim_id = $this->db->insert_id();
 		$new_member_insert_data = array(
 					'claim_id' => $claim_id,
 					'remarks' => $new_member_insert_data['remarks'],
-					'status' => $new_member_insert_data['status'],
+					'status' => 1,
 					'user_id' => $new_member_insert_data['user_id'],
 					'created_at' => date("Y-m-d H:i:s"),
 				);

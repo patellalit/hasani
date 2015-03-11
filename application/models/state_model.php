@@ -153,4 +153,3 @@ class State_model extends CI_Model {
 	}
  
 }
-?>	
