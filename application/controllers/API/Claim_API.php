@@ -157,6 +157,14 @@ class Claim_API extends CI_Controller {
 	    $data['data']['claim'] = $this->claim_model->get_claim_api('', '', 'ASC',null,null,$user_id);
 		$this->json_response($data);
 	}
+
+	public function claim_list_all(){
+		$data = array();
+		$data['status'] = 1;
+		$data['data']['count_claim']= $this->claim_model->count_claim_api();
+	    $data['data']['claim'] = $this->claim_model->get_claim_api('', '', 'ASC');
+		$this->json_response($data);
+	}
 	
 	public function pickup_add(){
 	$claim_id =$this->input->post('claim_id');
@@ -176,9 +184,10 @@ class Claim_API extends CI_Controller {
 	public function drop_to_service_center_add(){
 		$claim_id =$this->input->post('claim_id');
 		$service_center_id =$this->input->post('service_center_id');
+                $jobsheet_no =$this->input->post('jobsheet_no');
 		
 		if($this->claim_model->check_valid_status_claim_track($claim_id,2))
-			$this->claim_track_add(3,"Deliver to Service Center",array("service_center_id"=>$service_center_id));
+			$this->claim_track_add(3,"Deliver to Service Center",array("service_center_id"=>$service_center_id,"jobsheet_no"=>$jobsheet_no));
 		else{
 			$data = array();
 			$data['status'] = 0;
@@ -272,6 +281,10 @@ class Claim_API extends CI_Controller {
 				
 				if(!empty($params) && isset($params["submit_to_person_phone"]) && (int)$params["submit_to_person_phone"] > 0){
 					$new_member_insert_data["submit_to_person_phone"] = $params["submit_to_person_phone"];
+				}
+
+if(!empty($params) && isset($params["jobsheet_no"]) && (int)$params["jobsheet_no"] > 0){
+					$new_member_insert_data["jobsheet_no"] = $params["jobsheet_no"];
 				}
 
                 //if the insert has returned true then we show the flash message

@@ -183,7 +183,7 @@ class Users_model extends CI_Model {
 		return $query->result_array(); 	
     }
 
-	public function get_users_api($params,$is_admin=false)
+public function get_users_api($params,$is_admin=false)
     {
     	$search_string=$params["search_string"];
     	$search_in=$params["search_in"];
@@ -210,8 +210,8 @@ class Users_model extends CI_Model {
 		$this->db->from('membership m')
 				->join('roles r', 'r.id = m.role', 'inner');
 
-		if(!$is_admin)
-			$this->db->where('m.role > 1');
+		//if(!$is_admin)
+			//$this->db->where('m.role > 1');
 		
 		if($search_string && $search_in){
 			$this->db->like($search_in, $search_string);
@@ -240,8 +240,8 @@ class Users_model extends CI_Model {
 		$this->db->select('*');
 		$this->db->from('membership m')
 				->join('roles r', 'r.id = m.role', 'inner');
-		if(!$is_admin)
-			$this->db->where('m.role > 1');
+		//if(!$is_admin)
+			//$this->db->where('m.role > 1');
 		
 		if($search_string){
 			$this->db->like($search_in, $search_string);

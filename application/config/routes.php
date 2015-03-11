@@ -96,6 +96,7 @@ $route['API/V1/target/delete/(:any)'] = 'API/Target_API/target_delete/$1';
 
 //Claim
 $route['API/V1/claim'] = 'API/Claim_API/claim_list';
+$route['API/V1/claim/all'] = 'API/Claim_API/claim_list_all';
 $route['API/V1/claim/add'] = 'API/Claim_API/claim_add';
 $route['API/V1/claim/update/(:any)'] = 'API/Claim_API/claim_update/$1';
 $route['API/V1/claim/delete/(:any)'] = 'API/Claim_API/claim_delete/$1';
@@ -145,7 +146,7 @@ $route['admin/country/add'] = 'admin_country/add';
 $route['admin/country/update/(:any)'] = 'admin_country/update/$1';
 $route['admin/country/delete/(:any)'] = 'admin_country/delete/$1';
 $route['admin/country/(:any)'] = 'admin_country/index/$1'; //$1 = page number
-    
+
 $route['admin/state'] = 'admin_state/index';
 $route['admin/state/add'] = 'admin_state/add';
 $route['admin/state/fetchState'] = 'admin_state/fetchState';
@@ -159,7 +160,7 @@ $route['admin/city/add'] = 'admin_city/add';
 $route['admin/city/update/(:any)'] = 'admin_city/update/$1';
 $route['admin/city/delete/(:any)'] = 'admin_city/delete/$1';
 $route['admin/city/(:any)'] = 'admin_city/index/$1'; //$1 = page number
-    
+
 $route['admin/area'] = 'admin_area/index';
 $route['admin/area/add'] = 'admin_area/add';
 $route['admin/area/update/(:any)'] = 'admin_area/update/$1';
@@ -169,12 +170,3 @@ $route['admin/area/(:any)'] = 'admin_area/index/$1'; //$1 = page number
 
 /* End of file routes.php */
 /* Location: ./application/config/routes.php */
-
-                            
-                            
-
-                            
-                            
-                            
-
-                            
