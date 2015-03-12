@@ -166,6 +166,9 @@ $route['admin/area/add'] = 'admin_area/add';
 $route['admin/area/update/(:any)'] = 'admin_area/update/$1';
 $route['admin/area/delete/(:any)'] = 'admin_area/delete/$1';
 $route['admin/area/(:any)'] = 'admin_area/index/$1'; //$1 = page number
+    
+$route['admin/claim'] = 'admin_claim/index';
+$route['admin/claim/(:any)'] = 'admin_claim/index/$1'; //$1 = page number
 
 
 /* End of file routes.php */

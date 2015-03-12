@@ -8,6 +8,8 @@
   <script src="<?php echo base_url(); ?>assets/js/jquery-1.7.1.min.js"></script>
     <script src="<?php echo base_url(); ?>assets/jquery-ui/jquery-ui.min.js"></script>
 	<script src="<?php echo base_url(); ?>assets/js/bootstrap.min.js"></script>
+<script src="<?php echo base_url(); ?>assets/js/bootstrap-datepicker.js"></script>
+<link href="<?php echo base_url(); ?>assets/css/admin/datepicker3.css" rel="stylesheet" type="text/css">
 	<script src="<?php echo base_url(); ?>assets/js/admin.js"></script>
 <style>
 .navbar-inner{
@@ -71,6 +73,9 @@ $login_user = $this->session->userdata('login_user');
             </li>
             <li <?php if($this->uri->segment(2) == 'Area'){echo 'class="active"';}?>>
             <a href="<?php echo base_url(); ?>admin/area">Area</a>
+            </li>
+            <li <?php if($this->uri->segment(2) == 'Claim'){echo 'class="active"';}?>>
+            <a href="<?php echo base_url(); ?>admin/claim">Claim</a>
             </li>
 
 	      </ul>

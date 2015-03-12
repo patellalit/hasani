@@ -42,7 +42,105 @@ class Claim_model extends CI_Model {
     	else 
     		return false;
     }
-
+    
+    /**
+     * Fetch claim data from the database
+     * possibility to mix search, filter and order
+     * @param string $search_string
+     * @param strong $order
+     * @param string $order_type
+     * @param int $limit_start
+     * @param int $limit_end
+     * @return array
+     */
+    public function get_claim($date,$date_end=null,$search_string=null, $order=null, $order_type='Asc', $limit_start=null, $limit_end=null,$user_id=null)
+    {
+        
+        $this->db->select('claim.id');
+        
+        $this->db->select('pr.id as customer_id');
+        $this->db->select('pr.customerName as customer_name');
+        $this->db->select('pr.customerAddress as customer_address');
+        $this->db->select('pr.phoneNo as customer_phone');
+        
+        $this->db->select('p.id as product_id');
+        $this->db->select('p.plan_full_name as item');
+        $this->db->select('p.price');
+        
+        $this->db->select('CONCAT(m.first_name," ",m.last_name) as user_name',false);
+        
+        $this->db->select('ct.*');
+        
+        $this->db->from('claim_track ct')
+        ->join('claim', 'ct.claim_id = claim.id', 'inner')
+        ->join('productregistration pr', 'pr.id = claim.target_customer_id', 'inner')
+        ->join('plans p', 'p.id = pr.plan_id', 'inner')
+        ->join('membership m', 'm.id = ct.user_id', 'inner');
+        
+        if($date_end)
+            $this->db->where('STR_TO_DATE(DATE_FORMAT(ct.modified_at,"%Y-%m-%d"),"%Y-%m-%d") between "'.$date.'" and "'.$date_end.'"');
+        else
+            $this->db->where('DATE_FORMAT(ct.modified_at,"%Y-%m-%d")',$date);
+        
+        if($search_string){
+            $this->db->where('pr.customerName like "'.$search_string.'" or m.first_name like "'.$search_string.'" or last_name like "'.$search_string.'"');
+        }
+        
+        if($order){
+            $this->db->order_by($order, $order_type);
+        }else{
+            $this->db->order_by('ct.id', $order_type);
+        }
+        if($limit_start)
+            $this->db->limit($limit_start, $limit_end);
+        //$this->db->limit('4', '4');
+        //print_r($this->db->last_query());
+        $query = $this->db->get();
+        
+        $res_array = array();
+        foreach ($query->result_array() as $row)
+        {
+            $res_array[] = $row;
+        }
+        
+        return $res_array;
+    }
+    
+    /**
+     * Count the number of rows
+     * @param int $manufacture_id
+     * @param int $search_string
+     * @param int $order
+     * @return int
+     */
+    function count_claim($date,$date_end=null,$search_string=null, $order=null,$user_id=null)
+    {
+        $this->db->select('*');
+        $this->db->from('claim_track ct')
+        ->join('claim', 'ct.claim_id = claim.id', 'inner')
+        ->join('productregistration pr', 'pr.id = claim.target_customer_id', 'inner')
+        ->join('plans p', 'p.id = pr.plan_id', 'inner')
+        ->join('membership m', 'm.id = ct.user_id', 'inner');
+        
+        if($date_end)
+            $this->db->where('STR_TO_DATE(DATE_FORMAT(ct.modified_at,"%Y-%m-%d"),"%Y-%m-%d") between "'.$date.'" and "'.$date_end.'"');
+        else
+            $this->db->where('DATE_FORMAT(ct.modified_at,"%Y-%m-%d")',$date);
+        
+        
+        
+        if($search_string){
+            $this->db->where('pr.customerName like "'.$search_string.'" or m.first_name like "'.$search_string.'" or last_name like "'.$search_string.'"');
+        }
+        if($order){
+            $this->db->order_by($order, 'Asc');
+        }else{
+            $this->db->order_by('ct.id', 'Asc');
+        }
+        $query = $this->db->get();
+        return $query->num_rows();        
+    }
+    
     /**
     * Fetch claim data from the database
     * possibility to mix search, filter and order
