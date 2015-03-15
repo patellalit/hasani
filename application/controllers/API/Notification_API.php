@@ -33,9 +33,13 @@ class Notification_API extends CI_Controller {
 		$data = array();
 		$data['status'] = 1;
 		
-		$firms = $this->notification_model->get_notification_list($this->input->get('user_id'));
+		$offset = (int)$this->input->get('offset',0);
+		$limit = (int)$this->input->get('limit',0);
+		$user_id = $this->input->get('user_id');
 		
-		$data['data']['notifications'] = $firms;
+		$notifications = $this->notification_model->get_notification_list($user_id,$offset,$limit);
+		
+		$data['data']['notifications'] = $notifications;
 		$this->json_response($data);
 	}
 

@@ -34,11 +34,12 @@ class Notification_model extends CI_Model {
 		$this->db->where("nu.user_id",$user_id);
 
 		$this->db->order_by("nu.notification_id","DESC");
-if($limit > 0){
-if($offset == "")
-$offset = 0;
-$this->db->limit($offset, $limit);
-}
+		
+		if($limit > 0){
+			if($offset == "")
+				$offset = 0;
+			$this->db->limit($limit,$offset);
+		}
 
 		$query = $this->db->get();
 		

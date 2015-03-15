@@ -118,7 +118,7 @@ $route['API/V1/claim/deliverd/list'] = 'API/Claim_API/drop_to_customer_list';
 $route['API/V1/claim/deliverd/add'] = 'API/Claim_API/drop_to_customer_add';
 
 //Notification
-$route['API/V1/notification/list/(:any)/(:any)'] = 'API/Notification_API/notification_list/$1/$2';
+$route['API/V1/notification/list'] = 'API/Notification_API/notification_list';
 $route['API/V1/notification/add'] = 'API/Notification_API/notification_add';
 
 /*admin*/
