@@ -46,6 +46,27 @@ class Admin_claim extends CI_Controller {
 		{
 			$data['search']='';
 		}
+        
+        $searchin = $this->input->get('search_in');
+        if($searchin != '')
+        {
+            $data['searchin']=$searchin;
+        }
+        else
+        {
+            $data['searchin']='';
+        }
+        
+        $searchstatus = $this->input->get('status_in');
+        if($searchstatus != '')
+        {
+            $data['searchstatus']=$searchstatus;
+        }
+        else
+        {
+            $data['searchstatus']='';
+        }
+        
         $date = $this->input->get('date_start');
         if($date != '')
         {
@@ -136,8 +157,8 @@ class Admin_claim extends CI_Controller {
         }
         $data['order'] = $order;
         
-        $data['count_claim']= $this->claim_model->count_claim($date,$date_end,$search);
-        $data['claim'] = $this->claim_model->get_claim($date,$date_end,$search, '', $order_type, $config['per_page'],$limit_end);
+        $data['count_claim']= $this->claim_model->count_claim($date,$date_end,$search,$searchin,$searchstatus);
+        $data['claim'] = $this->claim_model->get_claim($date,$date_end,$search,$searchin,$searchstatus, '', $order_type, $config['per_page'],$limit_end);
 			
 		$config['total_rows'] = $data['count_claim'];
 		

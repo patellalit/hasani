@@ -53,7 +53,7 @@ class Claim_model extends CI_Model {
      * @param int $limit_end
      * @return array
      */
-    public function get_claim($date,$date_end=null,$search_string=null, $order=null, $order_type='Asc', $limit_start=null, $limit_end=null,$user_id=null)
+    public function get_claim($date,$date_end=null,$search_string=null,$searchin=null,$searchstatus=null, $order=null, $order_type='Asc', $limit_start=null, $limit_end=null,$user_id=null)
     {
         
         $this->db->select('claim.id');
@@ -66,6 +66,7 @@ class Claim_model extends CI_Model {
         $this->db->select('p.id as product_id');
         $this->db->select('p.plan_full_name as item');
         $this->db->select('p.price');
+        $this->db->select('(select `name` from servicecenter where servicecenter.id=ct.service_center_id) as service_center');
         
         $this->db->select('CONCAT(m.first_name," ",m.last_name) as user_name',false);
         
@@ -77,13 +78,35 @@ class Claim_model extends CI_Model {
         ->join('plans p', 'p.id = pr.plan_id', 'inner')
         ->join('membership m', 'm.id = ct.user_id', 'inner');
         
+        //echo $searchstatus;exit;
+        if($searchstatus!=0)
+        {
+            $this->db->where('ct.status',$searchstatus);
+        }
         if($date_end)
             $this->db->where('STR_TO_DATE(DATE_FORMAT(ct.modified_at,"%Y-%m-%d"),"%Y-%m-%d") between "'.$date.'" and "'.$date_end.'"');
         else
             $this->db->where('DATE_FORMAT(ct.modified_at,"%Y-%m-%d")',$date);
         
         if($search_string){
-            $this->db->where('pr.customerName like "'.$search_string.'" or m.first_name like "'.$search_string.'" or last_name like "'.$search_string.'"');
+            if($searchin=='claim_id')
+                $this->db->where('ct.claim_id',$search_string);
+            elseif($searchin=='customer_name')
+                $this->db->where('pr.customerName',$search_string);
+            elseif($searchin=='user_name')
+                $this->db->where('m.first_name like "'.$search_string.'" or last_name like "'.$search_string.'"');
+            elseif($searchin=='recieve_person_name')
+                $this->db->where('submit_to_person_name',$search_string);
+            elseif($searchin=='recieve_person_phone')
+                $this->db->where('submit_to_person_phone',$search_string);
+            elseif($searchin=='state')
+                $this->db->where('pr.state',$search_string);
+            elseif($searchin=='city')
+                $this->db->where('pr.city',$search_string);
+            elseif($searchin=='area')
+                $this->db->where('pr.area',$search_string);
+            else
+                $this->db->where('pr.customerName like "'.$search_string.'" or m.first_name like "'.$search_string.'" or last_name like "'.$search_string.'"');
         }
         
         if($order){
@@ -94,7 +117,7 @@ class Claim_model extends CI_Model {
         if($limit_start)
             $this->db->limit($limit_start, $limit_end);
         //$this->db->limit('4', '4');
-        //print_r($this->db->last_query());
+        //print_r($this->db->last_query());exit;
         $query = $this->db->get();
         
         $res_array = array();
@@ -113,7 +136,7 @@ class Claim_model extends CI_Model {
      * @param int $order
      * @return int
      */
-    function count_claim($date,$date_end=null,$search_string=null, $order=null,$user_id=null)
+    function count_claim($date,$date_end=null,$search_string=null,$searchin=null,$searchstatus=null, $order=null,$user_id=null)
     {
         $this->db->select('*');
         $this->db->from('claim_track ct')
@@ -128,9 +151,30 @@ class Claim_model extends CI_Model {
             $this->db->where('DATE_FORMAT(ct.modified_at,"%Y-%m-%d")',$date);
         
         
+        if($searchstatus!=0)
+        {
+            $this->db->where('ct.status',$searchstatus);
+        }
         
         if($search_string){
-            $this->db->where('pr.customerName like "'.$search_string.'" or m.first_name like "'.$search_string.'" or last_name like "'.$search_string.'"');
+            if($searchin=='claim_id')
+                $this->db->where('ct.claim_id',$search_string);
+            elseif($searchin=='customer_name')
+            $this->db->where('pr.customerName',$search_string);
+            elseif($searchin=='user_name')
+            $this->db->where('m.first_name like "'.$search_string.'" or last_name like "'.$search_string.'"');
+            elseif($searchin=='recieve_person_name')
+            $this->db->where('submit_to_person_name',$search_string);
+            elseif($searchin=='recieve_person_phone')
+            $this->db->where('submit_to_person_phone',$search_string);
+            elseif($searchin=='state')
+            $this->db->where('pr.state',$search_string);
+            elseif($searchin=='city')
+            $this->db->where('pr.city',$search_string);
+            elseif($searchin=='area')
+            $this->db->where('pr.area',$search_string);
+            else
+                $this->db->where('pr.customerName like "'.$search_string.'" or m.first_name like "'.$search_string.'" or last_name like "'.$search_string.'"');
         }
         if($order){
             $this->db->order_by($order, 'Asc');
