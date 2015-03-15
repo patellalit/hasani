@@ -83,7 +83,7 @@ class City_model extends CI_Model {
         }
         
         $query = $this->db->get();
-        print_r($this->db->last_query());
+
 		return $query->result_array(); 	
     }
 

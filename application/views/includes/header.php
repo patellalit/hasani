@@ -62,21 +62,26 @@ $login_user = $this->session->userdata('login_user');
 			<li <?php if($this->uri->segment(2) == 'dealers'){echo 'class="active"';}?>>
 	          <a href="<?php echo base_url(); ?>admin/dealers">Dealers</a>
 	        </li>
-            <li <?php if($this->uri->segment(2) == 'Country'){echo 'class="active"';}?>>
+            <?php /*<li <?php if($this->uri->segment(2) == 'Country'){echo 'class="active"';}?>>
                 <a href="<?php echo base_url(); ?>admin/country">Country</a>
+            </li> */ ?>
+            <li <?php if($this->uri->segment(2) == 'claim'){echo 'class="active"';}?>>
+            	<a href="<?php echo base_url(); ?>admin/claim">Claim</a>
             </li>
-            <li <?php if($this->uri->segment(2) == 'State'){echo 'class="active"';}?>>
-                <a href="<?php echo base_url(); ?>admin/state">State</a>
-            </li>
-            <li <?php if($this->uri->segment(2) == 'City'){echo 'class="active"';}?>>
-            <a href="<?php echo base_url(); ?>admin/city">City</a>
-            </li>
-            <li <?php if($this->uri->segment(2) == 'Area'){echo 'class="active"';}?>>
-            <a href="<?php echo base_url(); ?>admin/area">Area</a>
-            </li>
-            <li <?php if($this->uri->segment(2) == 'Claim'){echo 'class="active"';}?>>
-            <a href="<?php echo base_url(); ?>admin/claim">Claim</a>
-            </li>
+           <li class="dropdown">
+            	<a href="#" class="dropdown-toggle" data-toggle="dropdown">Masters <b class="caret"></b></a>
+            	<ul class="dropdown-menu">
+		            <li>
+						<a href="<?php echo base_url(); ?>admin/state">State</a>
+					</li>
+					<li>
+						<a href="<?php echo base_url(); ?>admin/city">City</a>
+					</li>
+					<li>
+						<a href="<?php echo base_url(); ?>admin/area">Area</a>
+					</li>
+				</ul>
+			</li>
 
 	      </ul>
 	    </div>
