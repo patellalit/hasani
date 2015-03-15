@@ -442,4 +442,21 @@ public function get_users_api($params,$is_admin=false)
 		else
 			return false;
 	}
+	function get_child_users($user_id){
+		$user = $this->get_user_by_id($user_id);
+		if(empty($user))
+			return array();
+	
+		$user = $user[0];
+	
+		$this->db->from('membership m')
+		->where('m.role IN (select r.id from roles r where r.parent_role_id='.$user["role"].')');
+	
+		$this->db->order_by("m.first_name","ASC");
+		$this->db->order_by("m.last_name","ASC");
+	
+		$query = $this->db->get();
+	
+		return $query->result_array();
+	}
 }
