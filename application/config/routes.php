@@ -117,6 +117,10 @@ $route['API/V1/claim/service_center_pickup/add'] = 'API/Claim_API/pickup_from_se
 $route['API/V1/claim/deliverd/list'] = 'API/Claim_API/drop_to_customer_list';
 $route['API/V1/claim/deliverd/add'] = 'API/Claim_API/drop_to_customer_add';
 
+//Notification
+$route['API/V1/notification/list'] = 'API/Notification_API/notification_list';
+$route['API/V1/notification/add'] = 'API/Notification_API/notification_add';
+
 /*admin*/
 $route['admin'] = 'user/index';
 $route['admin/signup'] = 'user/signup';
