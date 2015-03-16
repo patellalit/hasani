@@ -24,10 +24,13 @@
           <div class="well">
            
             <?php
+           $options_searchin = array(''=>'Select','c.customer_name'=>'Customer Name','c.ol_name'=>'O/L Name','c.ol_address'=>'O/L Address','city.name'=>'O/L City','c.mobile'=>'Mobile','c.email'=>'Email','c.cst_number'=>'CST Number','c.cst_date'=>'CST Date','c.gst_number'=>'GST Number','c.gst_date'=>'GST Date');
+                //$searchin='';
+            $attributes = array('class' => 'form-inline reset-margin', 'id' => 'myform','method'=>'GET');
            
-            $attributes = array('class' => 'form-inline reset-margin', 'id' => 'myform');
-           
-            //save the columns names in a array that we will use as filter         
+            //save the columns names in a array that we will use as filter
+                //echo "<pre>";
+                //print_r($dealers);exit;
             $options_users = array();    
             foreach ($dealers as $array) {
               foreach ($array as $key => $value) {
@@ -41,6 +44,9 @@
               echo form_label('Search:', 'search_string');
               echo form_input('search_string', $search_string_selected, 'style="width: 170px;
 height: 26px;"');
+                              
+              echo form_label('In:', 'search_in');
+              echo form_dropdown('search_in',$options_searchin,$search_in,'id="search_in" style="width:100px"');
 
               echo form_label('Order by:', 'order');
               echo form_dropdown('order', $options_users, $order, 'class="span2"');

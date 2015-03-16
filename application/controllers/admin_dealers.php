@@ -47,9 +47,10 @@ class Admin_dealers extends CI_Controller {
         } 
 
 		//all the posts sent by the view
-        $search_string = $this->input->post('search_string');        
-        $order = $this->input->post('order'); 
-        $order_type = $this->input->post('order_type'); 
+        $search_string = $this->input->get('search_string');
+        $search_in = $this->input->get('search_in');
+        $order = $this->input->get('order');
+        $order_type = $this->input->get('order_type');
 		
 		//filtered && || paginated
         if($search_string !== false && $search_string != "" && $order !== false || $this->uri->segment(3) == true){ 
@@ -76,6 +77,13 @@ class Admin_dealers extends CI_Controller {
 		        $search_string = $this->session->userdata('search_string_selected');
 		    }
 		    $data['search_string_selected'] = $search_string;
+            
+            if($search_in){
+                $filter_session_data['search_in'] = $search_in;
+            }else{
+                $search_in = $this->session->userdata('search_in');
+            }
+            $data['search_in'] = $search_in;
 
 			if($order){
 		        $filter_session_data['order'] = $order;
@@ -90,17 +98,19 @@ class Admin_dealers extends CI_Controller {
 		}else{
 			//clean filter data inside section
             $filter_session_data['search_string_selected'] = null;
+            $filter_session_data['search_in'] = null;
             $filter_session_data['order'] = null;
             $filter_session_data['order_type'] = null;
             $this->session->set_userdata($filter_session_data);
 
             //pre selected options
             $data['search_string_selected'] = '';
+            $data['search_in'] = '';
             $data['order'] = 'id';
 			$data['order_type_selected'] = 'desc';
 		}
 
-		$request_params = array("search_string"=>$data['search_string_selected'],"offset"=>$limit_end,"limit"=>$config['per_page'],"sort"=>$data['order'],"sort_dir"=>$data['order_type_selected']);
+		$request_params = array("search_string"=>$data['search_string_selected'],"search_in"=>$data['search_in'],"offset"=>$limit_end,"limit"=>$config['per_page'],"sort"=>$data['order'],"sort_dir"=>$data['order_type_selected']);
 		$users = $this->apicall->call("GET","dealers",$request_params);
 
 		$data['count_dealers'] = $users["data"]["count_customers"];
@@ -149,7 +159,7 @@ class Admin_dealers extends CI_Controller {
 
         }
         //load the view
-        $data['main_content'] = 'admin/dealer/add';
+        $data['main_content'] = 'admin/dealers/add';
         $this->load->view('includes/template', $data);  
     }       
 
@@ -187,7 +197,7 @@ class Admin_dealers extends CI_Controller {
                 }else{
                     $this->session->set_flashdata('flash_message', 'not_updated');
                 }
-                redirect('admin/dealer/update/'.$id.'');
+                redirect('admin/dealers/update/'.$id.'');
 
             }//validation run
 
@@ -197,9 +207,9 @@ class Admin_dealers extends CI_Controller {
         //the code below wel reload the current data
 
         //customer data 
-        $data['customer'] = $this->customers_model->get_customer_by_id($id);
+        $data['customers'] = $this->customers_model->get_customer_by_id($id);
         //load the view
-        $data['main_content'] = 'admin/dealer/edit';
+        $data['main_content'] = 'admin/dealers/edit';
         $this->load->view('includes/template', $data);            
 
     }//update
