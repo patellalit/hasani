@@ -66,3 +66,10 @@ CREATE TABLE IF NOT EXISTS `notification_users` (
   `read_datetime` datetime DEFAULT NULL,
   PRIMARY KEY (`notification_id`,`user_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+===============
+16-03-2015
+===============
+
+ALTER TABLE `membership` ADD `device_id` TEXT NULL DEFAULT NULL AFTER `parent_id`;
+ALTER TABLE `membership` ADD `device_token` TEXT NULL DEFAULT NULL COMMENT 'For Push Notification' AFTER `device_id`;

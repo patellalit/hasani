@@ -36,6 +36,19 @@ class Users_model extends CI_Model {
 		return false;
 	}
 	
+	function is_login($user_id){
+		$this->db->select('id');
+		$this->db->where('id', $user_id);
+		$this->db->where('is_logged_in', 1);
+		$query = $this->db->get('membership');
+		
+		if($query->num_rows == 1)
+		{
+			return true;
+		}
+		return false;
+	}
+	
     /**
     * Serialize the session data stored in the database, 
     * store it in a new array and return it to the controller 

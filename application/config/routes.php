@@ -42,6 +42,7 @@ $route['404_override'] = '';
 /* API */
 //User Login
 $route['API/V1/login'] = 'API/Authentication_API/validate_credentials';
+$route['API/V1/logout'] = 'API/Authentication_API/logout';
 
 //Basic Data
 $route['API/V1/region'] = 'API/BasicData_API/city_state_list';
@@ -62,6 +63,7 @@ $route['API/V1/user/update/(:any)'] = 'API/Users_API/user_update/$1';
 $route['API/V1/user/delete/(:any)'] = 'API/Users_API/user_delete/$1';
 $route['API/V1/users/role/(:any)'] = 'API/Users_API/user_list_by_role/$1';
 $route['API/V1/user/update/password'] = 'API/Users_API/user_change_password';
+$route['API/V1/device-token/update'] = 'API/Users_API/user_update_device_token';
 
 //Customers
 $route['API/V1/outlets'] = 'API/Customer_API/customer_list';

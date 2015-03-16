@@ -54,6 +54,7 @@ class Users_API extends CI_Controller {
             			'address' => $this->input->post('address'),
             			'personal_email' => $this->input->post('personal_email'),
             			'personal_phone' => $this->input->post('personal_phone'),
+            			'device_id' => $this->input->post('IMEI'),
             	);
             	
                 if($user_id = $this->users_model->add_user_api($new_member_insert_data)){
@@ -81,6 +82,52 @@ class Users_API extends CI_Controller {
 		$data = array();
 		$data['status'] = 0;
 		$data['message'] = "Method is not valid";
+		$this->json_response($data);
+	}
+	
+	public function user_update_device_token(){
+		//if save button was clicked, get the data sent via post
+		$user_id = (int)$this->input->get('user_id');
+		if ($this->input->server('REQUEST_METHOD') === 'POST' && (int)$user_id > 0)
+		{
+			//form validation
+			$this->form_validation->set_rules('device_token', 'Device Token', 'required|trim');
+	
+			$this->form_validation->set_error_delimiters('<div class="alert alert-error"><a class="close" data-dismiss="alert">×</a><strong>', '</strong></div>');
+	
+			//if the form has passed through the validation
+			if ($this->form_validation->run())
+			{
+				//if the insert has returned true then we show the flash message
+				$new_member_insert_data = array(
+						'device_token' => $this->input->post('device_token'),
+				);
+	
+				if($user_id = $this->users_model->update_user_api($user_id,$new_member_insert_data)){
+					$data = array();
+					$data['status'] = 1;
+					$data['message'] = "Device token updated successfully";
+					$data['data'] = array("user_id"=>$user_id);
+					$this->json_response($data);
+				}else{
+					$data = array();
+					$data['status'] = 0;
+					$data['message'] = "Device token not updated. Try again.";
+					$this->json_response($data);
+				}
+	
+			}else{
+				$data = array();
+				$data['status'] = 0;
+				$data['message'] = "Enter required fields";
+				$this->json_response($data);
+			}
+				
+		}
+	
+		$data = array();
+		$data['status'] = 0;
+		$data['message'] = "Method/User Id is not valid";
 		$this->json_response($data);
 	}
 	
@@ -116,6 +163,9 @@ class Users_API extends CI_Controller {
 					'personal_email' => $this->input->post('personal_email'),
 					'personal_phone' => $this->input->post('personal_phone'),
 				);
+				if($this->input->post('IMEI') != "")
+					$new_member_insert_data['device_id'] = $this->input->post('IMEI');
+				
                 if($user_id = $this->users_model->update_user_api($user_id,$new_member_insert_data)){
                     $data = array();
 					$data['status'] = 1;

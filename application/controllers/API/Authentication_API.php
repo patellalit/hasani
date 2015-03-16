@@ -56,4 +56,33 @@ class Authentication_API extends CI_Controller {
 			$this->json_response($data);
 		}
 	}
+	
+	/**
+	 * check the username and the password with the database
+	 * @return void
+	 */
+	public function logout(){
+		$user_id = $this->input->get('user_id');
+	
+		if($this->users_model->is_login($user_id))
+		{
+			$new_member_insert_data = array(
+					'is_logged_in' => 0,
+			);
+				
+			$this->users_model->update_user_api($user_id,$new_member_insert_data);
+				
+			$data = array();
+			$data['status'] = 1;
+			$data['message'] = "User has been logged out";
+			$this->json_response($data);
+		}
+		else // incorrect username or password
+		{
+			$data = array();
+			$data['status'] = 0;
+			$data['message'] = "User is not logged in.";
+			$this->json_response($data);
+		}
+	}
 }
