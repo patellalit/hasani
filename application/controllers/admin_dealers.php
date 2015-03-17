@@ -50,7 +50,23 @@ class Admin_dealers extends CI_Controller {
         $search_string = $this->input->get('search_string');
         $search_in = $this->input->get('search_in');
         $order = $this->input->get('order');
+        
         $order_type = $this->input->get('order_type');
+        
+        if($order && $order_type)
+        {
+            $filter_session_data['order'] = $order;
+            $filter_session_data['order_type'] = $order_type;
+            $data['order'] = $order;
+            $data['order_type_selected'] = $order_type;
+        }
+        else
+        {
+            $filter_session_data['order'] = null;
+            $filter_session_data['order_type'] = null;
+            $data['order'] = 'id';
+            $data['order_type_selected'] = 'desc';
+        }
 		
 		//filtered && || paginated
         if($search_string !== false && $search_string != "" && $order !== false || $this->uri->segment(3) == true){ 
@@ -99,18 +115,17 @@ class Admin_dealers extends CI_Controller {
 			//clean filter data inside section
             $filter_session_data['search_string_selected'] = null;
             $filter_session_data['search_in'] = null;
-            $filter_session_data['order'] = null;
-            $filter_session_data['order_type'] = null;
+            
             $this->session->set_userdata($filter_session_data);
 
             //pre selected options
             $data['search_string_selected'] = '';
             $data['search_in'] = '';
-            $data['order'] = 'id';
-			$data['order_type_selected'] = 'desc';
+            
 		}
-
+        
 		$request_params = array("search_string"=>$data['search_string_selected'],"search_in"=>$data['search_in'],"offset"=>$limit_end,"limit"=>$config['per_page'],"sort"=>$data['order'],"sort_dir"=>$data['order_type_selected']);
+        //print_r($request_params);
 		$users = $this->apicall->call("GET","dealers",$request_params);
 
 		$data['count_dealers'] = $users["data"]["count_customers"];

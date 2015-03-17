@@ -17,7 +17,7 @@
           <div class="well">
            
             <?php
-                $options_searchin = array(''=>'Select','claim_id'=>'Claim Id','customer_name'=>'Customer Name','user_name'=>'User Name','service_center'=>'Service Center','recieve_person_name'=>'Recieve person name','recieve_person_phone'=>'Recieve person phone','state'=>'State','city'=>'City','area'=>'Area');
+                $options_searchin = array(''=>'Select','claim_id'=>'Claim Id','customer_name'=>'Customer Name','user_name'=>'User Name','service_center'=>'Service Center','recieve_person_name'=>'Recieve person name','recieve_person_phone'=>'Recieve person phone','jobsheet_no'=>'Jobsheet no','state'=>'State','city'=>'City','area'=>'Area');
                 
                 $options_status = array('0'=>'Select','1'=>'Pending','2'=>'Pickup','3'=>'Submit to Service Center','4'=>'Pickup from Service Center','5'=>'Submit to Customer');
                 
@@ -68,15 +68,16 @@
             <thead>
               <tr>
                 <th class="header">#</th>
-                <th class="yellow header">Claim id</th>
-                <th class="yellow header">Customer name</th>
+                <th class="yellow header"><a href="javascript:void(0)" class="sort" data-order="ct.claim_id" data-order-dir="<?php echo $order_type_selected?>">Claim id</a></th>
+                <th class="yellow header"><a href="javascript:void(0)" class="sort" data-order="pr.customerName" data-order-dir="<?php echo $order_type_selected?>">Customer name</a></th>
 				<!-- <th class="yellow header">customer address</th>
                 <th class="red header">remarks</th>-->
-                <th class="red header">User name</th>
-                <th class="red header">Service center</th>
-                <th class="red header">Receive Person Name</th>
-                <th class="red header">Receive Person Phone</th>
-                <th class="red header">Date</th>
+                <th class="red header"><a href="javascript:void(0)" class="sort" data-order="m.first_name" data-order-dir="<?php echo $order_type_selected?>">User name</a></th>
+                <th class="red header"><a href="javascript:void(0)" class="sort" data-order="pr.customerName" data-order-dir="<?php echo $order_type_selected?>">Service center</a></th>
+                <th class="red header"><a href="javascript:void(0)" class="sort" data-order="ct.submit_to_person_name" data-order-dir="<?php echo $order_type_selected?>">Receive Person Name</a></th>
+                <th class="red header"><a href="javascript:void(0)" class="sort" data-order="ct.submit_to_person_phone" data-order-dir="<?php echo $order_type_selected?>">Receive Person Phone</a></th>
+                <th class="red header"><a href="javascript:void(0)" class="sort" data-order="ct.jobsheet_no" data-order-dir="<?php echo $order_type_selected?>">Jobsheet No</a></th>
+                <th class="red header"><a href="javascript:void(0)" class="sort" data-order="ct.modified_at" data-order-dir="<?php echo $order_type_selected?>">Date</a></th>
                 <th class="red header">status</th>
 
               </tr>
@@ -108,6 +109,7 @@
                 else
                     echo '<td>'.$row['submit_to_person_phone'].'</td>';
                 
+                echo '<td>'.$row['jobsheet_no'].'</td>';
                 echo '<td>'.date('d/m/Y',strtotime($row['modified_at'])).'</td>';
                 echo '<td>'.$statusarray[$row['status']].'</td>';
                 echo '</tr>';

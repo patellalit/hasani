@@ -55,8 +55,8 @@ class Claim_model extends CI_Model {
      */
     public function get_claim($date,$date_end=null,$search_string=null,$searchin=null,$searchstatus=null, $order=null, $order_type='Asc', $limit_start=null, $limit_end=null,$user_id=null)
     {
-        
-        $this->db->select('claim.id');
+        //echo $order;exit;
+        $this->db->select('ct.id as id');
         
         $this->db->select('pr.id as customer_id');
         $this->db->select('pr.customerName as customer_name');
@@ -105,21 +105,25 @@ class Claim_model extends CI_Model {
                 $this->db->where('pr.city',$search_string);
             elseif($searchin=='area')
                 $this->db->where('pr.area',$search_string);
+            elseif($searchin=='jobsheet_no')
+                $this->db->where('jobsheet_no',$search_string);
             else
                 $this->db->where('pr.customerName like "'.$search_string.'" or m.first_name like "'.$search_string.'" or last_name like "'.$search_string.'"');
         }
-        
+        //echo $order;exit;
         if($order){
             $this->db->order_by($order, $order_type);
         }else{
-            $this->db->order_by('ct.id', $order_type);
+            $this->db->order_by('ct.id', 'DESC');
         }
+        $this->db->order_by('ct.claim_id', 'DESC');
+        //$this->db->group_by('ct.claim_id', $order_type);
         if($limit_start)
             $this->db->limit($limit_start, $limit_end);
         //$this->db->limit('4', '4');
-        //print_r($this->db->last_query());exit;
-        $query = $this->db->get();
         
+        $query = $this->db->get();
+        //print_r($this->db->last_query());//exit;
         $res_array = array();
         foreach ($query->result_array() as $row)
         {
@@ -160,19 +164,21 @@ class Claim_model extends CI_Model {
             if($searchin=='claim_id')
                 $this->db->where('ct.claim_id',$search_string);
             elseif($searchin=='customer_name')
-            $this->db->where('pr.customerName',$search_string);
+                $this->db->where('pr.customerName',$search_string);
             elseif($searchin=='user_name')
-            $this->db->where('m.first_name like "'.$search_string.'" or last_name like "'.$search_string.'"');
+                $this->db->where('m.first_name like "'.$search_string.'" or last_name like "'.$search_string.'"');
             elseif($searchin=='recieve_person_name')
-            $this->db->where('submit_to_person_name',$search_string);
+                $this->db->where('submit_to_person_name',$search_string);
             elseif($searchin=='recieve_person_phone')
-            $this->db->where('submit_to_person_phone',$search_string);
+                $this->db->where('submit_to_person_phone',$search_string);
             elseif($searchin=='state')
-            $this->db->where('pr.state',$search_string);
+                $this->db->where('pr.state',$search_string);
             elseif($searchin=='city')
-            $this->db->where('pr.city',$search_string);
+                $this->db->where('pr.city',$search_string);
             elseif($searchin=='area')
-            $this->db->where('pr.area',$search_string);
+                $this->db->where('pr.area',$search_string);
+            elseif($searchin=='jobsheet_no')
+                $this->db->where('jobsheet_no',$search_string);
             else
                 $this->db->where('pr.customerName like "'.$search_string.'" or m.first_name like "'.$search_string.'" or last_name like "'.$search_string.'"');
         }

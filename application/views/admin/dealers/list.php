@@ -56,6 +56,8 @@ height: 26px;"');
               $options_order_type = array('Asc' => 'Asc', 'Desc' => 'Desc');
               echo form_dropdown('order_type', $options_order_type, $order_type_selected, 'class="span1"');
 
+                              echo '<input type="hidden" id="sort_order" name="order" value="'.$order.'" />';
+                              echo '<input type="hidden" id="sort_order_type" name="order_type" value="'.$order_type_selected.'" />';
               echo form_submit($data_submit);
 
             echo form_close();
@@ -66,18 +68,18 @@ height: 26px;"');
           <table class="table table-striped table-bordered table-condensed">
             <thead>
               <tr>
-                <th class="header">#</th>
-				<th class="yellow header headerSortDown">Customer Name</th>                
-				<th class="green header">O/L Name</th>
-                <th class="green header">O/L Address</th>
-                <th class="red header">O/L City</th>
-                <th class="red header">Mobile</th>
-                <th class="red header">Email</th>
+                <th class="header"><a href="javascript:void(0)" class="sort" data-order="c.id" data-order-dir="<?php echo $order_type_selected?>">#</a></th>
+				<th class="yellow header headerSortDown"><a href="javascript:void(0)" class="sort" data-order="c.customer_name" data-order-dir="<?php echo $order_type_selected?>">Customer Name</a></th>
+				<th class="green header"><a href="javascript:void(0)" class="sort" data-order="c.ol_name" data-order-dir="<?php echo $order_type_selected?>">O/L Name</a></th>
+                <th class="green header"><a href="javascript:void(0)" class="sort" data-order="c.ol_address" data-order-dir="<?php echo $order_type_selected?>">O/L Address</a></th>
+                <th class="red header"><a href="javascript:void(0)" class="sort" data-order="city.name" data-order-dir="<?php echo $order_type_selected?>">O/L City</a></th>
+                <th class="red header"><a href="javascript:void(0)" class="sort" data-order="c.mobile" data-order-dir="<?php echo $order_type_selected?>">Mobile</a></th>
+                <th class="red header"><a href="javascript:void(0)" class="sort" data-order="c.email" data-order-dir="<?php echo $order_type_selected?>">Email</a></th>
                 
-                <th class="green header">CST Number</th>
-                <th class="red header">CST Date</th>
-                <th class="red header">GST Number</th>
-                <th class="red header">GST Date</th>
+                <th class="green header"><a href="javascript:void(0)" class="sort" data-order="c.cst_number" data-order-dir="<?php echo $order_type_selected?>">CST Number</a></th>
+                <th class="red header"><a href="javascript:void(0)" class="sort" data-order="c.cst_date" data-order-dir="<?php echo $order_type_selected?>">CST Date</a></th>
+                <th class="red header"><a href="javascript:void(0)" class="sort" data-order="c.gst_number" data-order-dir="<?php echo $order_type_selected?>">GST Number</a></th>
+                <th class="red header"><a href="javascript:void(0)" class="sort" data-order="c.gst_date" data-order-dir="<?php echo $order_type_selected?>">GST Date</a></th>
                 
                 <th class="red header">Actions</th>
               </tr>
@@ -109,7 +111,18 @@ height: 26px;"');
           </table>
 
           <?php echo '<div class="pagination">'.$this->pagination->create_links().'</div>'; ?>
-
+<script>
+$(function() {
+  
+		$(".sort").click(function(){
+                         var sort_dir = $(this).attr("data-order-dir");
+                         sort_dir = (sort_dir == "Asc")?"Desc":"Asc";
+                         $("#sort_order_type").val(sort_dir);
+                         $("#sort_order").val($(this).attr("data-order"));
+                         $("#myform").submit();
+                         });
+  });
+</script>
       </div>
     </div>
 

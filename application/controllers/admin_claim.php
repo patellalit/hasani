@@ -88,9 +88,10 @@ class Admin_claim extends CI_Controller {
             $data['date_end']='';
         }
         
-        $order = $this->input->get('order'); 
+        $order = $this->input->get('order');
 		if($order == '')
-			$order="id";
+			$order="ct.id";
+        
         $order_type = $this->input->get('order_type'); 
 
         //pagination settings
@@ -131,12 +132,12 @@ class Admin_claim extends CI_Controller {
                 $order_type = $this->session->userdata('order_type');    
             }else{
                 //if we have nothing inside session, so it's the default "Asc"
-                $order_type = 'Asc';    
+                $order_type = 'DESC';
             }
         }
         //make the data type var avaible to our view
         $data['order_type_selected'] = $order_type;        
-		$order='id';
+		
         
 		$filter_session_data['order'] = null;
 		$filter_session_data['order_type'] = null;
@@ -158,7 +159,7 @@ class Admin_claim extends CI_Controller {
         $data['order'] = $order;
         
         $data['count_claim']= $this->claim_model->count_claim($date,$date_end,$search,$searchin,$searchstatus);
-        $data['claim'] = $this->claim_model->get_claim($date,$date_end,$search,$searchin,$searchstatus, '', $order_type, $config['per_page'],$limit_end);
+        $data['claim'] = $this->claim_model->get_claim($date,$date_end,$search,$searchin,$searchstatus, $order, $order_type, $config['per_page'],$limit_end);
 			
 		$config['total_rows'] = $data['count_claim'];
 		
