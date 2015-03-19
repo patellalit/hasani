@@ -123,6 +123,10 @@ $route['API/V1/claim/deliverd/add'] = 'API/Claim_API/drop_to_customer_add';
 $route['API/V1/notification/list'] = 'API/Notification_API/notification_list';
 $route['API/V1/notification/add'] = 'API/Notification_API/notification_add';
 
+//Location Tracker
+$route['API/V1/location/list'] = 'API/Location_API/location_list';
+$route['API/V1/location/add'] = 'API/Location_API/location_add';
+
 /*admin*/
 $route['admin'] = 'user/index';
 $route['admin/signup'] = 'user/signup';

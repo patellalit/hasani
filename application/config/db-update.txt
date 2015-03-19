@@ -73,3 +73,16 @@ CREATE TABLE IF NOT EXISTS `notification_users` (
 
 ALTER TABLE `membership` ADD `device_id` TEXT NULL DEFAULT NULL AFTER `parent_id`;
 ALTER TABLE `membership` ADD `device_token` TEXT NULL DEFAULT NULL COMMENT 'For Push Notification' AFTER `device_id`;
+
+===============
+19-03-2015
+===============
+
+CREATE TABLE IF NOT EXISTS `location_tracker` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `lat` text NOT NULL,
+  `long` text NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `created_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
