@@ -375,11 +375,16 @@ class Claim_model extends CI_Model {
 	
 			$this->db->select('claim.remarks');
 			$this->db->select('claim.status');
+			
+			$this->db->select('l.cdkey');
+			$this->db->select('pk.package_name');
 	
 			$this->db->from('claim')
 				->join('claim_track ct', 'ct.claim_id = claim.id AND ct.status=1', 'inner')
 				->join('productregistration pr', 'pr.id = claim.target_customer_id', 'inner')
-				->join('plans p', 'p.id = pr.plan_id', 'inner');
+				->join('login l', 'l.id = pr.loginId', 'inner')
+				->join('plans p', 'p.id = pr.plan_id', 'inner')
+				->join('packages pk', 'pk.id = p.package', 'inner');
 			
 			$this->db->where('claim.status',$status);
 			

@@ -43,6 +43,7 @@ class Trainee_model extends CI_Model {
 		$this->db->select('c.customer_name');
 		$this->db->select('c.ol_address as customer_address');
 		$this->db->select('c.mobile as customer_phone');
+		$this->db->select('c.ol_name');
 
 		/*$this->db->select('p.id as product_id');
 		$this->db->select('p.plan_full_name as item');

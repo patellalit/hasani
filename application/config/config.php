@@ -14,8 +14,8 @@
 | path to your installation.
 |
 */
-$config['base_url']	= 'http://localhost/tmp/hasani';
-$config['api_base_url']	= 'http://localhost/tmp/hasani/API/V1';
+$config['base_url']	= 'http://localhost:8888/hasani';
+$config['api_base_url']	= 'http://localhost:8888/hasani/API/V1';
 
 /*
 |--------------------------------------------------------------------------
@@ -358,10 +358,7 @@ $config['rewrite_short_tags'] = FALSE;
 */
 $config['proxy_ips'] = '';
 
+$config['androidApiKey'] = 'AIzaSyDTkhr9mV6wNlQhNEyn1zsIAMo0FT0WSso';
 
 /* End of file config.php */
 /* Location: ./application/config/config.php */
-
-                            
-                            
-                            

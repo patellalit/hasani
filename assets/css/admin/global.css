@@ -2,13 +2,13 @@
 @import url(admin.css);
 .navbar-inner{
 background-image:none;
-background-color:#fff;
+background-color:#ccc;
+font-weight: bold;
 }
 .navbar .nav > li > a, .navbar .nav > li > a:hover{
 color:000;
 text-shadow:none;
 }
-
 .container {
     margin-left: 60px;
     margin-right: 60px;
@@ -37,4 +37,7 @@ float:right;
 .filter-total td, .filter-total th {
     background-color: #888 !important;
     color: #fff;
+}
+.navbar .nav .dropdown-toggle .caret, .navbar .nav .open.dropdown .caret{
+	border-top-color:#000;
 }

@@ -53,6 +53,7 @@ class Dsr_model extends CI_Model {
 		$this->db->select('dsr.id');
 		$this->db->select('dsr.customer_id');
 		$this->db->select('c.customer_name');
+		$this->db->select('c.ol_name');
 
 		$this->db->select('city.id as city_id');
 		$this->db->select('city.name as city_name');
@@ -97,9 +98,11 @@ class Dsr_model extends CI_Model {
 			$this->db->select('p.plan_full_name as item');
 			$this->db->select('d.qty');
 			$this->db->select('d.price');
+			$this->db->select('pk.package_name');
 			
 			$this->db->from('dsr_products d')
-				->join('plans p', 'p.id = d.product_id', 'inner');
+				->join('plans p', 'p.id = d.product_id', 'inner')
+				->join('packages pk', 'pk.id = p.package', 'inner');
 			$this->db->where('d.dsr_id',$row["id"]);
 
 			$query = $this->db->get();

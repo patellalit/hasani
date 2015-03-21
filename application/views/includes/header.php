@@ -38,7 +38,7 @@ $login_user = $this->session->userdata('login_user');
 	      <a class="brand" style="padding:0;"><img src="<?php echo base_url(); ?>assets/img/admin/logo-small.png" style="height:36px;" /></a>
 	      <ul class="nav">
 			<li class="dropdown">
-	          <a href="#" class="dropdown-toggle" data-toggle="dropdown" style="padding:0;"><img src="<?php echo base_url(); ?>assets/img/admin/my-account.png" alt="User" title="My Account"/> <b class="caret"></b></a>
+	          <a href="#" class="dropdown-toggle" data-toggle="dropdown" style="padding:0;"><img src="<?php echo base_url(); ?>assets/img/admin/my-account.png" alt="User" title="My Account"/> &nbsp;&nbsp;&nbsp;</a>
 	          <ul class="dropdown-menu">
 	            <li>
 					<a href="javascript:void(0);">Welcome <?php echo $login_user["first_name"]." ".$login_user["last_name"]?></a>

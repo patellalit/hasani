@@ -63,6 +63,9 @@ class Notification_API extends CI_Controller {
 					'user_id' => $this->input->get('user_id'),
 					'created_at' => date("Y-m-d"),
 				);
+				$from_user = $this->users_model->get_user_by_id($this->input->get('user_id'));
+				if($from_user )
+					$from_user = $from_user [0];
 				$to_users = $this->users_model->get_child_users($new_member_insert_data["user_id"]);
 				$to_user_ids = array();
 				foreach($to_users as $to_user){
@@ -71,6 +74,24 @@ class Notification_API extends CI_Controller {
 
                 //if the insert has returned true then we show the flash message
                 if($notification_id = $this->notification_model->add_notification_api($new_member_insert_data,$to_user_ids)){
+                	//Send Push notification
+                	
+                	$androidApiKey = $this->config->item("androidApiKey");
+                	$this->load->library('AndroidPusher',array($androidApiKey));
+                	// Android pusher
+                	//$androidPusher = new AndroidPusher\Pusher($androidApiKey);
+                	foreach($to_users as $to_user){
+                		if($to_user["device_token"] && $to_user["device_token"] != null && $to_user["device_token"] != ""){
+		                	$this->AndroidPusher->notify($to_user["device_token"], array(
+		                			"message"=> $new_member_insert_data["message"],
+		                			"title"=> "Hasani Group Notification",
+		                			"from_first_name" => $from_user["first_name"],
+		                			"from_last_name"=>$from_user["last_name"]
+		                			)
+		                	);
+                		}
+                	}
+                	               	
                     $data = array();
 					$data['status'] = 1;
 					$data['message'] = "Message added successfully";
