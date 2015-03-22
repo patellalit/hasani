@@ -42,7 +42,31 @@ class Claim_model extends CI_Model {
     	else 
     		return false;
     }
-    
+    public function get_claim_by_claim_id($claim_id)
+    {
+        //echo $order;exit;
+        $this->db->select('ct.id as id');
+        
+        $this->db->select('CONCAT(m.first_name," ",m.last_name) as user_name',false);
+        
+        $this->db->select('ct.*');
+        
+        $this->db->from('claim_track ct')
+        ->join('claim', 'ct.claim_id = claim.id', 'inner')
+        ->join('membership m', 'm.id = ct.user_id', 'inner');
+        $this->db->where('ct.claim_id', $claim_id);
+        $this->db->order_by('ct.id', 'DESC');
+        
+        $query = $this->db->get();
+        //print_r($this->db->last_query());//exit;
+        $res_array = array();
+        foreach ($query->result_array() as $row)
+        {
+            $res_array[] = $row;
+        }
+        
+        return $res_array;
+    }
     /**
      * Fetch claim data from the database
      * possibility to mix search, filter and order

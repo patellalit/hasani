@@ -1,5 +1,5 @@
 <?php
-class Admin_claim extends CI_Controller {
+class Admin_trainee extends CI_Controller {
  
     /**
     * Responsable for auto load the model
@@ -12,7 +12,7 @@ class Admin_claim extends CI_Controller {
 		$this->load->model('country_model');        
 		$this->load->model('state_model');
         $this->load->model('city_model');
-        $this->load->model('claim_model');
+        $this->load->model('trainee_model');
 		if(!$this->session->userdata('is_logged_in')){
             redirect(site_url());exit;
         }
@@ -90,13 +90,13 @@ class Admin_claim extends CI_Controller {
         
         $order = $this->input->get('order');
 		if($order == '')
-			$order="ct.id";
+			$order="trainee.id";
         
         $order_type = $this->input->get('order_type'); 
 
         //pagination settings
         $config['per_page'] = $perPage;
-        $config['base_url'] = base_url().'admin/claim/page?'.http_build_query($_GET);
+        $config['base_url'] = base_url().'admin/trainee/page?'.http_build_query($_GET);
         $config['use_page_numbers'] = TRUE;
         $config['page_query_string'] = TRUE;
         $config['num_links'] = 20;
@@ -158,32 +158,21 @@ class Admin_claim extends CI_Controller {
         }
         $data['order'] = $order;
         
-        $data['count_claim']= $this->claim_model->count_claim($date,$date_end,$search,$searchin,$searchstatus);
-        $data['claim'] = $this->claim_model->get_claim($date,$date_end,$search,$searchin,$searchstatus, $order, $order_type, $config['per_page'],$limit_end);
+        $data['count_trainee']= $this->trainee_model->count_trainee($search,$searchin);
+        $data['trainee'] = $this->trainee_model->get_trainee($search,$searchin, $order, $order_type, $config['per_page'],$limit_end);
 			
-		$config['total_rows'] = $data['count_claim'];
+		$config['total_rows'] = $data['count_trainee'];
 		
 		
         //initializate the panination helper 
         $this->pagination->initialize($config);   
 
         //load the view
-        $data['main_content'] = 'admin/claim/list';
+        $data['main_content'] = 'admin/trainee/list';
         $this->load->view('includes/template', $data);
         /*echo "<pre>";
         print_r($data['claim']);
         echo "</pre>";*/
 
     }//index
-    
-    public function view()
-    {
-        $id = $this->uri->segment(4);
-        $data['claim'] = $this->claim_model->get_claim_by_claim_id($id);
-        //$data['main_content'] = 'admin/claim/view';
-        $html = $this->load->view('admin/claim/view', $data,true);
-        echo $html;exit;
-        //print_r($data['claim']);
-    }
-
 }

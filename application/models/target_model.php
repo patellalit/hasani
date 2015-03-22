@@ -80,6 +80,83 @@ class Target_model extends CI_Model {
     * @param int $limit_end
     * @return array
     */
+    public function get_target($date,$date_end,$search_string=null,$search_in, $order=null, $order_type='Asc', $limit_start=null, $limit_end=null)
+    {
+        
+        $this->db->select('t.*');
+        
+        $this->db->select('p.id as customer_id');
+        $this->db->select('p.customerName as customer_name');
+        $this->db->select('p.customerAddress as customer_address');
+        $this->db->select('CONCAT(first_name," ",last_name) as user_name',false);
+        
+        
+        $this->db->from('target t')
+        ->join('productregistration p', 'p.id = t.customer_id', 'inner')
+        ->join('membership m', 'm.id = t.user_id', 'inner');
+        
+        if($date_end)
+            $this->db->where('STR_TO_DATE(DATE_FORMAT(t.modified_at,"%Y-%m-%d"),"%Y-%m-%d") between "'.$date.'" and "'.$date_end.'"');
+        else
+            $this->db->where('DATE_FORMAT(t.modified_at,"%Y-%m-%d")',$date);
+        
+        if($search_string){
+            if($search_in=='user_name')
+            {
+                
+                $this->db->where('m.first_name like "'.$search_string.'" or last_name like "'.$search_string.'"');
+            }
+            else
+                $this->db->like('p.customerName', $search_string);
+        }
+        
+        if($order){
+            $this->db->order_by($order, $order_type);
+        }else{
+            $this->db->order_by('t.id', $order_type);
+        }
+        if($limit_start)
+            $this->db->limit($limit_start, $limit_end);
+        //$this->db->limit('4', '4');
+        
+        $query = $this->db->get();
+        
+        $res_array = array();
+        foreach ($query->result_array() as $row)
+        {
+            $res_array[] = $row;
+        }
+        //print_r($this->db->last_query());exit;
+        return $res_array;
+    }
+    
+    /**
+     * Count the number of rows
+     * @param int $manufacture_id
+     * @param int $search_string
+     * @param int $order
+     * @return int
+     */
+    function count_target($date,$date_end,$search_string=null,$search_in)
+    {
+        $this->db->select('*');
+        $this->db->from('target t')
+        ->join('productregistration p', 'p.id = t.customer_id', 'inner')
+         ->join('membership m', 'm.id = t.user_id', 'inner');
+        if($date_end)
+            $this->db->where('STR_TO_DATE(DATE_FORMAT(t.modified_at,"%Y-%m-%d"),"%Y-%m-%d") between "'.$date.'" and "'.$date_end.'"');
+        else
+            $this->db->where('DATE_FORMAT(t.modified_at,"%Y-%m-%d")',$date);
+        
+        if($search_string){
+            if($search_in=='user_name')
+            $this->db->where('m.first_name like "'.$search_string.'" or last_name like "'.$search_string.'"');
+            else
+            $this->db->like('p.customerName', $search_string);
+        }
+        $query = $this->db->get();
+        return $query->num_rows();        
+    }
     public function get_target_api($search_string=null, $order=null, $order_type='Asc', $limit_start=null, $limit_end=null)
     {
 	    
@@ -96,10 +173,13 @@ class Target_model extends CI_Model {
 		$this->db->from('target t')
 			->join('productregistration p', 'p.id = t.customer_id', 'inner')
 			->join('plans ps', 'ps.id = p.plan_id', 'inner');
+        
+        
+        
 		if($search_string){
 			$this->db->like('p.customerName', $search_string);
 		}
-
+        
 		if($order){
 			$this->db->order_by($order, $order_type);
 		}else{

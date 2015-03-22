@@ -82,7 +82,12 @@ $login_user = $this->session->userdata('login_user');
 					</li>
 				</ul>
 			</li>
-
+            <li <?php if($this->uri->segment(2) == 'target'){echo 'class="active"';}?>>
+                <a href="<?php echo base_url(); ?>admin/target">Target</a>
+            </li>
+            <li <?php if($this->uri->segment(2) == 'trainee'){echo 'class="active"';}?>>
+                <a href="<?php echo base_url(); ?>admin/trainee">Trainee</a>
+            </li>
 	      </ul>
 	    </div>
 	  </div>

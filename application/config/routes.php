@@ -178,7 +178,14 @@ $route['admin/area/delete/(:any)'] = 'admin_area/delete/$1';
 $route['admin/area/(:any)'] = 'admin_area/index/$1'; //$1 = page number
     
 $route['admin/claim'] = 'admin_claim/index';
+$route['admin/claim/view/(:any)'] = 'admin_claim/view/$1'; //$1 = page number
 $route['admin/claim/(:any)'] = 'admin_claim/index/$1'; //$1 = page number
+
+$route['admin/target'] = 'admin_target/index';
+$route['admin/target/(:any)'] = 'admin_target/index/$1'; //$1 = page number
+
+$route['admin/trainee'] = 'admin_trainee/index';
+$route['admin/trainee/(:any)'] = 'admin_trainee/index/$1'; //$1 = page number
 
 
 /* End of file routes.php */

@@ -48,13 +48,13 @@ height: 26px;"');
               echo form_label('In:', 'search_in');
               echo form_dropdown('search_in',$options_searchin,$search_in,'id="search_in" style="width:100px"');
 
-              echo form_label('Order by:', 'order');
-              echo form_dropdown('order', $options_users, $order, 'class="span2"');
+              //echo form_label('Order by:', 'order');
+              //echo form_dropdown('order', $options_users, $order, 'class="span2"');
 
               $data_submit = array('name' => 'mysubmit', 'class' => 'btn btn-primary', 'value' => 'Go');
 
-              $options_order_type = array('Asc' => 'Asc', 'Desc' => 'Desc');
-              echo form_dropdown('order_type', $options_order_type, $order_type_selected, 'class="span1"');
+              //$options_order_type = array('Asc' => 'Asc', 'Desc' => 'Desc');
+              //echo form_dropdown('order_type', $options_order_type, $order_type_selected, 'class="span1"');
 
                               echo '<input type="hidden" id="sort_order" name="order" value="'.$order.'" />';
                               echo '<input type="hidden" id="sort_order_type" name="order_type" value="'.$order_type_selected.'" />';
