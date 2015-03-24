@@ -1,5 +1,5 @@
 <?php
-class Admin_state extends CI_Controller {
+class Admin_servicecenter extends CI_Controller {
  
     /**
     * Responsable for auto load the model
@@ -8,10 +8,13 @@ class Admin_state extends CI_Controller {
     public function __construct()
     {
         parent::__construct();
-        $this->load->model('state_model');        
-		$this->load->model('country_model');
+        $this->load->model('servicecenter_model');
+        $this->load->model('country_model');
         $this->load->model('city_model');
-        $this->load->model('area_model');
+        $this->load->model('state_model');
+        
+		$this->load->model('area_model');
+        
 		if(!$this->session->userdata('is_logged_in')){
             redirect(site_url());exit;
         }
@@ -53,7 +56,7 @@ class Admin_state extends CI_Controller {
 
         //pagination settings
         $config['per_page'] = $perPage;
-        $config['base_url'] = base_url().'admin/state/page?'.http_build_query($_GET);
+        $config['base_url'] = base_url().'admin/servicecenter/page?'.http_build_query($_GET);
         $config['use_page_numbers'] = TRUE;
         $config['page_query_string'] = TRUE;
         $config['num_links'] = 20;
@@ -123,8 +126,8 @@ class Admin_state extends CI_Controller {
             }
             $data['order'] = $order;
 			
-			$data['count_state']= $this->state_model->count_state($country_id,$search);
-			$data['state'] = $this->state_model->get_state($country_id,$search, '', $order_type, $config['per_page'],$limit_end);  
+			$data['count_servicecenter']= $this->servicecenter_model->count_servicecenter($country_id,$search);
+			$data['servicecenter'] = $this->servicecenter_model->get_servicecenter($country_id,$search, '', $order_type, $config['per_page'],$limit_end);
 		}
 		else
 		{
@@ -133,18 +136,18 @@ class Admin_state extends CI_Controller {
 			$data['search_string_selected'] = '';
 			$data['order'] = 'id';
 			
-			$data['count_state']= $this->state_model->count_state('',$search);
-			$data['state'] = $this->state_model->get_state('',$search, '', $order_type, $config['per_page'],$limit_end);  
+			$data['count_servicecenter']= $this->servicecenter_model->count_servicecenter('',$search);
+			$data['servicecenter'] = $this->servicecenter_model->get_servicecenter('',$search, '', $order_type, $config['per_page'],$limit_end);
 		}
 		      
-		$config['total_rows'] = $data['count_state'];
+		$config['total_rows'] = $data['count_servicecenter'];
 		//fetch manufacturers data into arrays
-        $data['country'] = $this->country_model->get_country();
+        $data['area'] = $this->area_model->get_area();
         //initializate the panination helper 
         $this->pagination->initialize($config);   
 
         //load the view
-        $data['main_content'] = 'admin/state/list';
+        $data['main_content'] = 'admin/servicecenter/list';
         $this->load->view('includes/template', $data);  
 
     }//index
@@ -184,32 +187,19 @@ class Admin_state extends CI_Controller {
         echo $html;exit;
         //print_r($data);exit;
     }
-    public function fetchArea()
-    {
-        $areaid = $this->input->get('cityid', TRUE);
-        //print_r($_REQUEST);
-        //echo $_REQUEST['jilloid'];exit;
-        if($areaid != "")
-            $data = $this->area_model->get_area($areaid);
-        else
-            $data = array();
-        
-        $html='<option selected="selected" value="">Select</option>';
-        for($i=0;$i<count($data);$i++)
-        {
-            $html .= '<option value="'.$data[$i]['id'].'">'.$data[$i]['area_name'].'</option>';
-        }
-        echo $html;exit;
-        //print_r($data);exit;
-    }
+    
 	public function add()
     {
         //if save button was clicked, get the data sent via post
         if ($this->input->server('REQUEST_METHOD') === 'POST')
         {
 		    //form validation
-			$this->form_validation->set_rules('country_id', 'country_id', 'required');
-            $this->form_validation->set_rules('state_name', 'state_name', 'required');
+			$this->form_validation->set_rules('area_id', 'area_id', 'required');
+            $this->form_validation->set_rules('servicecenter_name', 'servicecenter_name', 'required');
+            $this->form_validation->set_rules('servicecenter_address', 'servicecenter_address', 'required');
+            $this->form_validation->set_rules('zipcode', 'zipcode', 'required');
+            $this->form_validation->set_rules('email', 'email', 'required');
+            $this->form_validation->set_rules('contactNo', 'contactNo', 'required');
 			
 			
             $this->form_validation->set_error_delimiters('<div class="alert alert-error"><a class="close" data-dismiss="alert">×</a><strong>', '</strong></div>');
@@ -217,19 +207,23 @@ class Admin_state extends CI_Controller {
             //if the form has passed through the validation
             if ($this->form_validation->run())
             {
-                if(!$this->state_model->is_state_exists($this->input->post('state_name'),$this->input->post('country_id'),0))
+                if(!$this->servicecenter_model->is_servicecenter_exists($this->input->post('servicecenter_name'),$this->input->post('area_id'),0))
                 {
                     $data_to_store = array(
-                        'country_id' => $this->input->post('country_id'),
-                        'name' => $this->input->post('state_name'),
+                        'area' => $this->input->post('area_id'),
+                        'name' => $this->input->post('servicecenter_name'),
+                        'address' => $this->input->post('servicecenter_address'),
+                        'zipCode' => $this->input->post('zipcode'),
+                        'emailId' => $this->input->post('email'),
+                        'contactNo' => $this->input->post('contactNo'),
                     );
-                    $stateid=$this->state_model->store_state($data_to_store);
+                    $servicecenterid=$this->servicecenter_model->store_servicecenter($data_to_store);
                 }
                 else
-                    $stateid=0;
+                    $servicecenterid=0;
                     
                 //if the insert has returned true then we show the flash message
-                if($stateid){
+                if($servicecenterid){
 					$data['flash_message'] = TRUE;
                 }else{
                     $data['flash_message'] = FALSE; 
@@ -240,8 +234,11 @@ class Admin_state extends CI_Controller {
         }
 		//fetch country data to populate the select field
         $data['country'] = $this->country_model->get_country();
+        $data['state'] = array();
+        $data['city'] = array();
+        $data['area'] = array();
 		//load the view
-        $data['main_content'] = 'admin/state/add';
+        $data['main_content'] = 'admin/servicecenter/add';
         $this->load->view('includes/template', $data);  //echo "lsdfhads";exit;
     }       
 
@@ -258,24 +255,31 @@ class Admin_state extends CI_Controller {
         if ($this->input->server('REQUEST_METHOD') === 'POST')
         {
             //form validation
-			$this->form_validation->set_rules('country_id', 'country_id', 'required');
-            $this->form_validation->set_rules('state_name', 'state_name', 'required');
-			$this->form_validation->set_error_delimiters('<div class="alert alert-error"><a class="close" data-dismiss="alert">×</a><strong>', '</strong></div>');
+            $this->form_validation->set_rules('area_id', 'area_id', 'required');
+            $this->form_validation->set_rules('servicecenter_name', 'servicecenter_name', 'required');
+            $this->form_validation->set_rules('servicecenter_address', 'servicecenter_address', 'required');
+            $this->form_validation->set_rules('zipcode', 'zipcode', 'required');
+            $this->form_validation->set_rules('email', 'email', 'required');
+            $this->form_validation->set_rules('contactNo', 'contactNo', 'required');
             //if the form has passed through the validation
             if ($this->form_validation->run())
             {
     
                 $data_to_store = array(
-					'country_id' => $this->input->post('country_id'),
-                    'name' => $this->input->post('state_name'),
+                                       'area' => $this->input->post('area_id'),
+                                       'name' => $this->input->post('servicecenter_name'),
+                                       'address' => $this->input->post('servicecenter_address'),
+                                       'zipCode' => $this->input->post('zipcode'),
+                                       'emailId' => $this->input->post('email'),
+                                       'contactNo' => $this->input->post('contactNo'),
                 );
                 //if the insert has returned true then we show the flash message
-                if($this->state_model->update_state($id, $data_to_store) == TRUE){
+                if($this->servicecenter_model->update_servicecenter($id, $data_to_store) == TRUE){
 					$this->session->set_flashdata('flash_message', 'updated');
                 }else{
                     $this->session->set_flashdata('flash_message', 'not_updated');
                 }
-                redirect('admin/state/update/'.$id.'');
+                redirect('admin/servicecenter/update/'.$id.'');
 
             }//validation run
 
@@ -283,9 +287,13 @@ class Admin_state extends CI_Controller {
 		//fetch country data to populate the select field
         $data['country'] = $this->country_model->get_country();
         //aanganvadi data 
-        $data['state'] = $this->state_model->get_state_by_id($id);
+        $data['servicecenter'] = $this->servicecenter_model->get_servicecenter_by_id($id);
+        $data['area'] =$this->area_model->get_area($data['servicecenter'][0]['city_id']);
+        //print_r($data['servicecenter']);
+        $data['city'] =$this->city_model->get_city($data['servicecenter'][0]['state_id']);
+        $data['state'] =$this->state_model->get_state($data['servicecenter'][0]['country_id']);
         //load the view
-        $data['main_content'] = 'admin/state/edit';
+        $data['main_content'] = 'admin/servicecenter/edit';
         $this->load->view('includes/template', $data);            
 
     }//update
@@ -298,9 +306,9 @@ class Admin_state extends CI_Controller {
     {
         //aanganvadi id 
         $id = $this->uri->segment(4);
-        $this->state_model->delete_state($id);
+        $this->servicecenter_model->delete_servicecenter($id);
 		$data_to_send = "id=".$id;
-		redirect('admin/state');
+		redirect('admin/servicecenter');
     }//edit
 
 }

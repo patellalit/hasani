@@ -161,6 +161,7 @@ $route['admin/state'] = 'admin_state/index';
 $route['admin/state/add'] = 'admin_state/add';
 $route['admin/state/fetchState'] = 'admin_state/fetchState';
 $route['admin/state/fetchCity'] = 'admin_state/fetchCity';
+$route['admin/state/fetchArea'] = 'admin_state/fetchArea';
 $route['admin/state/update/(:any)'] = 'admin_state/update/$1';
 $route['admin/state/delete/(:any)'] = 'admin_state/delete/$1';
 $route['admin/state/(:any)'] = 'admin_state/index/$1'; //$1 = page number
@@ -186,6 +187,12 @@ $route['admin/target/(:any)'] = 'admin_target/index/$1'; //$1 = page number
 
 $route['admin/trainee'] = 'admin_trainee/index';
 $route['admin/trainee/(:any)'] = 'admin_trainee/index/$1'; //$1 = page number
+    
+$route['admin/servicecenter'] = 'admin_servicecenter/index';
+$route['admin/servicecenter/add'] = 'admin_servicecenter/add';
+$route['admin/servicecenter/update/(:any)'] = 'admin_servicecenter/update/$1';
+$route['admin/servicecenter/delete/(:any)'] = 'admin_servicecenter/delete/$1';
+$route['admin/servicecenter/(:any)'] = 'admin_servicecenter/index/$1'; //$1 = page number
 
 
 /* End of file routes.php */

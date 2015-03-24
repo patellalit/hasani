@@ -60,3 +60,20 @@ function fetchCity(stateid,url){
            }
            });
 }
+function fetchArea(cityid,url){
+    $.ajax({
+           url : url+'?cityid='+cityid,
+           type: "POST",
+           data : '',
+           success:function(data, textStatus, jqXHR)
+           {
+           //alert(data);
+           $('#area_id').html(data);
+           
+           },
+           error: function(jqXHR, textStatus, errorThrown)
+           {
+           alert("error"+textStatus);
+           }
+           });
+}
