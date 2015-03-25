@@ -404,6 +404,62 @@ $data['total_price_3'] = $this->users_model->get_registered_users_total_bill($re
         $this->load->view('includes/template', $data);  
 
     }//index
-
+    
+	public function generate_pdf($id){
+		if(!$id || $id == "" || $id <= 0){
+			echo "Record not found";exit;
+		}
+		$request_params = array("search_in"=>"","search_from_date"=>"","search_to_date"=>"","search_string"=>"","offset"=>"","limit"=>null,"sort"=>"","sort_dir"=>"");
+		$users = $this->users_model->get_registered_users($request_params,$id);
+		if($users)
+			$user = $users[0];
+		else{
+			echo "Record not found";exit;
+		}
+		//print_r($user);
+		$loginId=$user['loginId'];
+		$customerName=$user['customerName'];
+		
+		$phoneNo=$user['phoneNo'];
+		$modelNo=$user['modelNo'];
+		$modelName=$user['modelName'];
+		$imeiNo=$user['imeiNo'];
+		
+		$billNo=$user['billNo'];
+		$purchaseDate=$user['purchaseDate'];
+		if($purchaseDate != "")
+			$purchaseDate = date("Y-m-d",strtotime($purchaseDate));
+		$billAmount=$user['billAmount'];
+		$dealerName=$user['dealerName'];
+		$state=$user['state'];
+		$city=$user['city'];
+		$area=$user['area'];
+		
+		$plan=$user['plan_name'];
+		
+		$customerAddress=$user['customerAddress'];
+		$imeiNo2=$user['imeiNo2'];
+		$package=$user['package_name'];
+		
+		$planDate=$user['planDate'];
+		if($planDate != "")
+			$planDate = date("Y-m-d",strtotime($planDate));
+		
+		$deviceaddress = trim($user['deviceaddress']);
+		
+		$package_id = $user["package"];
+		$login_info["cdkey"] = $user["cdkey"];
+		
+		//generate PDF
+		$customInfo = true;
+		$planDetails = $package." - ".$plan . " Insurance at ".$user['price'];
+		
+		$base_dir = '/home/hasanooh/public_html/novasecurity/v2/';
+		
+		//echo $loginId."/".$login_info["cdkey"]."-PRODUCT-REGISTRATION-CERTIFICATE.pdf";
+		///home/hasanooh/public_html/novasecurity/v2/data/187263
+		require $base_dir.'pdf.php';
+		
+		echo "PDF Generated successfully.";exit;
+	}
 }
-                            

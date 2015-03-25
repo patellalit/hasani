@@ -143,6 +143,7 @@ $route['admin/users/add'] = 'admin_users/add';
 $route['admin/users/update/(:any)'] = 'admin_users/update/$1';
 $route['admin/users/delete/(:any)'] = 'admin_users/delete/$1';
 $route['admin/users/(:any)'] = 'admin_users/index/$1'; //$1 = page number
+$route['admin/generate-pdf/(:any)'] = 'admin_users/generate_pdf/$1';
 
 $route['admin/dealers'] = 'admin_dealers/index';
 $route['admin/dealers/add'] = 'admin_dealers/add';

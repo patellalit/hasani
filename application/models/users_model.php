@@ -310,10 +310,10 @@ public function get_users_api($params,$is_admin=false)
 		$this->db->delete('membership'); 
 	}
 
-	function get_registered_users($params){
+	function get_registered_users($params,$id=null){
 		
 		$search_string=$params["search_string"];
-                $search_in=$params["search_in"];
+        $search_in=$params["search_in"];
 		$search_from_date=$params["search_from_date"];
 		$search_to_date=$params["search_to_date"];
 		$order=$params["sort"];
@@ -322,12 +322,16 @@ public function get_users_api($params,$is_admin=false)
 		$limit=$params["limit"];
 
 		$this->db->select('*');
+		$this->db->select('p.id as registraion_id');
+		
 		$this->db->from('productregistration p')
 			->join('login l', 'l.id = p.loginId', 'inner')
 			->join('plans pp', 'pp.id = p.plan_id', 'inner')
 			->join('packages pk', 'pk.id = pp.package', 'inner');
 		
-		if($search_string && $search_in){
+		if($id != null){
+			$this->db->where("p.id",$id);
+		}else if($search_string && $search_in){
 			$this->db->like($search_in, $search_string);
 			/*$this->db->or_like('p.customerName', $search_string);
 			$this->db->or_like('p.phoneNo', $search_string);
@@ -355,7 +359,9 @@ public function get_users_api($params,$is_admin=false)
 		}
 
 		$query = $this->db->get();
-
+		if($id != null){
+			//echo $this->db->last_query();
+		}
 		return $query->result_array(); 	
 	}
 

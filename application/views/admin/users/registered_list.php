@@ -135,7 +135,7 @@ height: 26px;"');
 				<th class="red header"><a href="javascript:void(0)" class="sort" data-order="pp.plan_name" data-order-dir="<?php echo $order_type_selected?>">Plan</a></th>
 				<th class="red header"><a href="javascript:void(0)" class="sort" data-order="p.imeiNo2" data-order-dir="<?php echo $order_type_selected?>">IMEI No2</a></th>
 				<th class="red header"><a href="javascript:void(0)" class="sort" data-order="p.planDate" data-order-dir="<?php echo $order_type_selected?>">Plan Date</a></th>
-
+				<th class="red header">PDF<br>Generate</th>
               </tr>
             </thead>
             <tbody>
@@ -162,6 +162,7 @@ height: 26px;"');
 				echo '<td>'.$row['package_name']." ".$row['plan_name'].'</td>';
                 echo '<td>'.$row['imeiNo2'].'</td>';
                 echo '<td>'.$row['planDate'].'</td>';
+                echo '<td><a href="javascript:void(0)" onclick="generatePdf('.$row['registraion_id'].');">PDF</a></td>';
 	
                 echo '</tr>';
 				$index++;
@@ -198,4 +199,11 @@ $(".sort").click(function(){
 	$("#myform").submit();
 });
 });
+function generatePdf(Id){
+	if(confirm("Are you sure want to regenerate PDF?")){
+		$.get('<?php echo site_url("admin")?>/generate-pdf/'+Id,function(data){
+			alert(data);
+		});
+	}
+}
 </script>
