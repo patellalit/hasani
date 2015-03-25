@@ -193,6 +193,11 @@ $route['admin/servicecenter/add'] = 'admin_servicecenter/add';
 $route['admin/servicecenter/update/(:any)'] = 'admin_servicecenter/update/$1';
 $route['admin/servicecenter/delete/(:any)'] = 'admin_servicecenter/delete/$1';
 $route['admin/servicecenter/(:any)'] = 'admin_servicecenter/index/$1'; //$1 = page number
+    
+    
+$route['admin/dsr'] = 'admin_dsr/index';
+$route['admin/dsr/view/(:any)'] = 'admin_dsr/view/$1'; //$1 = page number
+$route['admin/dsr/(:any)'] = 'admin_dsr/index/$1'; //$1 = page number
 
 
 /* End of file routes.php */

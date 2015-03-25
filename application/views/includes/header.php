@@ -91,6 +91,9 @@ $login_user = $this->session->userdata('login_user');
             <li <?php if($this->uri->segment(2) == 'trainee'){echo 'class="active"';}?>>
                 <a href="<?php echo base_url(); ?>admin/trainee">Trainee</a>
             </li>
+<li <?php if($this->uri->segment(2) == 'dsr'){echo 'class="active"';}?>>
+<a href="<?php echo base_url(); ?>admin/dsr">DSR</a>
+</li>
 	      </ul>
 	    </div>
 	  </div>
