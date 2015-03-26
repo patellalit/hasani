@@ -20,14 +20,21 @@
                 $options_searchin = array(''=>'Select','dsr.id'=>'Id','c.customer_name'=>'Customer name','dsr.payment_by'=>'Payment by','dsr.cheque_number'=>'Cheque Number','dsr.bank_name'=>'Bank name','dsr.cheque_date'=>'Check date','dsr.remarks'=>'Remarks');
                 
                 if($date_end!='')
-                $end = date('d-m-Y',strtotime($date_end));
+                {
+                    $end = date('d-m-Y',strtotime($date_end));
+                    $start = date('d-m-Y',strtotime($date_start));
+                }
                 else
-                $end='';
+                {
+                    $end='';
+                    $start='';
+                }
+                
             $attributes = array('class' => 'form-inline reset-margin', 'id' => 'myform','method'=>'GET');
             echo form_open('admin/dsr', $attributes);
                 
                 echo form_label('From:', 'date_start');
-                echo form_input('date_start', date('d-m-Y',strtotime($date_start)), 'style="width: 170px;height: 26px;" id="date_start"');
+                echo form_input('date_start', $start, 'style="width: 170px;height: 26px;" id="date_start"');
                 
                 echo form_label('To:', 'date_end');
                 echo form_input('date_end', $end, 'style="width: 100px;height: 26px;" id="date_end"');

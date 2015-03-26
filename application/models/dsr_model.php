@@ -116,7 +116,7 @@ class Dsr_model extends CI_Model {
         if($date_end)
             $this->db->where('STR_TO_DATE(DATE_FORMAT(dsr.modified_at,"%Y-%m-%d"),"%Y-%m-%d") between "'.$date.'" and "'.$date_end.'"');
         else
-            $this->db->where('DATE_FORMAT(dsr.modified_at,"%Y-%m-%d")',$date);
+            //$this->db->where('DATE_FORMAT(dsr.modified_at,"%Y-%m-%d")',$date);
         
         if($search_string){
             if($searchin=='dsr.id')
@@ -149,7 +149,8 @@ class Dsr_model extends CI_Model {
         //$this->db->limit('4', '4');
         
         $query = $this->db->get();
-        
+        //print_r($this->db->last_query());
+        //echo $limit_end;
         $res_array = array();
         foreach ($query->result_array() as $row)
         {
@@ -195,7 +196,7 @@ class Dsr_model extends CI_Model {
         if($date_end)
             $this->db->where('STR_TO_DATE(DATE_FORMAT(dsr.modified_at,"%Y-%m-%d"),"%Y-%m-%d") between "'.$date.'" and "'.$date_end.'"');
         else
-            $this->db->where('DATE_FORMAT(dsr.modified_at,"%Y-%m-%d")',$date);
+            //$this->db->where('DATE_FORMAT(dsr.modified_at,"%Y-%m-%d")',$date);
         if($search_string){
             if($searchin=='dsr.id')
                 $this->db->where('dsr.id',$search_string);

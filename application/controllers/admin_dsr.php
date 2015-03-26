@@ -36,7 +36,7 @@ class Admin_dsr extends CI_Controller {
 			$perPage = $perpagePost;
 		}
 		$data['perpage'] = $perPage;
-		$currentpagePost = $this->input->get('currentpage');
+		$currentpagePost = $this->input->get('per_page');
 		
         $search = $this->input->get('search_string');
 		if($search != '')

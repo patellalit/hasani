@@ -1,4 +1,4 @@
-<div class="modal-header">Claim detail</div>
+<div class="modal-header"><h2>Claim detail</h2></div>
 <div class="modal-body">
 <div class="">
 <?php
