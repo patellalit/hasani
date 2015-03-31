@@ -41,6 +41,28 @@
           echo '</div>';          
         }
       }
+          
+          $option_country = array(''=>'select country');
+          foreach($country as $row)
+          {
+              $option_country[$row['id']]=$row['country_name'];
+          }
+          $option_state = array(''=>'select state');
+          foreach($state as $row)
+          {
+              $option_state[$row['id']]=$row['name'];
+          }
+          $option_city = array(''=>'select city');
+          foreach($city as $row)
+          {
+              $option_city[$row['id']]=$row['name'];
+          }
+          
+          $option_area = array(''=>'select area');
+          foreach($area as $row)
+          {
+              $option_area[$row['id']]=$row['area_name'];
+          }
       ?>
       
       <?php
@@ -113,14 +135,36 @@
           <div class="control-group">
             <label for="inputError" class="control-label">Role</label>
             <div class="controls">
-              <?php 
-				$js = 'id="role" onChange="if(this.value==2) $(\'.isd-toggle\').show(); else $(\'.isd-toggle\').hide();"';
-				echo form_dropdown('role', role_array(), $user[0]['role'],$js);
+              <?php
+                  $role_options = array();
+                  foreach($roles as $role)
+                  {
+                      $role_options[$role['id']] = $role['role_name'];
+                      
+                  }
+				$js = 'id="role" onChange="fillparent(this.value,\''.base_url('admin').'/users/getparent/\')"';
+				echo form_dropdown('role', $role_options, $user[0]['role'],$js);
 			?>
             </div>
           </div>
+<div class="control-group">
+<label for="inputError" class="control-label">Parent</label>
+<div class="controls">
+<?php
+    $parent_options = array();
+    foreach($parents as $parent)
+    {
+        $parent_options[$parent['id']] = $parent['first_name'].' '.$parent['last_name'];
+        
+    }
+    $js1 = 'id="parent"';
+    
+    echo form_dropdown('parent', $parent_options, $user[0]['parent'],$js1);
+    ?>
+</div>
+</div>
 
-		  <div class="isd-toggle" <?php if($user[0]['role'] != 2) echo 'style="display:none;"'; ?>>
+		  <div class="isd-toggle" <?php if($user[0]['role'] != 7) echo 'style="display:none;"'; ?>>
 			<div class="control-group">
 		        <label for="inputError" class="control-label">Dealer Name</label>
 		        <div class="controls">
@@ -134,6 +178,30 @@
 		        </div>
 		      </div> 
 		  </div>
+<div class="control-group">
+<label for="inputError" class="control-label">Country</label>
+<div class="controls">
+<?php echo form_dropdown('country_id',$option_country,$user[0]['country_id'],'class="span2 width230" id="country_id" onchange="fetchState(this.value,\''.base_url().'admin/state/fetchState\')"'); ?>
+</div>
+</div>
+<div class="control-group">
+<label for="inputError" class="control-label">State</label>
+<div class="controls">
+<?php echo form_dropdown('state_id',$option_state,$user[0]['state_id'],'class="span2 width230" id="state_id"  onchange="fetchCity(this.value,\''.base_url().'admin/state/fetchCity\')"'); ?>
+</div>
+</div>
+<div class="control-group">
+<label for="inputError" class="control-label">City</label>
+<div class="controls">
+<?php echo form_dropdown('city_id',$option_city,$user[0]['city_id'],'class="span2 width230" id="city_id" onchange="fetchArea(this.value,\''.base_url().'admin/state/fetchArea\')"'); ?>
+</div>
+</div>
+<div class="control-group">
+<label for="inputError" class="control-label">Area</label>
+<div class="controls">
+<?php echo form_dropdown('area_id',$option_area,$user[0]['area_id'],'class="span2 width230" id="area_id"'); ?>
+</div>
+</div>
 
           <div class="form-actions">
             <button class="btn btn-primary" type="submit">Save changes</button>

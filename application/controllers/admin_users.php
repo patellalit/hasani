@@ -11,6 +11,12 @@ class Admin_users extends CI_Controller {
         $this->load->model('users_model');
         $this->load->helper('common_helper');
 		$this->load->library('apicall');
+        
+        $this->load->model('country_model');
+        $this->load->model('city_model');
+        $this->load->model('state_model');
+        
+        $this->load->model('area_model');
 
         if(!$this->session->userdata('is_logged_in')){
             redirect('admin/login');
@@ -151,6 +157,9 @@ class Admin_users extends CI_Controller {
 			}
             $this->form_validation->set_rules('mobile', 'Company Mobile', 'required|trim');
 			$this->form_validation->set_rules('password', 'Password', 'required|trim');
+            
+            $this->form_validation->set_rules('parent', 'parent', 'required|trim');
+            $this->form_validation->set_rules('area_id', 'Area', 'required|trim');
 
             $this->form_validation->set_error_delimiters('<div class="alert alert-error"><a class="close" data-dismiss="alert">×</a><strong>', '</strong></div>');
 
@@ -168,6 +177,11 @@ class Admin_users extends CI_Controller {
                 }
             }
         }
+        $data['country'] = $this->country_model->get_country();
+        $data['state'] = array();
+        $data['city'] = array();
+        $data['area'] = array();
+        $data['roles'] = $this->users_model->get_roles();
         //load the view
         $data['main_content'] = 'admin/users/add';
         $this->load->view('includes/template', $data);  
@@ -214,15 +228,41 @@ class Admin_users extends CI_Controller {
 
         //if we are updating, and the data did not pass trough the validation
         //the code below wel reload the current data
-
+$data['roles'] = $this->users_model->get_roles();
+        
+        //fetch country data to populate the select field
+        
+        
         //user data 
         $data['user'] = $this->users_model->get_user_by_id($id);
+        
+        $data['country'] = $this->country_model->get_country();
+        
+        
+        $data['area'] =$this->area_model->get_area($data['user'][0]['city_id']);
+        //print_r($data['servicecenter']);
+        $data['city'] =$this->city_model->get_city($data['user'][0]['state_id']);
+        $data['state'] =$this->state_model->get_state($data['user'][0]['country_id']);
+        
+        $data['parents'] = $this->users_model->get_user_by_role_id($data['user'][0]['role']);
+        
         //load the view
         $data['main_content'] = 'admin/users/edit';
         $this->load->view('includes/template', $data);            
 
     }//update
-
+    public function getparent()
+    {
+        $roleid = $this->input->get('roleid', TRUE);
+        $user = $this->users_model->get_user_by_role_id($roleid);
+        
+        $html='<option selected="selected" value="">Select</option>';
+        for($i=0;$i<count($user);$i++)
+        {
+            $html .= '<option value="'.$user[$i]['id'].'">'.$user[$i]['first_name'].' '.$user[$i]['last_name'].'</option>';
+        }
+        echo $html;exit;
+    }
     /**
     * Delete user by his id
     * @return void

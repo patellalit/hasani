@@ -86,3 +86,8 @@ CREATE TABLE IF NOT EXISTS `location_tracker` (
   `created_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+===============
+31-03-2015
+===============
+ALTER TABLE `membership` ADD `parent` INT NOT NULL DEFAULT '0' , ADD `area_id` INT NOT NULL ;

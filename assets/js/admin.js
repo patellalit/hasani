@@ -77,3 +77,27 @@ function fetchArea(cityid,url){
            }
            });
 }
+function fillparent(val,url)
+{
+    if(val==7)
+        $('.isd-toggle').show();
+    else
+        $('.isd-toggle').hide();
+    
+    
+    $.ajax({
+           url : url+'?roleid='+val,
+           type: "POST",
+           data : '',
+           success:function(data, textStatus, jqXHR)
+           {
+           //alert(data);
+           $('#parent').html(data);
+           
+           },
+           error: function(jqXHR, textStatus, errorThrown)
+           {
+           alert("error"+textStatus);
+           }
+           });
+}

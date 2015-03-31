@@ -55,6 +55,8 @@ class Users_API extends CI_Controller {
             			'personal_email' => $this->input->post('personal_email'),
             			'personal_phone' => $this->input->post('personal_phone'),
             			'device_id' => $this->input->post('IMEI'),
+                        'parent' => $this->input->post('parent'),
+                        'area_id' => $this->input->post('area_id'),
             	);
             	
                 if($user_id = $this->users_model->add_user_api($new_member_insert_data)){
@@ -162,6 +164,8 @@ class Users_API extends CI_Controller {
 					'address' => $this->input->post('address'),
 					'personal_email' => $this->input->post('personal_email'),
 					'personal_phone' => $this->input->post('personal_phone'),
+                                                'parent' => $this->input->post('parent'),
+                                                'area_id' => $this->input->post('area_id'),
 				);
 				if($this->input->post('IMEI') != "")
 					$new_member_insert_data['device_id'] = $this->input->post('IMEI');
