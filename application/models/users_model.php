@@ -99,9 +99,9 @@ class Users_model extends CI_Model {
         $this->db->select('city.name as city_name,city.id as city_id,state.name as state_name,state.id as state_id,country.country_name as country_name,country.id as country_id,area.area_name as area_name,area.id as area_id');
 		$this->db->from('membership');
         $this->db->join('area', 'membership.area_id = area.id', 'left');
-        $this->db->join('city', 'area.city_id = city.id', 'inner');
-        $this->db->join('state', 'city.stateId = state.id', 'inner');
-        $this->db->join('country', 'state.country_id = country.id', 'inner');
+        $this->db->join('city', 'area.city_id = city.id', 'left');
+        $this->db->join('state', 'city.stateId = state.id', 'left');
+        $this->db->join('country', 'state.country_id = country.id', 'left');
 		$this->db->where('membership.id', $id);
 		$query = $this->db->get();
 		return $query->result_array(); 
