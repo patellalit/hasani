@@ -57,10 +57,13 @@ class Target_model extends CI_Model {
 
 		$this->db->select('ps.id as product_id');
 		$this->db->select('ps.plan_full_name as item');
+		
+		$this->db->select('pk.package_name');
 
 		$this->db->from('productregistration p')
 			->join('login l', 'l.id = p.loginId', 'inner')
-			->join('plans ps', 'ps.id = p.plan_id', 'inner');
+			->join('plans ps', 'ps.id = p.plan_id', 'inner')
+			->join('packages pk', 'pk.id = ps.package', 'inner');
 
 		$this->db->where("l.cdkey",$cdkey);
 		$this->db->limit(1);
@@ -169,10 +172,13 @@ class Target_model extends CI_Model {
 
 		$this->db->select('ps.id as product_id');
 		$this->db->select('ps.plan_full_name as item');
+		
+		$this->db->select('pk.package_name');
 
 		$this->db->from('target t')
 			->join('productregistration p', 'p.id = t.customer_id', 'inner')
-			->join('plans ps', 'ps.id = p.plan_id', 'inner');
+			->join('plans ps', 'ps.id = p.plan_id', 'inner')
+			->join('packages pk', 'pk.id = ps.package', 'inner');
         
         
         
@@ -212,7 +218,8 @@ class Target_model extends CI_Model {
 		$this->db->select('*');
 		$this->db->from('target t')
 			->join('productregistration p', 'p.id = t.customer_id', 'inner')
-			->join('plans ps', 'ps.id = p.plan_id', 'inner');
+			->join('plans ps', 'ps.id = p.plan_id', 'inner')
+			->join('packages pk', 'pk.id = ps.package', 'inner');
 		if($search_string){
 			$this->db->like('p.customerName', $search_string);
 		}
