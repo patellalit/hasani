@@ -200,6 +200,10 @@ $route['admin/servicecenter/(:any)'] = 'admin_servicecenter/index/$1'; //$1 = pa
 $route['admin/dsr'] = 'admin_dsr/index';
 $route['admin/dsr/view/(:any)'] = 'admin_dsr/view/$1'; //$1 = page number
 $route['admin/dsr/(:any)'] = 'admin_dsr/index/$1'; //$1 = page number
+    
+$route['admin/location'] = 'admin_location/index';
+$route['admin/location/view/(:any)'] = 'admin_location/view/$1'; //$1 = page number
+$route['admin/location/(:any)'] = 'admin_location/index/$1'; //$1 = page number
 
 
 /* End of file routes.php */

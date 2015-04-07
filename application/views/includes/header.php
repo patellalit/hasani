@@ -85,15 +85,23 @@ $login_user = $this->session->userdata('login_user');
 </li>
 				</ul>
 			</li>
-            <li <?php if($this->uri->segment(2) == 'target'){echo 'class="active"';}?>>
-                <a href="<?php echo base_url(); ?>admin/target">Target</a>
+            <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Reports <b class="caret"></b></a>
+                <ul class="dropdown-menu">
+                    <li>
+                        <a href="<?php echo base_url(); ?>admin/target">Target</a>
+                    </li>
+                    <li>
+                        <a href="<?php echo base_url(); ?>admin/trainee">Trainee</a>
+                    </li>
+                    <li>
+                        <a href="<?php echo base_url(); ?>admin/dsr">DSR</a>
+                    </li>
+                    <li>
+                        <a href="<?php echo base_url(); ?>admin/location">Location</a>
+                    </li>
+                </ul>
             </li>
-            <li <?php if($this->uri->segment(2) == 'trainee'){echo 'class="active"';}?>>
-                <a href="<?php echo base_url(); ?>admin/trainee">Trainee</a>
-            </li>
-<li <?php if($this->uri->segment(2) == 'dsr'){echo 'class="active"';}?>>
-<a href="<?php echo base_url(); ?>admin/dsr">DSR</a>
-</li>
 	      </ul>
 	    </div>
 	  </div>

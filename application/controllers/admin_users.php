@@ -151,14 +151,14 @@ class Admin_users extends CI_Controller {
 			$this->form_validation->set_rules('personal_phone', 'Personal Mobile', 'required|trim');
 			$this->form_validation->set_rules('address', 'Address', 'required|trim');
 			$this->form_validation->set_rules('role', 'Role', 'required|trim');
-			if($this->input->post('role') == 2){
+			if($this->input->post('role') == 7){
 				$this->form_validation->set_rules('ol_name', 'Dealer Name', 'required|trim');
 				$this->form_validation->set_rules('ol_area', 'Dealer Area', 'required|trim');
 			}
             $this->form_validation->set_rules('mobile', 'Company Mobile', 'required|trim');
 			$this->form_validation->set_rules('password', 'Password', 'required|trim');
             
-            $this->form_validation->set_rules('parent', 'parent', 'required|trim');
+            //$this->form_validation->set_rules('parent', 'parent', 'required|trim');
             $this->form_validation->set_rules('area_id', 'Area', 'required|trim');
 
             $this->form_validation->set_error_delimiters('<div class="alert alert-error"><a class="close" data-dismiss="alert">×</a><strong>', '</strong></div>');
