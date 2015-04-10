@@ -100,6 +100,9 @@ $login_user = $this->session->userdata('login_user');
                     <li>
                         <a href="<?php echo base_url(); ?>admin/location">Location</a>
                     </li>
+<li>
+<a href="<?php echo base_url(); ?>admin/notifications">Notifications</a>
+</li>
                 </ul>
             </li>
 	      </ul>

@@ -204,6 +204,12 @@ $route['admin/dsr/(:any)'] = 'admin_dsr/index/$1'; //$1 = page number
 $route['admin/location'] = 'admin_location/index';
 $route['admin/location/view/(:any)'] = 'admin_location/view/$1'; //$1 = page number
 $route['admin/location/(:any)'] = 'admin_location/index/$1'; //$1 = page number
+    
+    
+$route['admin/notifications'] = 'admin_notifications/index';
+    $route['admin/notifications/add'] = 'admin_notifications/add';
+$route['admin/notifications/view/(:any)'] = 'admin_notifications/view/$1'; //$1 = page number
+$route['admin/notifications/(:any)'] = 'admin_notifications/index/$1'; //$1 = page number
 
 
 /* End of file routes.php */
