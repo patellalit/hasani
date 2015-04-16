@@ -62,6 +62,7 @@ class Location_API extends CI_Controller {
 				$new_member_insert_data = array(
 					'lat' => $this->input->post('lat'),
 					'long' => $this->input->post('long'),
+					'address' => $this->input->post('address'),
 					'user_id' => $this->input->get('user_id'),
 					'created_at' => date("Y-m-d h:i:s"),
 				);

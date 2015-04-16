@@ -70,7 +70,7 @@ class Authentication_API extends CI_Controller {
 					'is_logged_in' => 0,
 			);
 				
-			$this->users_model->update_user_api($user_id,$new_member_insert_data);
+			//$this->users_model->update_user_api($user_id,$new_member_insert_data);
 				
 			$data = array();
 			$data['status'] = 1;

@@ -7,3 +7,7 @@
 */cache/!index.html
 */cache/!.htaccess
 */assets/uploads/*
+/.settings/
+/.buildpath
+/.project
+/TMP/

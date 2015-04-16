@@ -158,10 +158,10 @@ class DSR_API extends CI_Controller {
 				
 				$new_member_insert_data = array(
 					'customer_id' => $this->input->post('customer_id'),
-					//'product_id' => $this->input->post('product_id'),
-					//'qty' => $this->input->post('qty'),
+					'product_id' => $this->input->post('product_id'),
+					'qty' => $this->input->post('qty'),
 					'payment_by' => $this->input->post('payment_by'),
-					//'amount' => $this->input->post('amount'),
+					'amount' => $this->input->post('amount'),
 					'remarks' => $this->input->post('remarks'),
 					'user_id' => $this->input->get('user_id'),
 					'created_at' => date("Y-m-d"),
@@ -182,7 +182,7 @@ class DSR_API extends CI_Controller {
 							"dsr_id"=>$dsr_id,
 							"product_id"=>$product["product_id"],
 							"qty"=>$product["qty"],
-							"price"=>$product["price"],
+							"price"=>"(select price from plans where id=".$product["product_id"].")",
 						);
 						$this->dsr_model->add_dsr_product_api($new_member_insert_data,$product["item_id"]);
 					}
