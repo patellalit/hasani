@@ -151,7 +151,7 @@ class Admin_users extends CI_Controller {
 			$this->form_validation->set_rules('personal_phone', 'Personal Mobile', 'required|trim');
 			$this->form_validation->set_rules('address', 'Address', 'required|trim');
 			$this->form_validation->set_rules('role', 'Role', 'required|trim');
-			if($this->input->post('role') == 2){
+			if($this->input->post('role') == 7){ //If ISD user selected
 				$this->form_validation->set_rules('ol_name', 'Dealer Name', 'required|trim');
 				$this->form_validation->set_rules('ol_area', 'Dealer Area', 'required|trim');
 			}

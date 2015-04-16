@@ -91,3 +91,8 @@ CREATE TABLE IF NOT EXISTS `location_tracker` (
 31-03-2015
 ===============
 ALTER TABLE `membership` ADD `parent` INT NOT NULL DEFAULT '0' , ADD `area_id` INT NOT NULL ;
+
+===============
+16-04-2015
+===============
+ALTER TABLE `roles` ADD `position` INT NOT NULL DEFAULT '0' AFTER `parent_role_id`;
