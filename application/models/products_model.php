@@ -23,6 +23,84 @@ class Products_model extends CI_Model {
 		return $query->result_array(); 
     }
 
+    public function get_all_plans()
+    {
+        $this->db->select('id');
+        $this->db->select('(select count(*) from productregistration where plan_id = plans.id) as count');
+        $this->db->from('plans');
+        $query = $this->db->get();
+        return $query->result_array();
+    }
+    
+    public function get_all_state()
+    {
+        $this->db->select('DISTINCT(state)');
+        $this->db->from('productregistration');
+        $query = $this->db->get();
+        $rs = $query->result_array();
+        //print_r($this->db->last_query());
+        return $rs;
+    }
+    public function get_all_cities($state)
+    {
+        $this->db->select('DISTINCT(city)');
+        $this->db->from('productregistration');
+        $this->db->where('state',$state);
+        $query = $this->db->get();
+        $rs = $query->result_array();
+        //print_r($this->db->last_query());
+        return $rs;
+        
+    }
+    public function get_all_area($state,$city)
+    {
+        $this->db->select('DISTINCT(area)');
+        $this->db->from('productregistration');
+        $this->db->where('state',$state);
+        $this->db->where('city',$city);
+        $query = $this->db->get();
+        $rs = $query->result_array();
+        //print_r($this->db->last_query());
+        return $rs;
+        
+    }
+    public function getplan_count($value,$planid,$field)
+    {
+        $this->db->select('count(*) as count');
+        $this->db->from('productregistration');
+        $this->db->where($field,$value);
+        $this->db->where('plan_id',$planid);
+        $query = $this->db->get();
+        $rs = $query->result_array();
+        //print_r($this->db->last_query());exit;
+        return $rs[0];
+    }
+    public function getplan_city_count($value,$state,$planid,$field)
+    {
+        $this->db->select('count(*) as count');
+        $this->db->from('productregistration');
+        $this->db->where('state',$state);
+        $this->db->where($field,$value);
+         $this->db->where('plan_id',$planid);
+        $query = $this->db->get();
+        $rs = $query->result_array();
+        //print_r($this->db->last_query());exit;
+        return $rs[0];
+    }
+    
+    public function getplan_area_count($value,$city,$state,$planid,$field)
+    {
+        $this->db->select('count(*) as count');
+        $this->db->from('productregistration');
+        $this->db->where('state',$state);
+        $this->db->where('city',$city);
+        $this->db->where($field,$value);
+        $this->db->where('plan_id',$planid);
+        $query = $this->db->get();
+        $rs = $query->result_array();
+        //print_r($this->db->last_query());exit;
+        return $rs[0];
+    }
     /**
     * Fetch products data from the database
     * possibility to mix search, filter and order

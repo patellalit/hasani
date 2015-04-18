@@ -43,6 +43,9 @@ $login_user = $this->session->userdata('login_user');
 	            <li>
 					<a href="javascript:void(0);">Welcome <?php echo $login_user["first_name"]." ".$login_user["last_name"]?></a>
 				</li>
+<li>
+<a href="<?php echo base_url(); ?>admin/dashboard">Dashboard</a>
+</li>
 				<!--<li>
 					<a href="<?php echo base_url(); ?>admin/changepassword">Change Password</a>	              
 				</li>-->

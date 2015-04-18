@@ -210,6 +210,11 @@ $route['admin/notifications'] = 'admin_notifications/index';
     $route['admin/notifications/add'] = 'admin_notifications/add';
 $route['admin/notifications/view/(:any)'] = 'admin_notifications/view/$1'; //$1 = page number
 $route['admin/notifications/(:any)'] = 'admin_notifications/index/$1'; //$1 = page number
+    
+    
+    $route['admin/dashboard'] = 'admin_dashboard/index';
+    
+    $route['admin/dashboard/(:any)'] = 'admin_dashboard/index/$1'; //$1 = page number
 
 
 /* End of file routes.php */
