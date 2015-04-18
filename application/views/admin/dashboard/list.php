@@ -20,17 +20,13 @@
       <div class="page-header users-header">
         <h2>
           <?php echo ucfirst($this->uri->segment(2));?> 
-          
+
         </h2>
       </div>
       
       <div class="row">
         <div class="span12 columns">
-          <div class="well">
-           
-
-
-          </div>
+       
 
           
  <div id="testdiv1" style="position:absolute;visibility:hidden;background-color:white;layer-background-color:white; z-index: 1;"></div>
