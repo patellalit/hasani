@@ -35,7 +35,28 @@ class Users_model extends CI_Model {
 		}
 		return false;
 	}
-	
+	function is_phone_email_exists($phone,$personal_phone,$email,$personal_email,$id=0)
+    {
+        $this->db->select('id',false);
+        $where='';
+        if($id!=0)
+        {
+            //$this->db->where("id!=",(int)$id);
+            $where = " and id != ".(int)$id;
+        }
+        $this->db->where("(email_address = '".$email."' or personal_email = '".$personal_email."' or mobile = '".$phone."' or personal_phone = '".$personal_phone."') ".$where);
+        
+        
+        $query = $this->db->get('membership');
+       // print_r($this->db->last_query());exit;
+        if($query->num_rows >= 1)
+        {
+            return $query->result_array();
+            
+        }
+        
+        return array();
+    }
 	function is_login($user_id){
 		$this->db->select('id');
 		$this->db->where('id', $user_id);

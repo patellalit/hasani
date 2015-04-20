@@ -167,12 +167,21 @@ class Admin_users extends CI_Controller {
             if ($this->form_validation->run())
             {
 				$request_params = $_POST;
-				$users = $this->apicall->call("POST","user/add",$request_params);
+                //check if email or phone exists start
+                $isexists = $this->users_model->is_phone_email_exists($request_params['mobile'],$request_params['personal_phone'],$request_params['email'],$request_params['personal_email'],0);
+                if(empty($isexists))
+                {
+                    $users = $this->apicall->call("POST","user/add",$request_params);
 
-                //if the insert has returned true then we show the flash message
-                if($users["status"] == 1){
-                    $data['flash_message'] = TRUE; 
-                }else{
+                    //if the insert has returned true then we show the flash message
+                    if($users["status"] == 1){
+                        $data['flash_message'] = TRUE; 
+                    }else{
+                        $data['flash_message'] = FALSE;
+                    }
+                }
+                else
+                {
                     $data['flash_message'] = FALSE;
                 }
             }
@@ -212,12 +221,20 @@ class Admin_users extends CI_Controller {
             if ($this->form_validation->run())
             {
                 $request_params = $_POST;
-
-				$users = $this->apicall->call("POST","user/update/".$id,$request_params);
-                //if the insert has returned true then we show the flash message
-                if($users["status"] == 1){
-                    $this->session->set_flashdata('flash_message', 'updated');
-                }else{
+                $isexists = $this->users_model->is_phone_email_exists($request_params['mobile'],$request_params['personal_phone'],$request_params['email'],$request_params['personal_email'],$id);
+                if(empty($isexists))
+                {//echo "12";exit;
+                    $users = $this->apicall->call("POST","user/update/".$id,$request_params);
+                    //print_r($users);exit;
+                    //if the insert has returned true then we show the flash message
+                    if($users["status"] == 1){
+                        $this->session->set_flashdata('flash_message', 'updated');
+                    }else{
+                        $this->session->set_flashdata('flash_message', 'not_updated');
+                    }
+                }
+                else
+                {//echo "dfa";exit;
                     $this->session->set_flashdata('flash_message', 'not_updated');
                 }
                 redirect('admin/users/update/'.$id.'');

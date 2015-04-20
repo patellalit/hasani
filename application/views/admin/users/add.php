@@ -36,7 +36,7 @@
         }else{
           echo '<div class="alert alert-error">';
             echo '<a class="close" data-dismiss="alert">×</a>';
-            echo '<strong>Username </strong> already exists.';
+            echo '<strong>Username / email / phone </strong> already exists.';
           echo '</div>';          
         }
       }
