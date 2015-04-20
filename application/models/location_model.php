@@ -20,7 +20,7 @@ class Location_model extends CI_Model {
         
         $this->db->select('m.id as from_user_id');
         $this->db->select('m.first_name as from_user_first_name');
-        $this->db->select('m.first_name as from_user_last_name');
+        $this->db->select('m.last_name as from_user_last_name');
         
         $this->db->from('location_tracker lt')
         ->join('membership m', 'm.id = lt.user_id', 'inner');
@@ -35,7 +35,7 @@ class Location_model extends CI_Model {
             if($searchin=='lt.id')
                 $this->db->where('.id',$search_string);
             elseif($searchin=='m.first_name')
-                $this->db->where('m.first_name like \'%'.$search_string.'%\' or m.last_name like \'%'.$search_string.'%\'');
+                $this->db->where('m.first_name like \'%'.$search_string.'%\' or m.last_name like \'%'.$search_string.'%\' or CONCAT(first_name," ",last_name) like \'%'.$search_string.'%\'');
             elseif($searchin=='lt.address')
                 $this->db->where('lt.address',$search_string);
                 //test
@@ -48,7 +48,7 @@ class Location_model extends CI_Model {
         }
         
         //$this->db->order_by("lt.id","DESC");
-        
+        //echo $limit;
         if($limit > 0){
             if($offset == "")
                 $offset = 0;
@@ -56,7 +56,7 @@ class Location_model extends CI_Model {
         }
         
         $query = $this->db->get();
-        
+        //echo $this->db->last_query();exit;
         $results = $query->result_array(); 	
         
         return $results;

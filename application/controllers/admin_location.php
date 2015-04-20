@@ -20,7 +20,7 @@ class Admin_location extends CI_Controller {
     */
     public function index()
     {
-		$perPage = 20;
+		$perPage = 1;
 		$data['perpage'] = $perPage;
         //all the posts sent by the view
 		//$country_id = $this->input->get('country_id');
@@ -92,7 +92,7 @@ class Admin_location extends CI_Controller {
         $order_type = $this->input->get('order_type'); 
 
         //pagination settings
-        $config['per_page'] = $perPage;
+        $config['per_page'] = 20;
         $config['base_url'] = base_url().'admin/location/page?'.http_build_query($_GET);
         $config['use_page_numbers'] = TRUE;
         $config['page_query_string'] = TRUE;
@@ -112,6 +112,7 @@ class Admin_location extends CI_Controller {
 		}
 		
         //math to get the initial record to be select in the database
+        //echo $config['per_page'];exit;
         $limit_end = ($page * $config['per_page']) - $config['per_page'];
         if ($limit_end < 0){
             $limit_end = 0;
@@ -156,7 +157,7 @@ class Admin_location extends CI_Controller {
         $data['order'] = $order;
         
         $data['count_location']= $this->location_model->count_location($date,$date_end,$search,$searchin);
-        $data['location'] = $this->location_model->get_location($date,$date_end,$search,$searchin, $order, $order_type, $config['per_page'],$limit_end);
+        $data['location'] = $this->location_model->get_location($date,$date_end,$search,$searchin, $order, $order_type, $limit_end,$config['per_page']);
         //echo "<pre>";print_r($data['dsr']);exit;
 		$config['total_rows'] = $data['count_location'];
 		
