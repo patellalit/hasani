@@ -25,7 +25,7 @@
           <div class="well">
            
             <?php
-                $options_searchin = array(''=>'Select','nm.notification_id'=>'Id','m2.first_name'=>'User name','nm.message'=>'Message');
+                $options_searchin = array(''=>'Select','nm.notification_id'=>'Id','m2.first_name'=>'To User','m1.first_name'=>'From User','nm.message'=>'Message');
                 
                 if($date_end!='')
                 {

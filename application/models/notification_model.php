@@ -38,11 +38,13 @@ class Notification_model extends CI_Model {
         
         if($search_string){
             if($searchin=='nm.notification_id')
-                $this->db->where('nm.notification_id',$search_string);
+                $this->db->where('nu.notification_id',$search_string);
             elseif($searchin=='m2.first_name')
-            $this->db->where('m2.first_name like \'%'.$search_string.'%\' or m2.last_name like \'%'.$search_string.'%\'');
+            $this->db->where('m2.first_name like \'%'.$search_string.'%\' or m2.last_name like \'%'.$search_string.'%\' or CONCAT(m2.first_name," ",m2.last_name) like \'%'.$search_string.'%\'');
+            elseif($searchin=='m1.first_name')
+            $this->db->where('m1.first_name like \'%'.$search_string.'%\' or m1.last_name like \'%'.$search_string.'%\' or CONCAT(m1.first_name," ",m1.last_name) like \'%'.$search_string.'%\'');
             elseif($searchin=='nm.message')
-            $this->db->where('nm.message',$search_string);
+            $this->db->where('nm.message like \'%'.$search_string.'%\'');
             //test
         }
         
@@ -57,7 +59,7 @@ class Notification_model extends CI_Model {
         $query = $this->db->get();
         
         $results = $query->result_array();
-        //echo $this->db->last_query();
+        //echo $this->db->last_query();exit;
         //mark as read
         /*$data = array("is_read"=>1,"read_datetime"=>date("Y-m-d H:i:s"));
          $this->db->where('user_id', $user_id);
