@@ -84,12 +84,16 @@
                   //print_r($notificatins);exit;
               foreach($notificatins as $row)
               {
+                  if($row['message_datetime']!='')
+                      $date = date('d/m/Y h:i A',strtotime($row['message_datetime']));
+                  else
+                      $date='';
                 echo '<tr>';
                 echo '<td>'.$row['notification_id'].'</td>';
                 echo '<td>'.$row['from_user_first_name'].' '.$row['from_user_last_name'].'</td>';
                   echo '<td>'.$row['to_user_first_name'].' '.$row['to_user_last_name'].'</td>';
                 echo '<td>'.$row['message'].'</td>';
-                echo '<td>'.date('d/m/Y h:i A',strtotime($row['message_datetime'])).'</td>';
+                echo '<td>'.$date.'</td>';
                 echo '</tr>';
               }
               ?>      

@@ -187,7 +187,7 @@ class Admin_notifications extends CI_Controller {
             //if the form has passed through the validation
             if ($this->form_validation->run())
             {
-                $get_all_ids = $this->notification_model->get_all_member();
+                $get_all_ids = $this->notification_model->get_all_member($this->input->post('roles'),$this->input->post('states'));
                 $ids = array();
                 foreach($get_all_ids as $id)
                 {
@@ -210,8 +210,10 @@ class Admin_notifications extends CI_Controller {
                 
             }
             
+            
         }
-        
+        $data['roles'] = $this->notification_model->get_all_role();
+        $data['states'] = $this->notification_model->get_all_state();
         //load the view
         $data['main_content'] = 'admin/notifications/add';
         $this->load->view('includes/template', $data);  //echo "lsdfhads";exit;

@@ -155,14 +155,45 @@ class Notification_model extends CI_Model {
 
 		return $results;
     }
-    public function get_all_member()
+    public function get_all_member($roles,$states)
     {
-        $this->db->select('id');
+        $this->db->select('membership.id');
+        $this->db->select('stateId');
+        $this->db->select('area_id');
+        $this->db->select('city_id');
         $this->db->from('membership');
+        if($roles!=0)
+            $this->db->where('role',$roles);
+        if($states!=0)
+        {
+            $this->db->join('area a', 'a.id = membership.area_id', 'inner');
+            $this->db->join('city c', 'c.id = a.city_id', 'inner');
+            //$this->db->join('state s', 's.id = c.stateId', 'inner');
+            $this->db->where('c.stateId',$states);
+        }
+        $query = $this->db->get();
+        $results = $query->result_array();
+        //echo $this->db->last_query();exit;
+        return $results;
+
+    }
+    public function get_all_role()
+    {
+        $this->db->select('*');
+        $this->db->from('roles');
         $query = $this->db->get();
         $results = $query->result_array();
         return $results;
-
+        
+    }
+    public function get_all_state()
+    {
+        $this->db->select('*');
+        $this->db->from('state');
+        $query = $this->db->get();
+        $results = $query->result_array();
+        return $results;
+        
     }
 	/**
     * Store the new item into the database

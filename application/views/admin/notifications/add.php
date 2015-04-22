@@ -50,9 +50,32 @@
       echo validation_errors();
       
       echo form_open('admin/notifications/add', $attributes);
+          $role_options = array('0'=>'Select All');
+          
+          foreach($roles as $role)
+          {
+              $role_options[$role['id']] = $role['role_name'];
+          }
+          $state_options = array('0'=>'Select All');
+          
+          foreach($states as $state)
+          {
+              $state_options[$state['id']] = $state['name'];
+          }
       ?>
         <fieldset>
-
+<div class="control-group">
+<label for="inputError" class="control-label">State</label>
+<div class="controls">
+<?php echo form_dropdown('states',$state_options,'',''); ?>
+</div>
+</div>
+            <div class="control-group">
+            <label for="inputError" class="control-label">Role</label>
+            <div class="controls">
+<?php echo form_dropdown('roles',$role_options,'',''); ?>
+            </div>
+            </div>
           <div class="control-group">
             <label for="inputError" class="control-label">Message</label>
             <div class="controls">
