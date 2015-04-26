@@ -408,6 +408,7 @@ public function get_users_api($params,$is_admin=false)
 		if($id != null){
 			//echo $this->db->last_query();
 		}
+        //echo $this->db->last_query();
 		return $query->result_array(); 	
 	}
 

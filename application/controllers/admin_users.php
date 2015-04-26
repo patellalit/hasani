@@ -50,7 +50,7 @@ class Admin_users extends CI_Controller {
         if ($limit_end < 0){
             $limit_end = 0;
         } 
-
+        //echo $this->input->get('search_string');exit;
 		//all the posts sent by the view
         $search_string = $this->input->post('search_string');  
         $order = $this->input->post('order'); 
@@ -328,7 +328,11 @@ $data['roles'] = $this->users_model->get_roles();
         $order = $this->input->post('order'); 
         $order_type = $this->input->post('order_type'); 
 		$search_in = $this->input->post('search_in');
-		
+        if($this->input->get('search_string')!='')
+        {
+            $search_string = $this->input->get('search_string');
+            $search_in = $this->input->get('search_in');
+        }
 		//filtered && || paginated
         if(($search_string != "" && $search_in )|| $search_from_date != "" || $search_to_date != "" && $order !== false || $this->uri->segment(4) == true){ 
 			$filter_session_data = array();

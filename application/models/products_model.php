@@ -54,7 +54,7 @@ class Products_model extends CI_Model {
     }
     public function get_all_area($state,$city)
     {
-        $this->db->select('DISTINCT(area)');
+        $this->db->select('DISTINCT(dealerName)');
         $this->db->from('productregistration');
         $this->db->where('state',$state);
         $this->db->where('city',$city);

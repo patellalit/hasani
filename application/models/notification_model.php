@@ -158,9 +158,12 @@ class Notification_model extends CI_Model {
     public function get_all_member($roles,$states)
     {
         $this->db->select('membership.id');
-        $this->db->select('stateId');
-        $this->db->select('area_id');
-        $this->db->select('city_id');
+        if($states!=0)
+        {
+            $this->db->select('stateId');
+            $this->db->select('area_id');
+            $this->db->select('city_id');
+        }
         $this->db->from('membership');
         if($roles!=0)
             $this->db->where('role',$roles);

@@ -42,7 +42,7 @@
 	   <tr>
 	       <th>Region</th>
 	       <th>Cluster</th>
-	       <th>Location</th>
+	       <th>Dealer</th>
 	       <th>ISD</th>
                 <?php
                     $i=0;
@@ -97,7 +97,7 @@
                     foreach($plans as $plan)
                     {
                         ?>
-                        <td><?php echo $allstates[$i]['allplans'][$plan['id']]['count']; ?></td>
+                        <td><a target="_blank" href="<?php echo base_url('admin/registered/users').'?search_string='.$allstates[$i]['state'].'&search_in=p.state' ?>"><?php echo $allstates[$i]['allplans'][$plan['id']]['count']; ?></a></td>
                         <?php
                     }
         ?>
@@ -119,7 +119,7 @@
                         foreach($plans as $plan)
                         {
                             ?>
-                            <td><?php echo $allstates[$i]['allcities'][$k]['allplans'][$plan['id']]['count']; ?></td>
+                            <td><a  target="_blank" href="<?php echo base_url('admin/registered/users').'?search_string='.$allstates[$i]['allcities'][$k]['city'].'&search_in=p.city' ?>"><?php echo $allstates[$i]['allcities'][$k]['allplans'][$plan['id']]['count']; ?></a></td>
                     <?php
                         }
                         ?>
@@ -137,12 +137,12 @@
                                 <td colspan="2">
                                     &nbsp;<img id="exp3" src="<?php echo base_url(); ?>assets/img/admin/down.png" width="10px;">
                                     <img id="coll3" src="<?php echo base_url(); ?>assets/img/admin/right.png" width="7px;" style="display: none;">
-                                    <input id="lnk3" type="hidden" value="[-]"><?php echo $allstates[$i]['allcities'][$k]['allareas'][$l]['area'] ?></td>
+                                    <input id="lnk3" type="hidden" value="[-]"><?php echo $allstates[$i]['allcities'][$k]['allareas'][$l]['dealerName'] ?></td>
                                     <?php
                                         foreach($plans as $plan)
                                         {
                                             ?>
-                                    <td><?php echo $allstates[$i]['allcities'][$k]['allareas'][$l]['allplans'][$plan['id']]['count']; ?></td>
+                                    <td><a target="_blank" href="<?php echo base_url('admin/registered/users').'?search_string='.$allstates[$i]['allcities'][$k]['allareas'][$l]['dealerName'].'&search_in=p.dealerName' ?>"><?php echo $allstates[$i]['allcities'][$k]['allareas'][$l]['allplans'][$plan['id']]['count']; ?></a></td>
                                     <?php
                                         }
                                         ?>

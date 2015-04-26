@@ -138,7 +138,7 @@ class Admin_dashboard extends CI_Controller {
                 {
                     for($j=0;$j<count($plans);$j++)
                     {
-                        $allstates[$i]['allcities'][$k]['allareas'][$l]['allplans'][$plans[$j]['id']] = $this->products_model->getplan_area_count($allstates[$i]['allcities'][$k]['allareas'][$l]['area'],$allstates[$i]['allcities'][$k]['city'],$allstates[$i]['state'],$plans[$j]['id'],'area');
+                        $allstates[$i]['allcities'][$k]['allareas'][$l]['allplans'][$plans[$j]['id']] = $this->products_model->getplan_area_count($allstates[$i]['allcities'][$k]['allareas'][$l]['dealerName'],$allstates[$i]['allcities'][$k]['city'],$allstates[$i]['state'],$plans[$j]['id'],'dealerName');
                     }
                 }
             }

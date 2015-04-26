@@ -198,6 +198,7 @@ class Admin_notifications extends CI_Controller {
                 $data_to_store = array(
                                        'message' => $this->input->post('message'),
                                        'user_id' => $cur_user['login_user']['id'],
+                                       'created_at' => date('Y-m-d H:i:s'),
                                        );
                 $stateid=$this->notification_model->add_notification_api($data_to_store,$ids);
                 
