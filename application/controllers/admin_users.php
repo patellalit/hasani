@@ -352,19 +352,23 @@ $data['roles'] = $this->users_model->get_roles();
 		    //make the data type var avaible to our view
 		    $data['order_type_selected'] = $order_type;
 		
-		    if($search_from_date){
+            if($search_from_date){
 		        $filter_session_data['search_from_date_selected'] = $search_from_date;
-		    }else{
-		        $search_from_date = $this->session->userdata('search_from_date_selected');
+                $data['search_from_date_selected'] = date("Y-m-d",strtotime($search_from_date));
+            }else{//echo $this->session->userdata('search_from_date_selected');exit;
+		        $search_from_date = '';//$this->session->userdata('search_from_date_selected');
+                $data['search_from_date_selected'] ='';
 		    }
-		    $data['search_from_date_selected'] = date("Y-m-d",strtotime($search_from_date));
+		    
 			
 		    if($search_to_date){
 		        $filter_session_data['search_to_date_selected'] = $search_to_date;
+                $data['search_to_date_selected'] = date("Y-m-d",strtotime($search_to_date));
 		    }else{
-		        $search_to_date = $this->session->userdata('search_to_date_selected');
+		        $search_to_date = '';//$this->session->userdata('search_to_date_selected');
+                $data['search_to_date_selected'] = '';
 		    }
-		    $data['search_to_date_selected'] = date("Y-m-d",strtotime($search_to_date));
+		    
 
 		    if($search_in == "all"){
 		        $search_string = null;
@@ -409,8 +413,8 @@ $data['roles'] = $this->users_model->get_roles();
 
             //pre selected options
             $data['search_string_selected'] = '';
-		    $data['search_from_date_selected'] = date("Y-m-d");
-            $data['search_to_date_selected'] = date("Y-m-d");
+		    $data['search_from_date_selected'] = '';//date("Y-m-d");
+            $data['search_to_date_selected'] = '';//date("Y-m-d");
             $data['order'] = 'p.id';
 			$data['order_type_selected'] = 'desc';
 			$data["search_in_selected"]="";
@@ -451,8 +455,13 @@ $data['total_price_2'] = $this->users_model->get_registered_users_total_bill($re
 		$data['total_bill_3'] = $this->users_model->get_registered_users_total_bill($request_params,"bill");
 $data['total_price_3'] = $this->users_model->get_registered_users_total_bill($request_params,"price");
 		
-		$data['search_from_date_selected'] = date("d-m-Y",strtotime($data['search_from_date_selected']));
-		$data['search_to_date_selected'] = date("d-m-Y",strtotime($data['search_to_date_selected']));
+        if($data['search_from_date_selected']!='')
+            $data['search_from_date_selected'] = date("d-m-Y",strtotime($data['search_from_date_selected']));
+        
+            
+        
+        if($data['search_to_date_selected']!='')
+            $data['search_to_date_selected'] = date("d-m-Y",strtotime($data['search_to_date_selected']));
 		$data['users'] = $users;
 		$config['total_rows'] = $data['count_users'];
 
