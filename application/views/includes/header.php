@@ -55,7 +55,7 @@ $login_user = $this->session->userdata('login_user');
 	          </ul>
 	        </li>
 			<li <?php if($this->uri->segment(2) == 'registered'){echo 'class="active"';}?>>
-	          <a href="<?php echo base_url(); ?>admin/registered/users">Registered CDKEY</a>
+	          <a href="<?php echo base_url(); ?>admin/registered/users">Activation</a>
 	        </li>
 
 	        <li <?php if($this->uri->segment(2) == 'users'){echo 'class="active"';}?>>

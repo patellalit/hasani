@@ -134,6 +134,7 @@ class Admin_dashboard extends CI_Controller {
                 }
                 //get all area start
                 $allstates[$i]['allcities'][$k]['allareas'] = $this->products_model->get_all_area($allstates[$i]['state'],$allstates[$i]['allcities'][$k]['city']);//print_r($allstates[$i]['allcities'][$k]['allareas']);exit;
+                
                 for($l=0;$l<count($allstates[$i]['allcities'][$k]['allareas']);$l++)
                 {
                     for($j=0;$j<count($plans);$j++)

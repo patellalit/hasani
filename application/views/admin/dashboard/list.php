@@ -87,11 +87,11 @@
         {
             $regionid = $row;
         ?>
-            <tr class="d11111" name="region0" id="<?php echo $regionid; ?>" onclick="toggle_visibility('regiontag','<?php echo $regionid; ?>', &#39;lnk1&#39;, &#39;coll1&#39;, &#39;exp1&#39;);">
+            <tr class="d11111" name="region0" id="<?php echo $regionid; ?>" onclick="toggle_visibility('regiontag','<?php echo $regionid; ?>', 'lnk<?php echo $regionid; ?>', 'coll<?php echo $regionid; ?>', 'exp<?php echo $regionid; ?>');">
                 <td colspan="3">
-                    &nbsp;<img id="exp1" src="<?php echo base_url(); ?>assets/img/admin/down.png" width="10px;">
-                    <img id="coll1" src="<?php echo base_url(); ?>assets/img/admin/right.png" width="7px;" style="display: none;">
-                    <input id="lnk1" type="hidden" value="[-]"><?php echo $allstates[$i]['state'] ?></td>
+                    &nbsp;<img id="exp<?php echo $regionid; ?>" src="<?php echo base_url(); ?>assets/img/admin/down.png" width="10px;">
+                    <img id="coll<?php echo $regionid; ?>" src="<?php echo base_url(); ?>assets/img/admin/right.png" width="7px;" style="display: none;">
+                    <input id="lnk<?php echo $regionid; ?>" type="hidden" value="[-]"><?php echo $allstates[$i]['state'] ?></td>
                     <td>&nbsp;</td>
                     <?php
                     foreach($plans as $plan)
@@ -108,12 +108,12 @@
                 {
                     $cityid = $row;
                     ?>
-                    <tr class="d1111" name="cluster0" expandregiontag="<?php echo $regionid; ?>" regiontag="<?php echo $regionid; ?>" id="<?php echo $cityid ?>" onclick="toggle_visibility('clustertag', '<?php echo $cityid; ?>', 'lnk2', 'coll2', 'exp2');">
+                    <tr class="d1111" name="cluster0" expandregiontag="<?php echo $regionid; ?>" regiontag="<?php echo $regionid; ?>" id="<?php echo $cityid ?>" onclick="toggle_visibility('clustertag', '<?php echo $cityid; ?>', 'lnk<?php echo $cityid ?>', 'coll<?php echo $cityid ?>', 'exp<?php echo $cityid ?>');">
 
                     <td>&nbsp;</td>
-                    <td colspan="2">&nbsp;<img id="exp2" src="<?php echo base_url(); ?>assets/img/admin/down.png" width="10px;">
-                        <img id="coll2" src="<?php echo base_url(); ?>assets/img/admin/right.png" width="7px;" style="display: none;">
-                        <input id="lnk2" type="hidden" value="[-]"><?php echo $allstates[$i]['allcities'][$k]['city'] ?></td>
+                    <td colspan="2">&nbsp;<img id="exp<?php echo $cityid ?>" src="<?php echo base_url(); ?>assets/img/admin/down.png" width="10px;">
+                        <img id="coll<?php echo $cityid ?>" src="<?php echo base_url(); ?>assets/img/admin/right.png" width="7px;" style="display: none;">
+                        <input id="lnk<?php echo $cityid ?>" type="hidden" value="[-]"><?php echo $allstates[$i]['allcities'][$k]['city'] ?></td>
                     <td>&nbsp;</td>
                     <?php
                         foreach($plans as $plan)
@@ -130,14 +130,14 @@
                         {
                             $areaid = $row;
                             ?>
-                            <tr class="d111" name="location0" regiontag="<?php echo $regionid; ?>" expandclustertag="<?php echo $cityid ?>" clustertag="<?php echo $cityid ?>" id="<?php echo $areaid ?>" onclick="toggle_visibility('locationtag', '<?php echo $areaid ?>', 'lnk3', 'coll3', 'exp3');">
+                            <tr class="d111" name="location0" regiontag="<?php echo $regionid; ?>" expandclustertag="<?php echo $cityid ?>" clustertag="<?php echo $cityid ?>" id="<?php echo $areaid ?>" onclick="toggle_visibility('locationtag', '<?php echo $areaid ?>', 'lnk<?php echo $areaid ?>', 'coll<?php echo $areaid ?>', 'exp<?php echo $areaid ?>');">
 
                                 <td>&nbsp;</td>
                                 <td>&nbsp;</td>
                                 <td colspan="2">
-                                    &nbsp;<img id="exp3" src="<?php echo base_url(); ?>assets/img/admin/down.png" width="10px;">
-                                    <img id="coll3" src="<?php echo base_url(); ?>assets/img/admin/right.png" width="7px;" style="display: none;">
-                                    <input id="lnk3" type="hidden" value="[-]"><?php echo $allstates[$i]['allcities'][$k]['allareas'][$l]['dealerName'] ?></td>
+                                    &nbsp;<img id="exp<?php echo $areaid ?>" src="<?php echo base_url(); ?>assets/img/admin/down.png" width="10px;" style="display: none;">
+                                    <img id="coll<?php echo $areaid ?>" src="<?php echo base_url(); ?>assets/img/admin/right.png" width="7px;" >
+                                    <input id="lnk<?php echo $areaid ?>" type="hidden" value="[+]"><?php echo $allstates[$i]['allcities'][$k]['allareas'][$l]['dealerName'] ?></td>
                                     <?php
                                         foreach($plans as $plan)
                                         {

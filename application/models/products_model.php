@@ -28,6 +28,7 @@ class Products_model extends CI_Model {
         $this->db->select('id');
         $this->db->select('(select count(*) from productregistration where plan_id = plans.id) as count');
         $this->db->from('plans');
+        
         $query = $this->db->get();
         return $query->result_array();
     }
@@ -46,6 +47,7 @@ class Products_model extends CI_Model {
         $this->db->select('DISTINCT(city)');
         $this->db->from('productregistration');
         $this->db->where('state',$state);
+        $this->db->where('plan_id != 0');
         $query = $this->db->get();
         $rs = $query->result_array();
         //print_r($this->db->last_query());
@@ -58,6 +60,7 @@ class Products_model extends CI_Model {
         $this->db->from('productregistration');
         $this->db->where('state',$state);
         $this->db->where('city',$city);
+        $this->db->where('plan_id != 0');
         $query = $this->db->get();
         $rs = $query->result_array();
         //print_r($this->db->last_query());
