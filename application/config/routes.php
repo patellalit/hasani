@@ -136,7 +136,9 @@ $route['admin/logout'] = 'user/logout';
 $route['admin/login/validate_credentials'] = 'user/validate_credentials';
 
 $route['admin/registered/users'] = 'admin_users/registered_user_list';
+    $route['admin/registered/users/edit/(:any)'] = 'admin_users/registered_user_edit/$1';
 $route['admin/registered/users/(:any)'] = 'admin_users/registered_user_list/$1';
+    
 
 $route['admin/users'] = 'admin_users/index';
 $route['admin/users/add'] = 'admin_users/add';

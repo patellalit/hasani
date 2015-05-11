@@ -195,7 +195,102 @@ class Admin_users extends CI_Controller {
         $data['main_content'] = 'admin/users/add';
         $this->load->view('includes/template', $data);  
     }       
-
+    /**
+     * Update item by his id
+     * @return void
+     */
+    public function registered_user_edit()
+    {
+        //user id
+        $id = $this->uri->segment(5);
+        
+        //if save button was clicked, get the data sent via post
+        if ($this->input->server('REQUEST_METHOD') === 'POST')
+        {
+            //form validation
+            $this->form_validation->set_rules('cdkey', 'Cdkey', 'required|trim');
+            $this->form_validation->set_rules('customer_name', 'Customer name', 'required|trim');
+            //$this->form_validation->set_rules('username', 'Username', 'required|trim');
+            $this->form_validation->set_rules('modelNo', 'Model No', 'required|trim');
+            $this->form_validation->set_rules('imeiNo', 'ImeiNo', 'required');
+            $this->form_validation->set_rules('billNo', 'BillNo', 'required|trim');
+            
+            $this->form_validation->set_rules('dealerName', 'Dealer Name', 'required|trim');
+            $this->form_validation->set_rules('customerAddress', 'Customer Address', 'trim');
+            //$this->form_validation->set_rules('package_name', 'Package name', 'required|trim');
+            
+            $this->form_validation->set_rules('imeiNo2', 'ImeiNo2', 'trim');
+            $this->form_validation->set_rules('planDate', 'Plan Date', 'required|trim');
+            
+            $this->form_validation->set_error_delimiters('<div class="alert alert-error"><a class="close" data-dismiss="alert">×</a><strong>', '</strong></div>');
+            //if the form has passed through the validation
+            if ($this->form_validation->run())
+            {
+                $request_params = $_POST;
+                //$isexists = $this->users_model->is_phone_email_exists($request_params['mobile'],$request_params['personal_phone'],$request_params['email'],$request_params['personal_email'],$id);
+                //if(empty($isexists))
+                {
+                    //$users = $this->apicall->call("POST","user/update/".$id,$request_params);
+                    $array = array('customerName'=>$request_params['customer_name'],
+                                   'phoneNo'=>$request_params['phoneNo'],
+                                   'modelNo'=>$request_params['modelNo'],
+                                   'modelName'=>$request_params['modelName'],
+                                   'imeiNo'=>$request_params['imeiNo'],
+                                   'billNo'=>$request_params['billNo'],
+                                   'purchaseDate'=>$request_params['purchaseDate'],
+                                   'billAmount'=>$request_params['billAmount'],
+                                   'dealerName'=>$request_params['dealerName'],
+                                   'plan_id'=>$request_params['plan'],
+                                   'customerAddress'=>$request_params['customerAddress'],
+                                   'imeiNo2'=>$request_params['imeiNo2'],
+                                   //'package'=>$request_params['package'],
+                                   'planDate'=>$request_params['planDate']);
+                    $this->users_model->update_productregistration($id,$array);
+                    //if the insert has returned true then we show the flash message
+                    //if($users["status"] == 1){
+                        $this->session->set_flashdata('flash_message', 'updated');
+                    //}else{
+                    //    $this->session->set_flashdata('flash_message', 'not_updated');
+                    //}
+                }
+                //else
+                {
+                //    $this->session->set_flashdata('flash_message', 'not_updated');
+                }
+                redirect('admin/registered/users/edit/'.$id.'');
+                
+            }//validation run
+            
+        }
+        /*
+        //if we are updating, and the data did not pass trough the validation
+        //the code below wel reload the current data
+        $data['roles'] = $this->users_model->get_roles();
+        
+        //fetch country data to populate the select field
+        
+        
+        //user data
+        $data['user'] = $this->users_model->get_user_by_id($id);
+        
+        $data['country'] = $this->country_model->get_country();
+        
+        
+        $data['area'] =$this->area_model->get_area($data['user'][0]['city_id']);
+        //print_r($data['servicecenter']);
+        $data['city'] =$this->city_model->get_city($data['user'][0]['state_id']);
+        $data['state'] =$this->state_model->get_state($data['user'][0]['country_id']);
+        
+        $data['parents'] = $this->users_model->get_user_by_role_id($data['user'][0]['role']);
+        */
+        $data['plan'] = $this->users_model->get_plan();
+        $data['user'] = $this->users_model->get_registered_user($id);
+        //print_r($data['user']);exit;
+        //load the view
+        $data['main_content'] = 'admin/users/registerededit';
+        $this->load->view('includes/template', $data);            
+        
+    }//update
     /**
     * Update item by his id
     * @return void

@@ -326,7 +326,19 @@ public function get_users_api($params,$is_admin=false)
 		    return  $this->db->insert_id();
 		}		
 	}
-
+    function update_productregistration($id, $data)
+    {
+        $this->db->where('id', $id);
+        $this->db->update('productregistration', $data);
+        $report = array();
+        $report['error'] = $this->db->_error_number();
+        $report['message'] = $this->db->_error_message();
+        if($report !== 0){
+            return $id;
+        }else{
+            return false;
+        }
+    }
     /**
     * Update user
     * @param array $data - associative array with data to store
@@ -355,7 +367,23 @@ public function get_users_api($params,$is_admin=false)
 		$this->db->where('id', $id);
 		$this->db->delete('membership'); 
 	}
-
+    function get_registered_user($id){
+        
+        $this->db->select('*,p.id as prid');
+        $this->db->select('p.id as registraion_id');
+        $this->db->select('pp.id as planid');
+        
+        $this->db->from('productregistration p')
+        ->join('login l', 'l.id = p.loginId', 'inner')
+        ->join('plans pp', 'pp.id = p.plan_id', 'inner')
+        ->join('packages pk', 'pk.id = pp.package', 'inner');
+        
+        $this->db->where("p.id",$id);
+        
+        $query = $this->db->get();
+        //echo $this->db->last_query();
+        return $query->result_array();
+    }
 	function get_registered_users($params,$id=null){
 		
 		$search_string=$params["search_string"];
@@ -367,7 +395,7 @@ public function get_users_api($params,$is_admin=false)
 		$offset=$params["offset"];
 		$limit=$params["limit"];
 
-		$this->db->select('*');
+		$this->db->select('*,p.id as prid');
 		$this->db->select('p.id as registraion_id');
 		
 		$this->db->from('productregistration p')
@@ -525,4 +553,16 @@ public function get_users_api($params,$is_admin=false)
 	
 		return $query->result_array();
 	}
+    function get_plan(){
+        $this->db->select('plans.*');
+        $this->db->from('plans')->join('packages pk','pk.id=plans.package','inner');
+        
+        
+        $this->db->order_by("plan_name","ASC");
+        
+        
+        $query = $this->db->get();
+        
+        return $query->result_array();
+    }
 }

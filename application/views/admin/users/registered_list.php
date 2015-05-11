@@ -136,6 +136,7 @@ height: 26px;"');
 				<th class="red header"><a href="javascript:void(0)" class="sort" data-order="p.imeiNo2" data-order-dir="<?php echo $order_type_selected?>">IMEI No2</a></th>
 				<th class="red header"><a href="javascript:void(0)" class="sort" data-order="p.planDate" data-order-dir="<?php echo $order_type_selected?>">Plan Date</a></th>
 				<th class="red header">PDF<br>Generate</th>
+<th class="red header">Edit</th>
               </tr>
             </thead>
             <tbody>
@@ -163,6 +164,7 @@ height: 26px;"');
                 echo '<td>'.$row['imeiNo2'].'</td>';
                 echo '<td>'.$row['planDate'].'</td>';
                 echo '<td><a href="javascript:void(0)" onclick="generatePdf('.$row['registraion_id'].');">PDF</a></td>';
+                echo '<td><a href="'.base_url('admin/registered/users/edit/'.$row['prid']).'">Edit</a></td>';
 	
                 echo '</tr>';
 				$index++;
