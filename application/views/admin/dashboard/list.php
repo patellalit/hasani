@@ -33,8 +33,44 @@
  
 
    <div id="content">
-     
- 
+    <div style="width:50%;float:left">
+        <table  style="font-size:12px" border="1" class="tableLW">
+            <tr><th colspan="4" style="height:10px;text-align:center">Plans</th></tr>
+            <?php
+                $i=0;
+                foreach($plans as $plan)
+                {
+                    if(($i % 4 == 0) && $i != 0)
+                        echo '</tr></tr>';
+                    if($i==0)
+                        echo '<tr>';
+                    ?>
+                    <td>p<?php echo $plan['id'] ?> - <?php echo $plan['plan_name'] ?></td>
+                    <?php
+                        $i++;
+                }
+                ?>
+        </table>
+    </div>
+<div style="float:right;width:25%;text-align:right">
+    <table style="font-size:12px" border="1" class="tableLW">
+        <tr><th style="height:10px">&nbsp;</th><th colspan="2" style="width:63%!important;height:10px;text-align:right">Filter</th></tr>
+        <tr>
+            <td>Registered</td>
+            <td colspan="2"><?php echo $count_users?></td>
+        </tr>
+        <tr>
+            <td>Amount</td>
+            <td colspan="2"><?php echo $total_price?></td>
+        </tr>
+        <tr>
+            <td>Handset Amount</td>
+            <td colspan="2"><?php echo $total_bill?></td>
+        </tr>
+    </table>
+</div>
+<div style="clear:both;padding:5px">&nbsp;</div>
+
  	<div class="whiteCnt">
     <div class="blueHd"><!--ISD Activation Report<span>Date: 30/03/2015  to  30/03/2015	--></span></div>
 	   <table border="0" cellpadding="0" cellspacing="0" width="100%" class="tableLW" name="mainTable" id="mainTable">

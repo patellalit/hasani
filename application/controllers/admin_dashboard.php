@@ -10,7 +10,8 @@ class Admin_dashboard extends CI_Controller {
         parent::__construct();
         $this->load->model('products_model');
 		$this->load->model('country_model');        
-		$this->load->model('state_model'); 
+		$this->load->model('state_model');
+        $this->load->model('users_model');
 		if(!$this->session->userdata('is_logged_in')){
             redirect(site_url());exit;
         }
@@ -145,7 +146,15 @@ class Admin_dashboard extends CI_Controller {
             }
             
         }
+        
         $data['allstates'] = $allstates;
+        $request_params1 = array('search_string'=>'','search_in'=>'','search_from_date'=>null,'search_to_date'=>null,'search_date'=>null);
+        
+        $data['count_users'] = $this->users_model->get_registered_users_count($request_params1,true);
+        $data['total_bill'] = $this->users_model->get_registered_users_total_bill($request_params1,"bill",true);
+        $data['total_price'] = $this->users_model->get_registered_users_total_bill($request_params1,"price",true);
+        
+        
         //echo "<pre>";
         //print_r($data['allstates']);exit;
         //initializate the panination helper 

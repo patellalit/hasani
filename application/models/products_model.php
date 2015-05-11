@@ -25,7 +25,7 @@ class Products_model extends CI_Model {
 
     public function get_all_plans()
     {
-        $this->db->select('id');
+        $this->db->select('id,plan_name');
         $this->db->select('(select count(*) from productregistration where plan_id = plans.id) as count');
         $this->db->from('plans');
         
