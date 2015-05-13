@@ -47,9 +47,11 @@ class Notification_model extends CI_Model {
             $this->db->where('nm.message like \'%'.$search_string.'%\'');
             //test
         }
-        
-        $this->db->order_by("nu.notification_id","DESC");
-        
+        if($order){
+            $this->db->order_by($order, $order_type);
+        }else{
+            $this->db->order_by("nu.notification_id",$order_type);
+        }
         if($limit > 0){
             if($offset == "")
                 $offset = 0;

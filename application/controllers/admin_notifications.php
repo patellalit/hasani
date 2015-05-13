@@ -87,7 +87,7 @@ class Admin_notifications extends CI_Controller {
         
         $order = $this->input->get('order');
 		if($order == '')
-			$order="notification_id";
+			$order="nu.notification_id";
         
         $order_type = $this->input->get('order_type'); 
 

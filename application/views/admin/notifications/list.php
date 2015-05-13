@@ -70,11 +70,11 @@
             <thead>
               <tr>
 
-                <th class="yellow header"><a href="javascript:void(0)" class="sort" data-order="dsr.id" data-order-dir="<?php echo $order_type_selected?>">ID</a></th>
-                <th class="yellow header"><a href="javascript:void(0)" class="sort" data-order="c.customer_name" data-order-dir="<?php echo $order_type_selected?>">From user</a></th>
-                <th class="yellow header"><a href="javascript:void(0)" class="sort" data-order="c.customer_name" data-order-dir="<?php echo $order_type_selected?>">To user</a></th>
-                <th class="red header"><a href="javascript:void(0)" class="sort" data-order="lt.address" data-order-dir="<?php echo $order_type_selected?>">Message</a></th>
-                <th class="red header"><a href="javascript:void(0)" class="sort" data-order="lt.created_at" data-order-dir="<?php echo $order_type_selected?>">Date</a></th>
+                <th class="yellow header"><a href="javascript:void(0)" class="sort" data-order="nm.notification_id" data-order-dir="<?php echo $order_type_selected?>">ID</a></th>
+                <th class="yellow header"><a href="javascript:void(0)" class="sort" data-order="m1.first_name" data-order-dir="<?php echo $order_type_selected?>">From user</a></th>
+                <th class="yellow header"><a href="javascript:void(0)" class="sort" data-order="m2.first_name" data-order-dir="<?php echo $order_type_selected?>">To user</a></th>
+                <th class="red header"><a href="javascript:void(0)" class="sort" data-order="nm.message" data-order-dir="<?php echo $order_type_selected?>">Message</a></th>
+                <th class="red header"><a href="javascript:void(0)" class="sort" data-order="nm.created_at" data-order-dir="<?php echo $order_type_selected?>">Date</a></th>
 
 
               </tr>
@@ -136,12 +136,12 @@ function showmodal(url)
       
       
       
-		/*$(".sort").click(function(){
+		$(".sort").click(function(){
 			var sort_dir = $(this).attr("data-order-dir");
 			sort_dir = (sort_dir == "Asc")?"Desc":"Asc";
 			$("#sort_order_type").val(sort_dir);
 			$("#sort_order").val($(this).attr("data-order"));
 			$("#myform").submit();
-		});*/
+		});
 	});
 </script>
