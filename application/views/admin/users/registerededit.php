@@ -172,6 +172,27 @@
 </div>
 </div>
 
+<div class="control-group">
+<label for="inputError" class="control-label">State</label>
+<div class="controls">
+<input type="text" id="state" name="state" value="<?php echo $user[0]['state']; ?>">
+</div>
+</div>
+
+<div class="control-group">
+<label for="inputError" class="control-label">City</label>
+<div class="controls">
+<input type="text" id="city" name="city" value="<?php echo $user[0]['city']; ?>">
+</div>
+</div>
+
+<div class="control-group">
+<label for="inputError" class="control-label">Area</label>
+<div class="controls">
+<input type="text" id="area" name="area" value="<?php echo $user[0]['area']; ?>">
+</div>
+</div>
+
 
           <div class="form-actions">
             <button class="btn btn-primary" type="submit">Save changes</button>

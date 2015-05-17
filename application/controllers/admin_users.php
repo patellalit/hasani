@@ -222,6 +222,10 @@ class Admin_users extends CI_Controller {
             $this->form_validation->set_rules('imeiNo2', 'ImeiNo2', 'trim');
             $this->form_validation->set_rules('planDate', 'Plan Date', 'required|trim');
             
+            $this->form_validation->set_rules('state', 'State', 'required|trim');
+            $this->form_validation->set_rules('city', 'City', 'required|trim');
+            $this->form_validation->set_rules('area', 'Area', 'required|trim');
+            
             $this->form_validation->set_error_delimiters('<div class="alert alert-error"><a class="close" data-dismiss="alert">×</a><strong>', '</strong></div>');
             //if the form has passed through the validation
             if ($this->form_validation->run())
@@ -243,6 +247,9 @@ class Admin_users extends CI_Controller {
                                    'plan_id'=>$request_params['plan'],
                                    'customerAddress'=>$request_params['customerAddress'],
                                    'imeiNo2'=>$request_params['imeiNo2'],
+                                   'state'=>$request_params['state'],
+                                   'city'=>$request_params['city'],
+                                   'area'=>$request_params['area'],
                                    //'package'=>$request_params['package'],
                                    'planDate'=>$request_params['planDate']);
                     $this->users_model->update_productregistration($id,$array);
