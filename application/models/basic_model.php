@@ -27,8 +27,8 @@ class Basic_model extends CI_Model {
 		$this->db->select('role_name');
 		$this->db->select('parent_role_id');
 		$this->db->from('roles');
-		$this->db->where('id >',5);
-
+		//$this->db->where('id >',5);
+		$this->db->order_by("position","ASC");
 		$query = $this->db->get();
 		
 		return $query->result_array(); 	

@@ -96,8 +96,8 @@ class Claim_model extends CI_Model {
         
         $this->db->select('ct.*');
         
-        $this->db->from('claim_track ct')
-        ->join('claim', 'ct.claim_id = claim.id', 'inner')
+        $this->db->from('claim')
+        //->join('claim', 'ct.claim_id = claim.id', 'inner')
         ->join('productregistration pr', 'pr.id = claim.target_customer_id', 'inner')
         ->join('plans p', 'p.id = pr.plan_id', 'inner')
         ->join('membership m', 'm.id = ct.user_id', 'inner');
@@ -140,8 +140,8 @@ class Claim_model extends CI_Model {
         }else{
             $this->db->order_by('ct.id', 'DESC');
         }
-        $this->db->order_by('ct.claim_id', 'DESC');
-        //$this->db->group_by('ct.claim_id', $order_type);
+        $this->db->order_by('ct.id', 'DESC');
+        $this->db->group_by('ct.claim_id');
         if($limit_start)
             $this->db->limit($limit_start, $limit_end);
         //$this->db->limit('4', '4');
