@@ -97,6 +97,13 @@
             </div>
           </div>
 		  <div class="control-group">
+            <label for="inputError" class="control-label">Model Name</label>
+            <div class="controls">
+              <input type="text" id="modelName" name="modelName" value="<?php echo $user[0]['modelName']; ?>" >
+              <!--<span class="help-inline">Woohoo!</span>-->
+            </div>
+          </div>
+		  <div class="control-group">
             <label for="inputError" class="control-label">Model No</label>
             <div class="controls">
               <input type="text" id="modelNo" name="modelNo" value="<?php echo $user[0]['modelNo']; ?>" >
