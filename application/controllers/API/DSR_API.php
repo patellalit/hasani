@@ -247,7 +247,7 @@ class DSR_API extends CI_Controller {
 		$data = array();
 		$data['status'] = 1;
 		$data['data']['count_dsr']= $this->dsr_model->count_dsr_api();
-	    $data['data']['dsr'] = $this->dsr_model->get_dsr_api('', '', 'ASC');
+	    $data['data']['dsr'] = $this->dsr_model->get_dsr_api('', '', 'DESC');
 		$this->json_response($data);
 	}
 }

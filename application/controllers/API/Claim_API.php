@@ -154,7 +154,7 @@ class Claim_API extends CI_Controller {
 		$data = array();
 		$data['status'] = 1;
 		$data['data']['count_claim']= $this->claim_model->count_claim_api(null,null,$user_id);
-	    $data['data']['claim'] = $this->claim_model->get_claim_api('', '', 'ASC',null,null,$user_id);
+	    $data['data']['claim'] = $this->claim_model->get_claim_api('', '', 'DESC',null,null,$user_id);
 		$this->json_response($data);
 	}
 
@@ -162,7 +162,7 @@ class Claim_API extends CI_Controller {
 		$data = array();
 		$data['status'] = 1;
 		$data['data']['count_claim']= $this->claim_model->count_claim_api();
-	    $data['data']['claim'] = $this->claim_model->get_claim_api('', '', 'ASC');
+	    $data['data']['claim'] = $this->claim_model->get_claim_api('', '', 'DESC');
 		$this->json_response($data);
 	}
 	

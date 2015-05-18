@@ -162,7 +162,7 @@ class Product_API extends CI_Controller {
 		$data = array();
 		$data['status'] = 1;
 		$data['data']['count_products']= $this->products_model->count_products_api();
-	    $data['data']['products'] = $this->products_model->get_products_api('', '', 'ASC');
+	    $data['data']['products'] = $this->products_model->get_products_api('', '', 'DESC');
 		$this->json_response($data);
 	}
 }

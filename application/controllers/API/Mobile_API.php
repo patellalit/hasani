@@ -207,7 +207,7 @@ class Mobile_API extends CI_Controller {
 			$data = array();
 			$data['status'] = 1;
 			$data['data']['count_users']= $this->users_model->count_api_users();
-		    $data['data']['users'] = $this->users_model->get_api_users('', '', 'ASC');
+		    $data['data']['users'] = $this->users_model->get_api_users('', '', 'DESC');
 			$this->json_response($data);
 		/*}
 		else
@@ -400,7 +400,7 @@ class Mobile_API extends CI_Controller {
 			$data = array();
 			$data['status'] = 1;
 			$data['data']['count_customers']= $this->customers_model->count_customers();
-		    $data['data']['customers'] = $this->customers_model->get_customers('', '', 'ASC');
+		    $data['data']['customers'] = $this->customers_model->get_customers('', '', 'DESC');
 			$this->json_response($data);
 		/*}
 		else

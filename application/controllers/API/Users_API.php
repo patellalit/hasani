@@ -233,7 +233,7 @@ class Users_API extends CI_Controller {
 		$offset = (int)$this->input->get('offset');
 		$limit = (int)$this->input->get('limit');
 		$sort = $this->input->get('sort');
-		$sort_dir = $this->input->get('sort_dir');
+		$sort_dir = $this->input->get('sort_dir','DESC');
 		$is_admin = $this->input->get('is_admin',false);
 		
 		$data = array();

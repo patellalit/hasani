@@ -173,7 +173,7 @@ class Target_API extends CI_Controller {
 		$data = array();
 		$data['status'] = 1;
 		$data['data']['count_target']= $this->target_model->count_target_api();
-	    $data['data']['target'] = $this->target_model->get_target_api('', '', 'ASC');
+	    $data['data']['target'] = $this->target_model->get_target_api('', '', 'DESC');
 		$this->json_response($data);
 	}
 }

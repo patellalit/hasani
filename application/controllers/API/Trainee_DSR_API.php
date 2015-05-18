@@ -162,7 +162,7 @@ class Trainee_DSR_API extends CI_Controller {
 		$data = array();
 		$data['status'] = 1;
 		$data['data']['count_trainee']= $this->trainee_model->count_trainee_api();
-	    $data['data']['trainee'] = $this->trainee_model->get_trainee_api('', '', 'ASC');
+	    $data['data']['trainee'] = $this->trainee_model->get_trainee_api('', '', 'DESC');
 		$this->json_response($data);
 	}
 }
