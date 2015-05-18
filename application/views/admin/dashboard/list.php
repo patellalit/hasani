@@ -45,7 +45,7 @@
                     if($i==0)
                         echo '<tr>';
                     ?>
-                    <td>p<?php echo $plan['id'] ?> - <?php echo $plan['plan_name'] ?></td>
+                    <td>p<?php echo $plan['id'] ?> - <?php echo $plan['plan_name'] ?> - <?php echo $plan['package_name'] ?></td>
                     <?php
                         $i++;
                 }
