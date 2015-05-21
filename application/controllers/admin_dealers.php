@@ -31,8 +31,10 @@ class Admin_dealers extends CI_Controller {
             $config['per_page'] = $this->input->get('pagingval');
         else
             $config['per_page'] = $data['pagingoption'][0];
-        $config['base_url'] = base_url().'admin/dealers';
+        //$config['base_url'] = base_url().'admin/dealers';
+        $config['base_url'] = base_url().'admin/dealers/page?'.http_build_query($_GET);
         $config['use_page_numbers'] = TRUE;
+        $config['page_query_string'] = TRUE;
         $config['num_links'] = 20;
         $config['full_tag_open'] = '<ul>';
         $config['full_tag_close'] = '</ul>';
