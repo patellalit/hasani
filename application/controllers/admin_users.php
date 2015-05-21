@@ -29,8 +29,14 @@ class Admin_users extends CI_Controller {
     */
     public function index()
     {
+        
 		//pagination settings
-        $config['per_page'] = 25;
+        //$config['per_page'] = 25;
+        $data['pagingoption'] = get_paging_options();
+        if($this->input->post('pagingval') != "")
+            $config['per_page'] = $this->input->post('pagingval');
+        else
+            $config['per_page'] = $data['pagingoption'][0];
         $config['base_url'] = base_url().'admin/users';
         $config['use_page_numbers'] = TRUE;
         $config['num_links'] = 20;
@@ -45,6 +51,8 @@ class Admin_users extends CI_Controller {
 
 		//limit end
         $page = $this->uri->segment(3);
+        
+        $data['pagingval'] = $config['per_page'];
 		//math to get the initial record to be select in the database
         $limit_end = ($page * $config['per_page']) - $config['per_page'];
         if ($limit_end < 0){
@@ -402,7 +410,12 @@ $data['roles'] = $this->users_model->get_roles();
     public function registered_user_list()
     {
 		//pagination settings
-        $config['per_page'] = 25;
+        $data['pagingoption'] = get_paging_options();
+        if($this->input->post('pagingval') != "")
+            $config['per_page'] = $this->input->post('pagingval');
+        else
+            $config['per_page'] = $data['pagingoption'][0];
+        
         $config['base_url'] = base_url().'admin/registered/users';
         $config['use_page_numbers'] = TRUE;
         $config['num_links'] = 20;
@@ -415,6 +428,7 @@ $data['roles'] = $this->users_model->get_roles();
         $config['uri_segment'] = 4;
         $config['num_links'] = 4;
 
+        $data['pagingval'] = $config['per_page'];
 		//limit end
         $data['page_selected'] = $page = $this->uri->segment(4);
 		//math to get the initial record to be select in the database
@@ -568,7 +582,7 @@ $data['total_price_3'] = $this->users_model->get_registered_users_total_bill($re
             $data['search_to_date_selected'] = date("d-m-Y",strtotime($data['search_to_date_selected']));
 		$data['users'] = $users;
 		$config['total_rows'] = $data['count_users'];
-
+        
 
         //initializate the panination helper 
         $this->pagination->initialize($config);   

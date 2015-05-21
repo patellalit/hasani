@@ -51,7 +51,7 @@ class Notification_model extends CI_Model {
             $this->db->order_by($order, $order_type);
         }else{
             $this->db->order_by("nu.notification_id",$order_type);
-        }
+        }//echo $limit;
         if($limit > 0){
             if($offset == "")
                 $offset = 0;

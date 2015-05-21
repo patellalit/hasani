@@ -10,6 +10,7 @@ class Admin_location extends CI_Controller {
         parent::__construct();
         $this->load->model('location_model');
 		$this->load->model('customers_model');
+        $this->load->helper('common_helper');
         if(!$this->session->userdata('is_logged_in')){
             redirect(site_url());exit;
         }
@@ -20,8 +21,13 @@ class Admin_location extends CI_Controller {
     */
     public function index()
     {
-		$perPage = 1;
+        $data['pagingoption'] = get_paging_options();
+        if($this->input->get('pagingval') != "")
+            $perPage  = $this->input->get('pagingval');
+        else
+            $perPage = $data['pagingoption'][0];
 		$data['perpage'] = $perPage;
+        $data['pagingval'] = $perPage;
         //all the posts sent by the view
 		//$country_id = $this->input->get('country_id');
 		//$stateId = $this->input->get('state_id');

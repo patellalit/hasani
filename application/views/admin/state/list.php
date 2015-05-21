@@ -36,6 +36,7 @@
               
               echo '<input type="hidden" id="sort_order" name="order" value="'.$order.'" />';
               echo '<input type="hidden" id="sort_order_type" name="order_type" value="'.$order_type_selected.'" />';
+                echo '<input type="hidden" id="pagingval" name="pagingval" value="'.$pagingval.'" />';
               echo form_submit($data_submit);
 
             echo form_close();
@@ -69,12 +70,31 @@
               ?>      
             </tbody>
           </table>
-
-          <?php echo '<div class="pagination">'.$this->pagination->create_links().'</div>'; ?>
+            <div class="pagination">
+                <div style="width:50%;float:left;text-align:left">
+                    <select id="pagingoption" name="pagingoption" onchange="submitpaging(this.value)">
+                        <?php
+                            for($i=0;$i<count($pagingoption);$i++)
+                            {
+                                $selected = $pagingoption[$i]==$pagingval?"selected='selected'":"";
+                                echo '<option '.$selected.' value="'.$pagingoption[$i].'">'.$pagingoption[$i].'</option>';
+                            }
+                            ?>
+                    </select>
+                </div>
+                <div style="width:50%;float:right;text-align:right">
+                    <?php echo $this->pagination->create_links(); ?>
+                </div>
+            </div>
 
       </div>
     </div>
  <script>
+function submitpaging(val)
+{
+    $('#pagingval').val(val);
+    $('#myform').submit();
+}
 	$(function() {
 		$(".sort").click(function(){
 			var sort_dir = $(this).attr("data-order-dir");

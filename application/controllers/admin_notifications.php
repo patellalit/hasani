@@ -9,6 +9,7 @@ class Admin_notifications extends CI_Controller {
     {
         parent::__construct();
         $this->load->model('notification_model');
+        $this->load->helper('common_helper');
 		//$this->load->model('customers_model');
         if(!$this->session->userdata('is_logged_in')){
             redirect(site_url());exit;
@@ -20,13 +21,18 @@ class Admin_notifications extends CI_Controller {
     */
     public function index()
     {
-		$perPage = 20;
-		$data['perpage'] = $perPage;
+        $data['pagingoption'] = get_paging_options();
+        if($this->input->get('pagingval') != "")
+            $perPage  = $this->input->get('pagingval');
+        else
+            $perPage = $data['pagingoption'][0];
+        $data['perpage'] = $perPage;
+        $data['pagingval'] = $perPage;
         //all the posts sent by the view
 		//$country_id = $this->input->get('country_id');
 		//$stateId = $this->input->get('state_id');
         //$city_id = $this->input->get('city_id');
-        $perpagePost = $this->input->get('perpage');
+        $perpagePost = $this->input->get('pagingval');
 		if($perpagePost != '')
 		{
 			$perPage = $perpagePost;
@@ -109,8 +115,11 @@ class Admin_notifications extends CI_Controller {
 		if($currentpagePost != '')
 		{
 			$page = $currentpagePost;
-		}
-		
+        }
+        if($page =='')
+        {
+            $page=1;
+        }//echo $page;
         //math to get the initial record to be select in the database
         $limit_end = ($page * $config['per_page']) - $config['per_page'];
         if ($limit_end < 0){
@@ -156,7 +165,7 @@ class Admin_notifications extends CI_Controller {
         $data['order'] = $order;
         
         $data['count_notifications']= $this->notification_model->count_notifications($date,$date_end,$search,$searchin);
-        $data['notificatins'] = $this->notification_model->get_notifications($date,$date_end,$search,$searchin, $order, $order_type, $config['per_page'],$limit_end);
+        $data['notificatins'] = $this->notification_model->get_notifications($date,$date_end,$search,$searchin, $order, $order_type, $limit_end,$config['per_page']);
         //echo "<pre>";print_r($data['dsr']);exit;
 		$config['total_rows'] = $data['count_notifications'];
 		

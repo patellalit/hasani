@@ -25,7 +25,12 @@ class Admin_dealers extends CI_Controller {
     {
 
         //pagination settings
-        $config['per_page'] = 25;
+        //$config['per_page'] = 25;
+        $data['pagingoption'] = get_paging_options();
+        if($this->input->get('pagingval') != "")
+            $config['per_page'] = $this->input->get('pagingval');
+        else
+            $config['per_page'] = $data['pagingoption'][0];
         $config['base_url'] = base_url().'admin/dealers';
         $config['use_page_numbers'] = TRUE;
         $config['num_links'] = 20;
@@ -39,6 +44,7 @@ class Admin_dealers extends CI_Controller {
         $config['num_links'] = 4;
 
 		//limit end
+        $data['pagingval'] = $config['per_page'];
         $page = $this->uri->segment(3);
 		//math to get the initial record to be select in the database
         $limit_end = ($page * $config['per_page']) - $config['per_page'];

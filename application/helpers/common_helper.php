@@ -17,4 +17,8 @@ if ( ! function_exists('role_array'))
 			return $roles[$role_id];
         return $roles;
     }
+    
 }
+    function get_paging_options(){
+        return array(10, 20, 30, 50, 100, 200, 500);
+    }

@@ -12,6 +12,7 @@ class Admin_area extends CI_Controller {
 		$this->load->model('country_model');        
 		$this->load->model('state_model');
         $this->load->model('city_model');
+        $this->load->helper('common_helper');
 		if(!$this->session->userdata('is_logged_in')){
             redirect(site_url());exit;
         }
@@ -22,7 +23,13 @@ class Admin_area extends CI_Controller {
     */
     public function index()
     {
-		$perPage = 20;
+		//$perPage = 20;
+        $data['pagingoption'] = get_paging_options();
+        if($this->input->get('pagingval') != "")
+            $perPage  = $this->input->get('pagingval');
+        else
+            $perPage = $data['pagingoption'][0];
+        
 		$data['perpage'] = $perPage;
         //all the posts sent by the view
 		$country_id = $this->input->get('country_id');
@@ -34,6 +41,7 @@ class Admin_area extends CI_Controller {
 			$perPage = $perpagePost;
 		}
 		$data['perpage'] = $perPage;
+        $data['pagingval'] = $perPage;
 		$currentpagePost = $this->input->get('currentpage');
 		
         $search = $this->input->get('search_string');
