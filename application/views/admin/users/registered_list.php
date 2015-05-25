@@ -45,7 +45,7 @@
 				"p.planDate"=>"Plan Date",
 			);
             
-            $attributes = array('class' => 'form-inline reset-margin', 'id' => 'myform',"style"=>"float:left;");
+            $attributes = array('class' => 'form-inline reset-margin','method'=>'GET', 'id' => 'myform',"style"=>"float:left;");
             echo form_open('admin/registered/users', $attributes);
 
               echo form_label('From Date:', 'search_date');

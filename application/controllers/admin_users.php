@@ -33,12 +33,17 @@ class Admin_users extends CI_Controller {
 		//pagination settings
         //$config['per_page'] = 25;
         $data['pagingoption'] = get_paging_options();
-        if($this->input->post('pagingval') != "")
-            $config['per_page'] = $this->input->post('pagingval');
+        if($this->input->get('pagingval') != "")
+            $config['per_page'] = $this->input->get('pagingval');
         else
             $config['per_page'] = $data['pagingoption'][0];
-        $config['base_url'] = base_url().'admin/users';
+        
+        $gets = $_GET;
+        unset($gets['per_page']);
+        $config['base_url'] = base_url().'admin/users/page?'.http_build_query($gets);
         $config['use_page_numbers'] = TRUE;
+        $config['page_query_string'] = TRUE;
+        
         $config['num_links'] = 20;
         $config['full_tag_open'] = '<ul>';
         $config['full_tag_close'] = '</ul>';
@@ -50,7 +55,7 @@ class Admin_users extends CI_Controller {
         $config['num_links'] = 4;
 
 		//limit end
-        $page = $this->uri->segment(3);
+        $page = $this->input->get('per_page');//$this->uri->segment(3);
         
         $data['pagingval'] = $config['per_page'];
 		//math to get the initial record to be select in the database
@@ -60,10 +65,10 @@ class Admin_users extends CI_Controller {
         } 
         //echo $this->input->get('search_string');exit;
 		//all the posts sent by the view
-        $search_string = $this->input->post('search_string');  
-        $order = $this->input->post('order'); 
-        $order_type = $this->input->post('order_type'); 
-		$search_in = $this->input->post('search_in'); 
+        $search_string = $this->input->get('search_string');
+        $order = $this->input->get('order');
+        $order_type = $this->input->get('order_type');
+		$search_in = $this->input->get('search_in');
 		
 		//filtered && || paginated
 		if(($search_string != "" && $search_in ) || $order !== false || $this->uri->segment(3) == true){ 
@@ -411,13 +416,17 @@ $data['roles'] = $this->users_model->get_roles();
     {
 		//pagination settings
         $data['pagingoption'] = get_paging_options();
-        if($this->input->post('pagingval') != "")
-            $config['per_page'] = $this->input->post('pagingval');
+        if($this->input->get('pagingval') != "")
+            $config['per_page'] = $this->input->get('pagingval');
         else
             $config['per_page'] = $data['pagingoption'][0];
         
-        $config['base_url'] = base_url().'admin/registered/users';
+        
+        $gets = $_GET;
+        unset($gets['per_page']);
+        $config['base_url'] = base_url().'admin/registered/users/page?'.http_build_query($gets);
         $config['use_page_numbers'] = TRUE;
+        $config['page_query_string'] = TRUE;
         $config['num_links'] = 20;
         $config['full_tag_open'] = '<ul>';
         $config['full_tag_close'] = '</ul>';
@@ -430,7 +439,8 @@ $data['roles'] = $this->users_model->get_roles();
 
         $data['pagingval'] = $config['per_page'];
 		//limit end
-        $data['page_selected'] = $page = $this->uri->segment(4);
+        //$data['page_selected'] = $page = $this->uri->segment(4);
+        $data['page_selected'] = $page = $this->input->get('per_page');
 		//math to get the initial record to be select in the database
         $limit_end = ($page * $config['per_page']) - $config['per_page'];
         if ($limit_end < 0){
@@ -438,12 +448,12 @@ $data['roles'] = $this->users_model->get_roles();
         } 
 
 		//all the posts sent by the view
-        $search_string = $this->input->post('search_string');  
-		$search_from_date = $this->input->post('search_from_date');
-		$search_to_date = $this->input->post('search_to_date');
-        $order = $this->input->post('order'); 
-        $order_type = $this->input->post('order_type'); 
-		$search_in = $this->input->post('search_in');
+        $search_string = $this->input->get('search_string');
+		$search_from_date = $this->input->get('search_from_date');
+		$search_to_date = $this->input->get('search_to_date');
+        $order = $this->input->get('order');
+        $order_type = $this->input->get('order_type');
+		$search_in = $this->input->get('search_in');
         $showdate = date("Y-m-d");
         if($this->input->get('search_string')!='')
         {

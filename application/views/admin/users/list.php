@@ -39,7 +39,7 @@
 				"m.ol_area"=>"O/L Area",*/
 			);
             
-            $attributes = array('class' => 'form-inline reset-margin', 'id' => 'myform');
+            $attributes = array('class' => 'form-inline reset-margin', 'id' => 'myform','method'=>'GET');
             echo form_open('admin/users', $attributes);
      
               echo form_label('Search:', 'search_string');

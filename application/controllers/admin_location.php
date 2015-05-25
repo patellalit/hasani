@@ -99,7 +99,9 @@ class Admin_location extends CI_Controller {
 
         //pagination settings
         $config['per_page'] = 20;
-        $config['base_url'] = base_url().'admin/location/page?'.http_build_query($_GET);
+        $gets = $_GET;
+        unset($gets['per_page']);
+        $config['base_url'] = base_url().'admin/location/page?'.http_build_query($gets);
         $config['use_page_numbers'] = TRUE;
         $config['page_query_string'] = TRUE;
         $config['num_links'] = 20;
@@ -111,7 +113,7 @@ class Admin_location extends CI_Controller {
         $config['cur_tag_close'] = '</a></li>';
 
         //limit end
-        $page = $this->uri->segment(3);
+        $page = $this->input->get('per_page');
 		if($currentpagePost != '')
 		{
 			$page = $currentpagePost;

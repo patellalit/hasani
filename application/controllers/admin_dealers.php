@@ -32,7 +32,9 @@ class Admin_dealers extends CI_Controller {
         else
             $config['per_page'] = $data['pagingoption'][0];
         //$config['base_url'] = base_url().'admin/dealers';
-        $config['base_url'] = base_url().'admin/dealers/page?'.http_build_query($_GET);
+        $gets = $_GET;
+        unset($gets['per_page']);
+        $config['base_url'] = base_url().'admin/dealers/page?'.http_build_query($gets);
         $config['use_page_numbers'] = TRUE;
         $config['page_query_string'] = TRUE;
         $config['num_links'] = 20;
@@ -47,7 +49,7 @@ class Admin_dealers extends CI_Controller {
 
 		//limit end
         $data['pagingval'] = $config['per_page'];
-        $page = $this->uri->segment(3);
+        $page = $this->input->get('per_page');
 		//math to get the initial record to be select in the database
         $limit_end = ($page * $config['per_page']) - $config['per_page'];
         if ($limit_end < 0){
