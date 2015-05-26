@@ -34,10 +34,52 @@
 
    <div id="content">
     <div style="width:50%;float:left">
-        <table  style="font-size:12px" border="1" class="tableLW">
-            <tr><th colspan="4" style="height:10px;text-align:center">Plans</th></tr>
-            <?php
+        <table  style="font-size:12px" class="tableLW" border="1">
+            <!-- <tr><th colspan="4" style="height:10px;text-align:center">Plans</th></tr> -->
+            <tr>
+                <?php
                 $i=0;
+                $package='';
+                foreach($plans as $plan)
+                {
+                    if($plan['package_name'] != $package)
+                    {
+                        echo '<th>'.$plan['package_name'].'</th>';
+                    }
+                    $package = $plan['package_name'] ;
+                    $i++;
+                }
+                ?>
+            </tr>
+            <tr><td>
+                <?php
+                $i=0;
+                $package='';
+                foreach($plans as $plan)
+                {
+                    if($i!=0 && $plan['package_name'] != $package)
+                        echo '</table></td><td>';
+                    if($plan['package_name'] != $package)
+                    {
+                        echo '<table  >';
+                    }
+                    
+                    
+                    ?>
+                    <tr><td>p<?php echo $plan['id'] ?> - <?php echo $plan['plan_name'] ?></td></tr>
+                    <?php
+                    if($plan['plan_name'] != $package)
+                    {
+                       // echo '</tr>';
+                       
+                    }
+                         $package = $plan['package_name'] ;
+                    $i++;
+                }
+                ?>
+            </table></td></tr>
+            <?php
+                /*$i=0;
                 foreach($plans as $plan)
                 {
                     if(($i % 4 == 0) && $i != 0)
@@ -48,7 +90,7 @@
                     <td>p<?php echo $plan['id'] ?> - <?php echo $plan['plan_name'] ?> - <?php echo $plan['package_name'] ?></td>
                     <?php
                         $i++;
-                }
+                }*/
                 ?>
         </table>
     </div>

@@ -28,7 +28,9 @@ class Products_model extends CI_Model {
         $this->db->select('id,plan_name,(select package_name from packages where id=plans.package) as package_name');
         $this->db->select('(select count(*) from productregistration where plan_id = plans.id) as count');
         $this->db->from('plans');
-        
+        $this->db->where('plans.status','1');
+        $this->db->where('package in (select id from packages where packages.status=1)');
+        $this->db->order_by('plans.package','asc');
         $query = $this->db->get();
         return $query->result_array();
     }
@@ -48,6 +50,7 @@ class Products_model extends CI_Model {
         $this->db->from('productregistration');
         $this->db->where('state',$state);
         $this->db->where('plan_id != 0');
+        //$this->db->where('(select status from plans where plans.id=productregistration.plan_id and plans.status=1)','1');
         $query = $this->db->get();
         $rs = $query->result_array();
         //print_r($this->db->last_query());

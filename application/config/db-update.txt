@@ -96,3 +96,9 @@ ALTER TABLE `membership` ADD `parent` INT NOT NULL DEFAULT '0' , ADD `area_id` I
 16-04-2015
 ===============
 ALTER TABLE `roles` ADD `position` INT NOT NULL DEFAULT '0' AFTER `parent_role_id`;
+
+
+===============
+26–05-2015
+===============
+ALTER TABLE `plans` ADD `status` INT NOT NULL DEFAULT '1' COMMENT '0-inactive, 1-active' ;

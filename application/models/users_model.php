@@ -402,7 +402,8 @@ public function get_users_api($params,$is_admin=false)
 			->join('login l', 'l.id = p.loginId', 'inner')
 			->join('plans pp', 'pp.id = p.plan_id', 'inner')
 			->join('packages pk', 'pk.id = pp.package', 'inner');
-		
+        $this->db->where('pp.status','1');
+        $this->db->where('pk.status','1');
 		if($id != null){
 			$this->db->where("p.id",$id);
 		}else if($search_string && $search_in){
@@ -454,7 +455,8 @@ public function get_users_api($params,$is_admin=false)
 			->join('login l', 'l.id = p.loginId', 'inner')
 			->join('plans pp', 'pp.id = p.plan_id', 'inner')
 			->join('packages pk', 'pk.id = pp.package', 'inner');
-
+        $this->db->where('pp.status','1');
+        $this->db->where('pk.status','1');
 		if($search_string && $search_in && $is_search){
 			$this->db->like($search_in, $search_string);
 			/*$this->db->or_like('p.customerName', $search_string);
@@ -494,7 +496,8 @@ public function get_users_api($params,$is_admin=false)
 			->join('login l', 'l.id = p.loginId', 'inner')
 			->join('plans pp', 'pp.id = p.plan_id', 'inner')
 			->join('packages pk', 'pk.id = pp.package', 'inner');
-		
+		$this->db->where('pp.status','1');
+        $this->db->where('pk.status','1');
 		if($search_string && $search_in && $is_search){
 			$this->db->like($search_in, $search_string);
 			/*$this->db->or_like('p.customerName', $search_string);
