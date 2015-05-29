@@ -35,6 +35,17 @@ class Products_model extends CI_Model {
         return $query->result_array();
     }
     
+    public function get_plans()
+    {
+        $this->db->select('id,plan_name');
+        $this->db->from('plans');
+        $this->db->where('plans.status','1');
+        $this->db->where('package in (select id from packages where packages.status=1)');
+        $this->db->order_by('plans.package','asc');
+        $query = $this->db->get();
+        return $query->result_array();
+    }
+    
     public function get_all_state()
     {
         $this->db->select('DISTINCT(state)');

@@ -44,6 +44,12 @@
 				"p.imeiNo2"=>"IMEI No2",
 				"p.planDate"=>"Plan Date",
 			);
+                
+            $options_plans = array(''=>'Select plans');
+            foreach($plans as $plan)
+            {
+                $options_plans[$plan['id']] = $plan['plan_name'];
+            }
             
             $attributes = array('class' => 'form-inline reset-margin','method'=>'GET', 'id' => 'myform',"style"=>"float:left;");
             echo form_open('admin/registered/users', $attributes);
@@ -62,7 +68,9 @@ height: 26px;"');
 
               echo form_label('In:', 'search_in');
               echo form_dropdown('search_in', $options_users, $search_in_selected, 'class="span2"');
-
+              echo "<br><br>";
+              echo form_label('Plan', 'selected_plan');
+              echo form_dropdown('selected_plan', $options_plans, $selected_plan, 'class="span2"');
               $data_submit = array('name' => 'mysubmit', 'class' => 'btn btn-primary', 'value' => 'Go');
 
 //              $options_order_type = array('Asc' => 'Asc', 'Desc' => 'Desc');

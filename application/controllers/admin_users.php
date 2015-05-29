@@ -15,7 +15,7 @@ class Admin_users extends CI_Controller {
         $this->load->model('country_model');
         $this->load->model('city_model');
         $this->load->model('state_model');
-        
+        $this->load->model('products_model');
         $this->load->model('area_model');
 
         if(!$this->session->userdata('is_logged_in')){
@@ -454,6 +454,7 @@ $data['roles'] = $this->users_model->get_roles();
         $order = $this->input->get('order');
         $order_type = $this->input->get('order_type');
 		$search_in = $this->input->get('search_in');
+        $selected_plan = $this->input->get('selected_plan');
         $showdate = date("Y-m-d");
         if($this->input->get('search_string')!='')
         {
@@ -462,7 +463,7 @@ $data['roles'] = $this->users_model->get_roles();
             $showdate='';
         }
 		//filtered && || paginated
-        if(($search_string != "" && $search_in )|| $search_from_date != "" || $search_to_date != "" && $order !== false || $this->uri->segment(4) == true){ 
+        if(($search_string != "" && $search_in )|| $search_from_date != "" || $selected_plan != "" || $search_to_date != "" && $order !== false || $this->uri->segment(4) == true){
 			$filter_session_data = array();
 			//if order type was changed
 		    if($order_type){
@@ -496,6 +497,14 @@ $data['roles'] = $this->users_model->get_roles();
 		        $search_to_date = $showdate;//$this->session->userdata('search_to_date_selected');
                 $data['search_to_date_selected'] = $showdate;
 		    }
+            
+            if($selected_plan){
+                $filter_session_data['selected_plan'] = $selected_plan;
+                $data['selected_plan'] = $selected_plan;
+            }else{
+                $filter_session_data['selected_plan'] = '';
+                $data['selected_plan'] = '';
+            }
 		    
 
 		    if($search_in == "all"){
@@ -546,9 +555,12 @@ $data['roles'] = $this->users_model->get_roles();
             $data['order'] = 'p.id';
 			$data['order_type_selected'] = 'desc';
 			$data["search_in_selected"]="";
+            $data['selected_plan'] = "";
 		}
-
-		$request_params = array("search_in"=>$search_in,"search_from_date"=>$data['search_from_date_selected'],"search_to_date"=>$data['search_to_date_selected'],"search_string"=>$data['search_string_selected'],"offset"=>$limit_end,"limit"=>$config['per_page'],"sort"=>$data['order'],"sort_dir"=>$data['order_type_selected']);
+        $plans = $this->products_model->get_plans();
+        $data['plans'] = $plans;
+        
+		$request_params = array("search_in"=>$search_in,"search_from_date"=>$data['search_from_date_selected'],"search_to_date"=>$data['search_to_date_selected'],"search_string"=>$data['search_string_selected'],"offset"=>$limit_end,"limit"=>$config['per_page'],"sort"=>$data['order'],"sort_dir"=>$data['order_type_selected'],"selected_plan"=>$data['selected_plan']);
 		//$users = $this->apicall->call("GET","users",$request_params);
 		$users = $this->users_model->get_registered_users($request_params);
 
