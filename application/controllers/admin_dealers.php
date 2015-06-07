@@ -150,6 +150,149 @@ class Admin_dealers extends CI_Controller {
         $this->load->view('includes/template', $data);  
 
     }//index
+    
+    public function dealers_csv()
+    {
+        
+        //pagination settings
+        //$config['per_page'] = 25;
+        $data['pagingoption'] = get_paging_options();
+        if($this->input->get('pagingval') != "")
+            $config['per_page'] = $this->input->get('pagingval');
+        else
+            $config['per_page'] = $data['pagingoption'][0];
+        //$config['base_url'] = base_url().'admin/dealers';
+        $gets = $_GET;
+        unset($gets['per_page']);
+        $config['base_url'] = base_url().'admin/dealers/page?'.http_build_query($gets);
+        $config['use_page_numbers'] = TRUE;
+        $config['page_query_string'] = TRUE;
+        $config['num_links'] = 20;
+        $config['full_tag_open'] = '<ul>';
+        $config['full_tag_close'] = '</ul>';
+        $config['num_tag_open'] = '<li>';
+        $config['num_tag_close'] = '</li>';
+        $config['cur_tag_open'] = '<li class="active"><a>';
+        $config['cur_tag_close'] = '</a></li>';
+        $config['uri_segment'] = 3;
+        $config['num_links'] = 4;
+        
+        //limit end
+        $data['pagingval'] = $config['per_page'];
+        $page = $this->input->get('per_page');
+        //math to get the initial record to be select in the database
+        $limit_end = ($page * $config['per_page']) - $config['per_page'];
+        if ($limit_end < 0){
+            $limit_end = 0;
+        }
+        
+        //all the posts sent by the view
+        $search_string = $this->input->get('search_string');
+        $search_in = $this->input->get('search_in');
+        $order = $this->input->get('order');
+        
+        $order_type = $this->input->get('order_type');
+        
+        if($order && $order_type)
+        {
+            $filter_session_data['order'] = $order;
+            $filter_session_data['order_type'] = $order_type;
+            $data['order'] = $order;
+            $data['order_type_selected'] = $order_type;
+        }
+        else
+        {
+            $filter_session_data['order'] = null;
+            $filter_session_data['order_type'] = null;
+            $data['order'] = 'id';
+            $data['order_type_selected'] = 'desc';
+        }
+        
+        //filtered && || paginated
+        if($search_string !== false && $search_string != "" && $order !== false || $this->uri->segment(3) == true){
+            $filter_session_data = array();
+            //if order type was changed
+            if($order_type){
+                $filter_session_data['order_type'] = $order_type;
+            }
+            else{
+                //we have something stored in the session?
+                if($this->session->userdata('order_type')){
+                    $order_type = $this->session->userdata('order_type');
+                }else{
+                    //if we have nothing inside session, so it's the default "Asc"
+                    $order_type = 'DESC';
+                }
+            }
+            //make the data type var avaible to our view
+            $data['order_type_selected'] = $order_type;
+            
+            if($search_string){
+                $filter_session_data['search_string_selected'] = $search_string;
+            }else{
+                $search_string = $this->session->userdata('search_string_selected');
+            }
+            $data['search_string_selected'] = $search_string;
+            
+            if($search_in){
+                $filter_session_data['search_in'] = $search_in;
+            }else{
+                $search_in = $this->session->userdata('search_in');
+            }
+            $data['search_in'] = $search_in;
+            
+            if($order){
+                $filter_session_data['order'] = $order;
+            }
+            else{
+                $order = $this->session->userdata('order');
+            }
+            $data['order'] = $order;
+            
+            //save session data into the session
+            $this->session->set_userdata($filter_session_data);
+        }else{
+            //clean filter data inside section
+            $filter_session_data['search_string_selected'] = null;
+            $filter_session_data['search_in'] = null;
+            
+            $this->session->set_userdata($filter_session_data);
+            
+            //pre selected options
+            $data['search_string_selected'] = '';
+            $data['search_in'] = '';
+            
+        }
+        
+        $request_params = array("search_string"=>$data['search_string_selected'],"search_in"=>$data['search_in'],"offset"=>$limit_end,"limit"=>$config['per_page'],"sort"=>$data['order'],"sort_dir"=>$data['order_type_selected']);
+        //print_r($request_params);
+        $users = $this->apicall->call("GET","dealers",$request_params);
+        
+        $data['count_dealers'] = $users["data"]["count_customers"];
+        $data['dealers'] = $users["data"]["customers"];
+        $config['total_rows'] = $data['count_dealers'];
+        
+        $file = fopen("dealers.csv","w");
+        fputcsv($file,array('','Customer Name','O/L Name','O/L Address','O/L City','Mobile','Email','CST Number','CST Date','GST Number','GST Date'));
+        
+        foreach ($data['dealers'] as $line)
+        {
+            $arr = array($line['id'],$line['customer_name'],$line['ol_name'],$line['ol_address'],$line['city_name'],$line['mobile'],$line['email'],$line['cst_number'],$line['cst_date'],$line['gst_number'],$line['gst_date']);
+            fputcsv($file,$arr);
+            
+        }
+        
+        fclose($file);
+        echo $filename = "dealers.csv";exit;
+        
+        //initializate the panination helper 
+        //$this->pagination->initialize($config);
+        
+        //load the view
+        //$data['main_content'] = 'admin/dealers/list';
+        //$this->load->view('includes/template', $data);
+        
+    }//index
 
     public function add()
     {

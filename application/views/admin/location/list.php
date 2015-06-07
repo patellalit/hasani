@@ -51,7 +51,7 @@
               echo '<input type="hidden" id="sort_order_type" name="order_type" value="'.$order_type_selected.'" />';
                 echo '<input type="hidden" id="pagingval" name="pagingval" value="'.$pagingval.'" />';
               echo form_submit($data_submit);
-
+echo '&nbsp;<input type="button" id="getcsv" name="getcsv" value="Generate CSV" onclick="generatecsv(\''.base_url('admin/location/location_csv').'\')" class="btn btn-primary" onclick="" />';
             echo form_close();
                 
                 
@@ -105,6 +105,23 @@
       </div>
     </div>
  <script>
+function generatecsv(url){
+    $.ajax({
+           type: "GET",
+           url: url,
+           data: $('#myform').serialize(),
+           success: function(data){
+           //alert('<?php echo base_url() ?>'+data);
+           window.location.href='<?php echo base_url() ?>'+data;
+           //alert(data);
+           },
+           error: function(xhr, desc, err){
+           alert('err'+desc);
+           },
+           
+           
+           });
+}
 function submitpaging(val)
 {
     $('#pagingval').val(val);

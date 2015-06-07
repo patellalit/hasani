@@ -145,7 +145,10 @@ $route['admin/users/add'] = 'admin_users/add';
 $route['admin/users/update/(:any)'] = 'admin_users/update/$1';
 $route['admin/users/delete/(:any)'] = 'admin_users/delete/$1';
 $route['admin/users/getparent'] = 'admin_users/getparent';
+    $route['admin/users/registered_user_list_csv'] = 'admin_users/registered_user_list_csv/$1'; //$1 = page number
+    $route['admin/users/users_csv'] = 'admin_users/users_csv/$1'; //$1 = page number
 $route['admin/users/(:any)'] = 'admin_users/index/$1'; //$1 = page number
+
 $route['admin/generate-pdf/(:any)'] = 'admin_users/generate_pdf/$1';
 
 $route['admin/dealers'] = 'admin_dealers/index';
@@ -153,6 +156,7 @@ $route['admin/dealers/add'] = 'admin_dealers/add';
 $route['admin/dealers/update/(:any)'] = 'admin_dealers/update/$1';
 $route['admin/dealers/delete/(:any)'] = 'admin_dealers/delete/$1';
 $route['admin/dealers/csv'] = 'admin_dealers/csv';
+    $route['admin/dealers/dealers_csv'] = 'admin_dealers/dealers_csv/$1';
 $route['admin/dealers/(:any)'] = 'admin_dealers/index/$1'; //$1 = page number
     
 $route['admin/country'] = 'admin_country/index';
@@ -168,18 +172,21 @@ $route['admin/state/fetchCity'] = 'admin_state/fetchCity';
 $route['admin/state/fetchArea'] = 'admin_state/fetchArea';
 $route['admin/state/update/(:any)'] = 'admin_state/update/$1';
 $route['admin/state/delete/(:any)'] = 'admin_state/delete/$1';
+    $route['admin/state/state_csv'] = 'admin_state/state_csv/$1'; //$1 = page number
 $route['admin/state/(:any)'] = 'admin_state/index/$1'; //$1 = page number
 
 $route['admin/city'] = 'admin_city/index';
 $route['admin/city/add'] = 'admin_city/add';
 $route['admin/city/update/(:any)'] = 'admin_city/update/$1';
 $route['admin/city/delete/(:any)'] = 'admin_city/delete/$1';
+    $route['admin/city/city_csv'] = 'admin_city/city_csv/$1'; //$1 = page number
 $route['admin/city/(:any)'] = 'admin_city/index/$1'; //$1 = page number
 
 $route['admin/area'] = 'admin_area/index';
 $route['admin/area/add'] = 'admin_area/add';
 $route['admin/area/update/(:any)'] = 'admin_area/update/$1';
 $route['admin/area/delete/(:any)'] = 'admin_area/delete/$1';
+    $route['admin/area/area_csv'] = 'admin_area/area_csv/$1'; //$1 = page number
 $route['admin/area/(:any)'] = 'admin_area/index/$1'; //$1 = page number
     
 $route['admin/claim'] = 'admin_claim/index';
@@ -187,30 +194,36 @@ $route['admin/claim/view/(:any)'] = 'admin_claim/view/$1'; //$1 = page number
 $route['admin/claim/(:any)'] = 'admin_claim/index/$1'; //$1 = page number
 
 $route['admin/target'] = 'admin_target/index';
+    $route['admin/target/target_csv'] = 'admin_target/target_csv/$1'; //$1 = page number
 $route['admin/target/(:any)'] = 'admin_target/index/$1'; //$1 = page number
 
 $route['admin/trainee'] = 'admin_trainee/index';
+    $route['admin/trainee/trainee_csv'] = 'admin_trainee/trainee_csv/$1'; //$1 = page number
 $route['admin/trainee/(:any)'] = 'admin_trainee/index/$1'; //$1 = page number
     
 $route['admin/servicecenter'] = 'admin_servicecenter/index';
 $route['admin/servicecenter/add'] = 'admin_servicecenter/add';
 $route['admin/servicecenter/update/(:any)'] = 'admin_servicecenter/update/$1';
 $route['admin/servicecenter/delete/(:any)'] = 'admin_servicecenter/delete/$1';
+    $route['admin/servicecenter/center_csv'] = 'admin_servicecenter/center_csv/$1'; //$1 = page number
 $route['admin/servicecenter/(:any)'] = 'admin_servicecenter/index/$1'; //$1 = page number
     
     
 $route['admin/dsr'] = 'admin_dsr/index';
 $route['admin/dsr/view/(:any)'] = 'admin_dsr/view/$1'; //$1 = page number
+    $route['admin/dsr/dsr_csv'] = 'admin_dsr/dsr_csv/$1'; //$1 = page number
 $route['admin/dsr/(:any)'] = 'admin_dsr/index/$1'; //$1 = page number
     
 $route['admin/location'] = 'admin_location/index';
 $route['admin/location/view/(:any)'] = 'admin_location/view/$1'; //$1 = page number
+    $route['admin/location/location_csv'] = 'admin_location/location_csv/$1'; //$1 = page number
 $route['admin/location/(:any)'] = 'admin_location/index/$1'; //$1 = page number
     
     
 $route['admin/notifications'] = 'admin_notifications/index';
     $route['admin/notifications/add'] = 'admin_notifications/add';
 $route['admin/notifications/view/(:any)'] = 'admin_notifications/view/$1'; //$1 = page number
+    $route['admin/notifications/notification_csv'] = 'admin_notifications/notification_csv/$1'; //$1 = page number
 $route['admin/notifications/(:any)'] = 'admin_notifications/index/$1'; //$1 = page number
     
     

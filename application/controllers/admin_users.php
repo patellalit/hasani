@@ -150,6 +150,143 @@ class Admin_users extends CI_Controller {
         $this->load->view('includes/template', $data);  
 
     }//index
+    
+    public function users_csv()
+    {
+        
+        //pagination settings
+        //$config['per_page'] = 25;
+        $data['pagingoption'] = get_paging_options();
+        if($this->input->get('pagingval') != "")
+            $config['per_page'] = $this->input->get('pagingval');
+        else
+            $config['per_page'] = $data['pagingoption'][0];
+        
+        $gets = $_GET;
+        unset($gets['per_page']);
+        $config['base_url'] = base_url().'admin/users/page?'.http_build_query($gets);
+        $config['use_page_numbers'] = TRUE;
+        $config['page_query_string'] = TRUE;
+        
+        $config['num_links'] = 20;
+        $config['full_tag_open'] = '<ul>';
+        $config['full_tag_close'] = '</ul>';
+        $config['num_tag_open'] = '<li>';
+        $config['num_tag_close'] = '</li>';
+        $config['cur_tag_open'] = '<li class="active"><a>';
+        $config['cur_tag_close'] = '</a></li>';
+        $config['uri_segment'] = 3;
+        $config['num_links'] = 4;
+        
+        //limit end
+        $page = $this->input->get('per_page');//$this->uri->segment(3);
+        
+        $data['pagingval'] = $config['per_page'];
+        //math to get the initial record to be select in the database
+        $limit_end = ($page * $config['per_page']) - $config['per_page'];
+        if ($limit_end < 0){
+            $limit_end = 0;
+        }
+        //echo $this->input->get('search_string');exit;
+        //all the posts sent by the view
+        $search_string = $this->input->get('search_string');
+        $order = $this->input->get('order');
+        $order_type = $this->input->get('order_type');
+        $search_in = $this->input->get('search_in');
+        
+        //filtered && || paginated
+        if(($search_string != "" && $search_in ) || $order !== false || $this->uri->segment(3) == true){
+            $filter_session_data = array();
+            //if order type was changed
+            if($order_type){
+                $filter_session_data['order_type'] = $order_type;
+            }
+            else{
+                //we have something stored in the session?
+                if($this->session->userdata('order_type')){
+                    $order_type = $this->session->userdata('order_type');
+                }else{
+                    //if we have nothing inside session, so it's the default "Asc"
+                    $order_type = 'DESC';
+                }
+            }
+            //make the data type var avaible to our view
+            $data['order_type_selected'] = $order_type;
+            
+            if($search_in == "all"){
+                $search_string = null;
+            }else if($search_string){
+                $filter_session_data['search_string_selected'] = $search_string;
+            }else{
+                $search_string = $this->session->userdata('search_string_selected');
+            }
+            $data['search_string_selected'] = $search_string;
+            
+            if($search_in == "all"){
+                $search_in = null;
+            }else if($search_in){
+                $filter_session_data['search_in_selected'] = $search_in;
+            }else{
+                $search_in = $this->session->userdata('search_in_selected');
+            }
+            $data['search_in_selected'] = $search_in;
+            $data['search_in'] = $search_in;
+            
+            if($order){
+                $filter_session_data['order'] = $order;
+            }
+            else{
+                $order = $this->session->userdata('order');
+            }
+            
+            $data['order'] = $order;
+            
+            //save session data into the session
+            $this->session->set_userdata($filter_session_data);
+        }else{
+            //clean filter data inside section
+            $filter_session_data['search_string_selected'] = null;
+            $filter_session_data["search_in_selected"]=null;
+            $filter_session_data['order'] = null;
+            $filter_session_data['order_type'] = null;
+            
+            $this->session->set_userdata($filter_session_data);
+            
+            //pre selected options
+            $data['search_string_selected'] = '';
+            $data['order'] = 'm.id';
+            $data['order_type_selected'] = 'desc';
+            $data["search_in_selected"]="";
+        }
+        
+        $request_params = array("search_in"=>$search_in,"search_string"=>$data['search_string_selected'],"offset"=>$limit_end,"limit"=>$config['per_page'],"sort"=>$data['order'],"sort_dir"=>$data['order_type_selected']);
+        $users = $this->apicall->call("GET","users",$request_params);
+        
+        $data['count_users'] = $users["data"]["count_users"];
+        $data['users'] = $users["data"]["users"];
+        $config['total_rows'] = $data['count_users'];
+        
+        $file = fopen("users.csv","w");
+        fputcsv($file,array('','First Name','Last Name','Company Phone','Company Email','Personal Phone','Personal Email','Address','Role'));
+        
+        foreach ($data['users'] as $line)
+        {
+            $arr = array($line['id'],$line['first_name'],$line['last_name'],$line['mobile'],$line['email_address'],$line['personal_phone'],$line['personal_email'],$line['address'],$line['role_name']);
+            fputcsv($file,$arr);
+           
+        }
+        
+        fclose($file);
+        echo $filename = "users.csv";exit;
+        
+        //initializate the panination helper 
+        //$this->pagination->initialize($config);
+        
+        //load the view
+        //$data['main_content'] = 'admin/users/list';
+        //$this->load->view('includes/template', $data);
+        
+    }//index
 
     public function add()
     {
@@ -613,6 +750,224 @@ $data['total_price_3'] = $this->users_model->get_registered_users_total_bill($re
         $data['main_content'] = 'admin/users/registered_list';
         $this->load->view('includes/template', $data);  
 
+    }//index
+    public function registered_user_list_csv()
+    {
+        //pagination settings
+        $data['pagingoption'] = get_paging_options();
+        if($this->input->get('pagingval') != "")
+            $config['per_page'] = $this->input->get('pagingval');
+        else
+            $config['per_page'] = $data['pagingoption'][0];
+        
+        
+        $gets = $_GET;
+        unset($gets['per_page']);
+        $config['base_url'] = base_url().'admin/registered/users/page?'.http_build_query($gets);
+        $config['use_page_numbers'] = TRUE;
+        $config['page_query_string'] = TRUE;
+        $config['num_links'] = 20;
+        $config['full_tag_open'] = '<ul>';
+        $config['full_tag_close'] = '</ul>';
+        $config['num_tag_open'] = '<li>';
+        $config['num_tag_close'] = '</li>';
+        $config['cur_tag_open'] = '<li class="active"><a>';
+        $config['cur_tag_close'] = '</a></li>';
+        $config['uri_segment'] = 4;
+        $config['num_links'] = 4;
+        
+        $data['pagingval'] = $config['per_page'];
+        //limit end
+        //$data['page_selected'] = $page = $this->uri->segment(4);
+        $data['page_selected'] = $page = $this->input->get('per_page');
+        //math to get the initial record to be select in the database
+        $limit_end = ($page * $config['per_page']) - $config['per_page'];
+        if ($limit_end < 0){
+            $limit_end = 0;
+        }
+        
+        //all the posts sent by the view
+        $search_string = $this->input->get('search_string');
+        $search_from_date = $this->input->get('search_from_date');
+        $search_to_date = $this->input->get('search_to_date');
+        $order = $this->input->get('order');
+        $order_type = $this->input->get('order_type');
+        $search_in = $this->input->get('search_in');
+        $selected_plan = $this->input->get('selected_plan');
+        $showdate = date("Y-m-d");
+        if($this->input->get('search_string')!='')
+        {
+            $search_string = $this->input->get('search_string');
+            $search_in = $this->input->get('search_in');
+            $showdate='';
+        }
+        //filtered && || paginated
+        if(($search_string != "" && $search_in )|| $search_from_date != "" || $selected_plan != "" || $search_to_date != "" && $order !== false || $this->uri->segment(4) == true){
+            $filter_session_data = array();
+            //if order type was changed
+            if($order_type){
+                $filter_session_data['order_type'] = $order_type;
+            }
+            else{
+                //we have something stored in the session?
+                if($this->session->userdata('order_type')){
+                    $order_type = $this->session->userdata('order_type');
+                }else{
+                    //if we have nothing inside session, so it's the default "Asc"
+                    $order_type = 'DESC';
+                }
+            }
+            //make the data type var avaible to our view
+            $data['order_type_selected'] = $order_type;
+            
+            if($search_from_date){
+                $filter_session_data['search_from_date_selected'] = $search_from_date;
+                $data['search_from_date_selected'] = date("Y-m-d",strtotime($search_from_date));
+            }else{//echo $this->session->userdata('search_from_date_selected');exit;
+                $search_from_date = $showdate;//$this->session->userdata('search_from_date_selected');
+                $data['search_from_date_selected'] =$showdate;
+            }
+            
+            
+            if($search_to_date){
+                $filter_session_data['search_to_date_selected'] = $search_to_date;
+                $data['search_to_date_selected'] = date("Y-m-d",strtotime($search_to_date));
+            }else{
+                $search_to_date = $showdate;//$this->session->userdata('search_to_date_selected');
+                $data['search_to_date_selected'] = $showdate;
+            }
+            
+            if($selected_plan){
+                $filter_session_data['selected_plan'] = $selected_plan;
+                $data['selected_plan'] = $selected_plan;
+            }else{
+                $filter_session_data['selected_plan'] = '';
+                $data['selected_plan'] = '';
+            }
+            
+            
+            if($search_in == "all"){
+                $search_string = null;
+            }else if($search_string){
+                $filter_session_data['search_string_selected'] = $search_string;
+            }else{
+                $search_string = $this->session->userdata('search_string_selected');
+            }
+            $data['search_string_selected'] = $search_string;
+            
+            if($search_in == "all"){
+                $search_in = null;
+            }else if($search_in){
+                $filter_session_data['search_in_selected'] = $search_in;
+            }else{
+                $search_in = $this->session->userdata('search_in_selected');
+            }
+            $data['search_in_selected'] = $search_in;
+            $data['search_in'] = $search_in;
+            
+            if($order){
+                $filter_session_data['order'] = $order;
+            }
+            else{
+                $order = $this->session->userdata('order');
+            }
+            
+            $data['order'] = $order;
+            
+            //save session data into the session
+            $this->session->set_userdata($filter_session_data);
+        }else{
+            //clean filter data inside section
+            $filter_session_data['search_string_selected'] = null;
+            $filter_session_data["search_in_selected"]=null;
+            $filter_session_data['search_from_date_selected'] = date("Y-m-d");
+            $filter_session_data['search_to_date_selected'] = date("Y-m-d");
+            $filter_session_data['order'] = null;
+            $filter_session_data['order_type'] = null;
+            
+            $this->session->set_userdata($filter_session_data);
+            
+            //pre selected options
+            $data['search_string_selected'] = '';
+            $data['search_from_date_selected'] = $showdate;//date("Y-m-d");
+            $data['search_to_date_selected'] = $showdate;//date("Y-m-d");
+            $data['order'] = 'p.id';
+            $data['order_type_selected'] = 'desc';
+            $data["search_in_selected"]="";
+            $data['selected_plan'] = "";
+        }
+        $plans = $this->products_model->get_plans();
+        $data['plans'] = $plans;
+        
+        $request_params = array("search_in"=>$search_in,"search_from_date"=>$data['search_from_date_selected'],"search_to_date"=>$data['search_to_date_selected'],"search_string"=>$data['search_string_selected'],"offset"=>$limit_end,"limit"=>$config['per_page'],"sort"=>$data['order'],"sort_dir"=>$data['order_type_selected'],"selected_plan"=>$data['selected_plan']);
+        //$users = $this->apicall->call("GET","users",$request_params);
+        $users = $this->users_model->get_registered_users($request_params);
+        
+        $data['count_users'] = $this->users_model->get_registered_users_count($request_params,true);
+        $data['total_bill'] = $this->users_model->get_registered_users_total_bill($request_params,"bill",true);
+        $data['total_price'] = $this->users_model->get_registered_users_total_bill($request_params,"price",true);
+        
+        $date = new DateTime();
+        $data['search_date_0'] = $request_params["search_date"] = date_format($date, 'Y-m-d');
+        $data['count_users_0'] = $this->users_model->get_registered_users_count($request_params);
+        $data['total_bill_0'] = $this->users_model->get_registered_users_total_bill($request_params,"bill");
+        $data['total_price_0'] = $this->users_model->get_registered_users_total_bill($request_params,"price");
+        
+        $date = new DateTime($request_params["search_date"]);
+        $date->sub(new DateInterval('P1D'));
+        $data['search_date_1'] = $request_params["search_date"] = date_format($date, 'Y-m-d');
+        $data['count_users_1'] = $this->users_model->get_registered_users_count($request_params);
+        $data['total_bill_1'] = $this->users_model->get_registered_users_total_bill($request_params,"bill");
+        $data['total_price_1'] = $this->users_model->get_registered_users_total_bill($request_params,"price");
+        
+        $date = new DateTime($request_params["search_date"]);
+        $date->sub(new DateInterval('P1D'));
+        $data['search_date_2'] = $request_params["search_date"] = date_format($date, 'Y-m-d');
+        $data['count_users_2'] = $this->users_model->get_registered_users_count($request_params);
+        $data['total_bill_2'] = $this->users_model->get_registered_users_total_bill($request_params,"bill");
+        $data['total_price_2'] = $this->users_model->get_registered_users_total_bill($request_params,"price");
+        
+        $date = new DateTime($request_params["search_date"]);
+        $date->sub(new DateInterval('P1D'));
+        $data['search_date_3'] = $request_params["search_date"] = date_format($date, 'Y-m-d');
+        $data['count_users_3'] = $this->users_model->get_registered_users_count($request_params);
+        $data['total_bill_3'] = $this->users_model->get_registered_users_total_bill($request_params,"bill");
+        $data['total_price_3'] = $this->users_model->get_registered_users_total_bill($request_params,"price");
+        
+        if($data['search_from_date_selected']!='')
+            $data['search_from_date_selected'] = date("d-m-Y",strtotime($data['search_from_date_selected']));
+        
+        
+        
+        if($data['search_to_date_selected']!='')
+            $data['search_to_date_selected'] = date("d-m-Y",strtotime($data['search_to_date_selected']));
+        $data['users'] = $users;
+        $config['total_rows'] = $data['count_users'];
+        
+        /*header("Pragma: public");
+        header("Expires: 0");
+        header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
+        header("Content-Type: text/x-csv");
+        header("Content-Disposition: attachment;filename=\"search_results.csv\"");
+        
+        
+        print_r($data['users']);exit;
+        */
+        
+        $file = fopen("Activation-CDKEY.csv","w");
+        fputcsv($file,array('','CDKEY','Customer Name','Phone Number','Model No','Model Name','IMEI No','Bill No','Purchase Date','Bill Amount','Dealer Name','Customer Address','State','City','Area','Plan','IMEI No2','Plan Date'));
+        $i=1;
+        foreach ($data['users'] as $line)
+        {
+            $arr = array($i,$line['cdkey'],$line['customerName'],$line['phoneNo'],$line['modelNo'],$line['modelName'],$line['imeiNo'],$line['billNo'],$line['purchaseDate'],$line['billAmount'],$line['dealerName'],$line['customerAddress'],$line['state'],$line['city'],$line['area'],$line['package_name'],$line['imeiNo2'],$line['planDate']);
+            fputcsv($file,$arr);
+            $i++;
+        }
+        
+        fclose($file);
+        echo $filename = "Activation-CDKEY.csv";exit;
+        
+        
     }//index
     
 	public function generate_pdf($id){
